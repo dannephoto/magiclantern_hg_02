@@ -2296,9 +2296,14 @@ void hack_liveview(int unhack)
         }
 
         /* disable auto exposure and auto white balance */
+    //Allows for af while using hacks
+    if (is_manual_focus())
+    {
         call("aewb_enableaewb", unhack ? 1 : 0);  /* for new cameras */
+    }
         call("lv_ae",           unhack ? 1 : 0);  /* for old cameras */
         call("lv_wb",           unhack ? 1 : 0);
+
         
         /* change dialog refresh timer from 50ms to 8192ms */
         uint32_t dialog_refresh_timer_addr = /* in StartDialogRefreshTimer */
@@ -2360,13 +2365,21 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    aewbSuspend();
+                    //Allows for af while using hacks
+                    if (is_manual_focus())
+                    {
+                        aewbSuspend();
+                    }
                 }
 
                 if (small_hacks == 3 && CartridgeCancel_works) // CartridgeCancel_works: calling CartridgeCancel(); freezes LiveView in some models
                 {
                     lvfaceEnd();
-                    aewbSuspend();
+                    //Allows for af while using hacks
+                    if (is_manual_focus())
+                    {
+                        aewbSuspend();
+                    }
                     CartridgeCancel();
                     wait_lv_frames(2); /* In some cases the first frame would be corrupted when calling CartridgeCancel */
                 }

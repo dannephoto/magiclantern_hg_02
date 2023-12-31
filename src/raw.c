@@ -1141,15 +1141,13 @@ int raw_update_params_work()
         printf("Black level: %d\n", black_mean);
     }
     
-#ifdef CONFIG_EOSM
+    raw_info.black_level = black_mean;
+    
+    //Correct black level for digic V cameras
+    if (black_mean == 2047)
     {
         raw_info.black_level = 2048;
     }
-#else
-    {
-        raw_info.black_level = black_mean;
-    }
-#endif
 
     if (!lv)
     {
