@@ -5395,6 +5395,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
     extern int kill_canon_gui_mode;
     //Reset zoom when stopping recording
     
+//Focus aid function
 if (Half_Shutter == 2)
 {
     if (key == MODULE_KEY_REC && RECORDING)
@@ -5406,32 +5407,19 @@ if (Half_Shutter == 2)
     if (!get_halfshutter_pressed() && zoom)
     {
         zoom = 0;
-        key = MODULE_KEY_UNPRESS_SET;
         CheckPreviewRegsValuesAndForce();
         msleep(400);
     }
     
-    if (get_halfshutter_pressed() && RECORDING)
-    {
-        key = MODULE_KEY_PRESS_SET;
-    }
-    
-    //If zoomaid is turned off
-    if (get_halfshutter_pressed() && !RECORDING && !gui_menu_shown() && lv && is_movie_mode())
-    {
-        key = MODULE_KEY_PRESS_SET;
-    }
-    
-    
-    if (key == MODULE_KEY_PRESS_SET && !zoom)
+    if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode())
     {
         zoom = 1;
-        key = MODULE_KEY_UNPRESS_SET;
         msleep(400);
         EngDrvOutLV(0xc0f11B8C, 0x0);
         EngDrvOutLV(0xc0f11BCC, 0x0);
         EngDrvOutLV(0xc0f11BC8, 0x0);
     }
+    
 }
     
     /* Opens up last magic lantern menu tab by tapping display */
