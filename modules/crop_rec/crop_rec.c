@@ -5389,6 +5389,17 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
 static unsigned int crop_rec_keypress_cbr(unsigned int key)
 {
     extern int kill_canon_gui_mode;
+    
+    /* Opens up last magic lantern menu tab by tapping display */
+    if (key == MODULE_KEY_TOUCH_1_FINGER && !gui_menu_shown() && is_movie_mode() && lv && !RECORDING && lv_dispsize != 10)
+    {
+        msleep(100);
+        if(lv_disp_mode != 0){
+            // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+            return 1;
+        }
+        gui_open_menu();
+    }
 
     /* we need to use customize buttons in LiveView while ML isn't showing and when using Crop mood */
     if (lv)

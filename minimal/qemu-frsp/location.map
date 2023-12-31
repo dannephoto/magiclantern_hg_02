@@ -1050,7 +1050,7 @@ Linker script and memory map
 
                 0x000000000009e1e0                . = 0x9e1e0
 
-.text           0x000000000009e1e0     0x9010
+.text           0x000000000009e1e0     0x8fd0
                 0x000000000009e1e0                _text_start = .
  *(.text)
  .text          0x000000000009e1e0        0x4 entry.o
@@ -1096,7 +1096,7 @@ Linker script and memory map
                 0x000000000009e660                font_draw
  .text          0x000000000009e73c        0x0 ../../platform/EOSM.202/stubs.o
  *fill*         0x000000000009e73c        0x4 
- .text          0x000000000009e740     0x3578 raw.o
+ .text          0x000000000009e740     0x3560 raw.o
                 0x000000000009e778                raw_red_pixel
                 0x000000000009e7b8                raw_green_pixel
                 0x000000000009e7fc                raw_blue_pixel
@@ -1106,515 +1106,515 @@ Linker script and memory map
                 0x000000000009e990                raw_red_pixel_bright
                 0x000000000009e9f8                raw_green_pixel_bright
                 0x000000000009ea68                raw_blue_pixel_bright
-                0x000000000009fc74                raw_set_dirty
-                0x000000000009fc88                raw_set_preview_rect
-                0x000000000009fd74                raw_set_geometry
-                0x000000000009feb8                raw_get_pixel
-                0x00000000000a0270                raw_get_pixel_ex
-                0x00000000000a0384                raw_set_pixel
-                0x00000000000a0534                raw_get_gray_pixel
-                0x00000000000a0744                raw_to_ev
-                0x00000000000a084c                ev_to_raw
-                0x00000000000a08b0                raw_lv_redirect_edmac
-                0x00000000000a08c4                raw_lv_vsync
-                0x00000000000a09b0                _raw_lv_get_iso_post_gain
-                0x00000000000a09dc                raw_lv_settings_still_valid
-                0x00000000000a0a44                raw_preview_fast_ex
-                0x00000000000a0b10                raw_preview_fast
-                0x00000000000a0b70                raw_lv_is_enabled
-                0x00000000000a0b80                raw_lv_request_bpp
-                0x00000000000a0c70                raw_lv_request_digital_gain
-                0x00000000000a0cfc                raw_force_aspect_ratio
-                0x00000000000a0e24                get_dxo_dynamic_range
-                0x00000000000a0ec4                can_use_raw_overlays_photo
-                0x00000000000a18f0                raw_update_params
-                0x00000000000a1a4c                raw_lv_request
-                0x00000000000a1ab4                raw_lv_release
-                0x00000000000a1b14                can_use_raw_overlays
-                0x00000000000a1bbc                can_use_raw_overlays_menu
-                0x00000000000a1c3c                menu_set_warning_raw
-                0x00000000000a1c90                menu_checkdep_raw
- *fill*         0x00000000000a1cb8        0x8 
- .text          0x00000000000a1cc0      0x918 vram.o
-                0x00000000000a1d58                vram_params_set_dirty
-                0x00000000000a1da8                _update_vram_params
-                0x00000000000a234c                yuv422_buffer_check
-                0x00000000000a2378                get_lcd_422_buf
-                0x00000000000a23cc                guess_fastrefresh_direction
-                0x00000000000a2438                get_fastrefresh_422_buf
-                0x00000000000a24bc                get_yuv422_vram
-                0x00000000000a2564                get_yuv422_hd_vram
-                0x00000000000a25a8                vram_clear_lv
- *fill*         0x00000000000a25d8        0x8 
- .text          0x00000000000a25e0      0xa04 propvalues.o
-                0x00000000000a2a3c                is_camera
-                0x00000000000a2af0                is_movie_mode
-                0x00000000000a2b0c                set_recording_custom
-                0x00000000000a2b1c                get_video_mode_name
-                0x00000000000a2ec8                get_display_device_name
- *fill*         0x00000000000a2fe4        0xc 
- .text          0x00000000000a2ff0      0x378 stdio.o
-                0x00000000000a2ff0                streq
-                0x00000000000a3088                toupper
-                0x00000000000a3098                tolower
-                0x00000000000a30a8                __errno
-                0x00000000000a30b4                islower
-                0x00000000000a30c8                isupper
-                0x00000000000a30dc                isalpha
-                0x00000000000a30f4                isdigit
-                0x00000000000a3108                isxdigit
-                0x00000000000a3128                isalnum
-                0x00000000000a3158                ispunct
-                0x00000000000a3178                isgraph
-                0x00000000000a31a8                isspace
-                0x00000000000a31c8                iscntrl
-                0x00000000000a31e8                snprintf
-                0x00000000000a3214                memset64
-                0x00000000000a32ac                memcpy64
- *fill*         0x00000000000a3368        0x8 
- .text          0x00000000000a3370      0x7cc imgconv.o
-                0x00000000000a3444                precompute_yuv2rgb
-                0x00000000000a34ec                yuv2rgb
-                0x00000000000a3570                rgb2yuv422_rec709
-                0x00000000000a3638                rgb2yuv422_rec601
-                0x00000000000a3710                rgb2yuv422
-                0x00000000000a3714                uyvy_split
-                0x00000000000a3744                yuv_resize
-                0x00000000000a37f8                yuv_halfcopy
-                0x00000000000a388c                yuv411_to_422
-                0x00000000000a38f0                yuv411_to_rgb
-                0x00000000000a3a18                yuvcpy_main
-                0x00000000000a3a84                little_cleanup
-                0x00000000000a3b08                yuv422_get_pixel
- *fill*         0x00000000000a3b3c        0x4 
- .text          0x00000000000a3b40       0xb4 dialog_test.o
-                0x00000000000a3b40                get_current_dialog_handler
-                0x00000000000a3b64                canon_gui_disable_front_buffer
-                0x00000000000a3b9c                canon_gui_enable_front_buffer
-                0x00000000000a3be8                canon_gui_front_buffer_disabled
- .text          0x00000000000a3bf4       0x1c dietlibc.a(strlen.o)
-                0x00000000000a3bf4                strlen
- .text          0x00000000000a3c10       0x2c dietlibc.a(strchr.o)
-                0x00000000000a3c10                index
-                0x00000000000a3c10                strchr
- .text          0x00000000000a3c3c      0x168 newlib-libc.a(lib_a-memcpy-stub.o)
-                0x00000000000a3c3c                memcpy
- .text          0x00000000000a3da4      0x188 newlib-libc.a(lib_a-memset.o)
-                0x00000000000a3da4                memset
- .text          0x00000000000a3f2c       0x1c newlib-libm.a(lib_a-sf_log2.o)
-                0x00000000000a3f2c                log2f
- .text          0x00000000000a3f48       0x7c newlib-libm.a(lib_a-sf_round.o)
-                0x00000000000a3f48                roundf
- .text          0x00000000000a3fc4      0x164 newlib-libm.a(lib_a-wf_log.o)
-                0x00000000000a3fc4                logf
- .text          0x00000000000a4128      0x504 newlib-libm.a(lib_a-wf_pow.o)
-                0x00000000000a4128                powf
- .text          0x00000000000a462c      0x11c newlib-libm.a(lib_a-wf_sqrt.o)
-                0x00000000000a462c                sqrtf
- .text          0x00000000000a4748      0x3b8 newlib-libm.a(lib_a-ef_log.o)
-                0x00000000000a4748                __ieee754_logf
- .text          0x00000000000a4b00      0x998 newlib-libm.a(lib_a-ef_pow.o)
-                0x00000000000a4b00                __ieee754_powf
- .text          0x00000000000a5498      0x114 newlib-libm.a(lib_a-ef_sqrt.o)
-                0x00000000000a5498                __ieee754_sqrtf
- .text          0x00000000000a55ac        0x8 newlib-libm.a(lib_a-sf_fabs.o)
-                0x00000000000a55ac                fabsf
- .text          0x00000000000a55b4       0x1c newlib-libm.a(lib_a-sf_finite.o)
-                0x00000000000a55b4                finitef
- .text          0x00000000000a55d0       0x6c newlib-libm.a(lib_a-sf_fpclassify.o)
-                0x00000000000a55d0                __fpclassifyf
- .text          0x00000000000a563c        0xc newlib-libm.a(lib_a-sf_nan.o)
-                0x00000000000a563c                nanf
- .text          0x00000000000a5648      0x11c newlib-libm.a(lib_a-sf_scalbn.o)
-                0x00000000000a5648                scalbnf
- .text          0x00000000000a5764        0x0 newlib-libm.a(lib_a-s_lib_ver.o)
- .text          0x00000000000a5764        0x8 newlib-libm.a(lib_a-s_matherr.o)
-                0x00000000000a5764                matherr
- .text          0x00000000000a576c       0x10 newlib-libm.a(lib_a-s_nan.o)
-                0x00000000000a576c                nan
- .text          0x00000000000a577c      0x1a0 newlib-libm.a(lib_a-s_rint.o)
-                0x00000000000a577c                rint
- .text          0x00000000000a591c       0x10 newlib-libm.a(lib_a-sf_copysign.o)
-                0x00000000000a591c                copysignf
- .text          0x00000000000a592c      0x114 gcc-libgcc.a(_udivsi3.o)
-                0x00000000000a592c                __udivsi3
-                0x00000000000a592c                __aeabi_uidiv
-                0x00000000000a5a20                __aeabi_uidivmod
- .text          0x00000000000a5a40      0x148 gcc-libgcc.a(_divsi3.o)
-                0x00000000000a5a40                __aeabi_idiv
-                0x00000000000a5a40                __divsi3
-                0x00000000000a5b68                __aeabi_idivmod
- .text          0x00000000000a5b88        0x4 gcc-libgcc.a(_dvmd_tls.o)
-                0x00000000000a5b88                __aeabi_ldiv0
-                0x00000000000a5b88                __aeabi_idiv0
- .text          0x00000000000a5b8c      0x41c gcc-libgcc.a(_arm_addsubdf3.o)
-                0x00000000000a5b8c                __aeabi_drsub
-                0x00000000000a5b94                __subdf3
-                0x00000000000a5b94                __aeabi_dsub
-                0x00000000000a5b98                __aeabi_dadd
-                0x00000000000a5b98                __adddf3
-                0x00000000000a5ea8                __aeabi_ui2d
-                0x00000000000a5ea8                __floatunsidf
-                0x00000000000a5ecc                __floatsidf
-                0x00000000000a5ecc                __aeabi_i2d
-                0x00000000000a5ef4                __extendsfdf2
-                0x00000000000a5ef4                __aeabi_f2d
-                0x00000000000a5f34                __aeabi_ul2d
-                0x00000000000a5f34                __floatundidf
-                0x00000000000a5f48                __aeabi_l2d
-                0x00000000000a5f48                __floatdidf
- .text          0x00000000000a5fa8      0x49c gcc-libgcc.a(_arm_muldivdf3.o)
-                0x00000000000a5fa8                __aeabi_dmul
-                0x00000000000a5fa8                __muldf3
-                0x00000000000a6238                __aeabi_ddiv
-                0x00000000000a6238                __divdf3
- .text          0x00000000000a6444      0x144 gcc-libgcc.a(_arm_cmpdf2.o)
-                0x00000000000a6444                __gedf2
-                0x00000000000a6444                __gtdf2
-                0x00000000000a644c                __ledf2
-                0x00000000000a644c                __ltdf2
-                0x00000000000a6454                __cmpdf2
-                0x00000000000a6454                __eqdf2
-                0x00000000000a6454                __nedf2
-                0x00000000000a64dc                __aeabi_cdrcmple
-                0x00000000000a64f8                __aeabi_cdcmple
-                0x00000000000a64f8                __aeabi_cdcmpeq
-                0x00000000000a6510                __aeabi_dcmpeq
-                0x00000000000a6528                __aeabi_dcmplt
-                0x00000000000a6540                __aeabi_dcmple
-                0x00000000000a6558                __aeabi_dcmpge
-                0x00000000000a6570                __aeabi_dcmpgt
- .text          0x00000000000a6588       0xa0 gcc-libgcc.a(_arm_truncdfsf2.o)
-                0x00000000000a6588                __aeabi_d2f
-                0x00000000000a6588                __truncdfsf2
- .text          0x00000000000a6628      0x2ac gcc-libgcc.a(_arm_addsubsf3.o)
-                0x00000000000a6628                __aeabi_frsub
-                0x00000000000a6630                __aeabi_fsub
-                0x00000000000a6630                __subsf3
-                0x00000000000a6634                __aeabi_fadd
-                0x00000000000a6634                __addsf3
-                0x00000000000a67f0                __aeabi_ui2f
-                0x00000000000a67f0                __floatunsisf
-                0x00000000000a67f8                __floatsisf
-                0x00000000000a67f8                __aeabi_i2f
-                0x00000000000a6818                __aeabi_ul2f
-                0x00000000000a6818                __floatundisf
-                0x00000000000a6828                __aeabi_l2f
-                0x00000000000a6828                __floatdisf
- .text          0x00000000000a68d4      0x2f8 gcc-libgcc.a(_arm_muldivsf3.o)
-                0x00000000000a68d4                __mulsf3
-                0x00000000000a68d4                __aeabi_fmul
-                0x00000000000a6a6c                __divsf3
-                0x00000000000a6a6c                __aeabi_fdiv
- .text          0x00000000000a6bcc      0x114 gcc-libgcc.a(_arm_cmpsf2.o)
-                0x00000000000a6bcc                __gesf2
-                0x00000000000a6bcc                __gtsf2
-                0x00000000000a6bd4                __ltsf2
-                0x00000000000a6bd4                __lesf2
-                0x00000000000a6bdc                __nesf2
-                0x00000000000a6bdc                __eqsf2
-                0x00000000000a6bdc                __cmpsf2
-                0x00000000000a6c40                __aeabi_cfrcmple
-                0x00000000000a6c50                __aeabi_cfcmpeq
-                0x00000000000a6c50                __aeabi_cfcmple
-                0x00000000000a6c68                __aeabi_fcmpeq
-                0x00000000000a6c80                __aeabi_fcmplt
-                0x00000000000a6c98                __aeabi_fcmple
-                0x00000000000a6cb0                __aeabi_fcmpge
-                0x00000000000a6cc8                __aeabi_fcmpgt
- .text          0x00000000000a6ce0       0x5c gcc-libgcc.a(_arm_fixsfsi.o)
-                0x00000000000a6ce0                __fixsfsi
-                0x00000000000a6ce0                __aeabi_f2iz
- *fill*         0x00000000000a6d3c        0x4 
- .text.__stub   0x00000000000a6d40       0x20 linker stubs
-                0x00000000000a6d60                _text_end = .
-                0x00000000000a6d80                . = ALIGN (0x40)
- *fill*         0x00000000000a6d60       0x20 
-                0x00000000000a6d80                _rodata_start = .
+                0x000000000009fc50                raw_set_dirty
+                0x000000000009fc64                raw_set_preview_rect
+                0x000000000009fd50                raw_set_geometry
+                0x000000000009fe94                raw_get_pixel
+                0x00000000000a024c                raw_get_pixel_ex
+                0x00000000000a0360                raw_set_pixel
+                0x00000000000a0510                raw_get_gray_pixel
+                0x00000000000a0720                raw_to_ev
+                0x00000000000a0828                ev_to_raw
+                0x00000000000a088c                raw_lv_redirect_edmac
+                0x00000000000a08a0                raw_lv_vsync
+                0x00000000000a098c                _raw_lv_get_iso_post_gain
+                0x00000000000a09b8                raw_lv_settings_still_valid
+                0x00000000000a0a20                raw_preview_fast_ex
+                0x00000000000a0aec                raw_preview_fast
+                0x00000000000a0b4c                raw_lv_is_enabled
+                0x00000000000a0b5c                raw_lv_request_bpp
+                0x00000000000a0c4c                raw_lv_request_digital_gain
+                0x00000000000a0cd8                raw_force_aspect_ratio
+                0x00000000000a0e00                get_dxo_dynamic_range
+                0x00000000000a0ea0                can_use_raw_overlays_photo
+                0x00000000000a18d8                raw_update_params
+                0x00000000000a1a34                raw_lv_request
+                0x00000000000a1a9c                raw_lv_release
+                0x00000000000a1afc                can_use_raw_overlays
+                0x00000000000a1ba4                can_use_raw_overlays_menu
+                0x00000000000a1c24                menu_set_warning_raw
+                0x00000000000a1c78                menu_checkdep_raw
+ .text          0x00000000000a1ca0      0x918 vram.o
+                0x00000000000a1d38                vram_params_set_dirty
+                0x00000000000a1d88                _update_vram_params
+                0x00000000000a232c                yuv422_buffer_check
+                0x00000000000a2358                get_lcd_422_buf
+                0x00000000000a23ac                guess_fastrefresh_direction
+                0x00000000000a2418                get_fastrefresh_422_buf
+                0x00000000000a249c                get_yuv422_vram
+                0x00000000000a2544                get_yuv422_hd_vram
+                0x00000000000a2588                vram_clear_lv
+ *fill*         0x00000000000a25b8        0x8 
+ .text          0x00000000000a25c0      0xa04 propvalues.o
+                0x00000000000a2a1c                is_camera
+                0x00000000000a2ad0                is_movie_mode
+                0x00000000000a2aec                set_recording_custom
+                0x00000000000a2afc                get_video_mode_name
+                0x00000000000a2ea8                get_display_device_name
+ *fill*         0x00000000000a2fc4        0xc 
+ .text          0x00000000000a2fd0      0x378 stdio.o
+                0x00000000000a2fd0                streq
+                0x00000000000a3068                toupper
+                0x00000000000a3078                tolower
+                0x00000000000a3088                __errno
+                0x00000000000a3094                islower
+                0x00000000000a30a8                isupper
+                0x00000000000a30bc                isalpha
+                0x00000000000a30d4                isdigit
+                0x00000000000a30e8                isxdigit
+                0x00000000000a3108                isalnum
+                0x00000000000a3138                ispunct
+                0x00000000000a3158                isgraph
+                0x00000000000a3188                isspace
+                0x00000000000a31a8                iscntrl
+                0x00000000000a31c8                snprintf
+                0x00000000000a31f4                memset64
+                0x00000000000a328c                memcpy64
+ *fill*         0x00000000000a3348        0x8 
+ .text          0x00000000000a3350      0x7cc imgconv.o
+                0x00000000000a3424                precompute_yuv2rgb
+                0x00000000000a34cc                yuv2rgb
+                0x00000000000a3550                rgb2yuv422_rec709
+                0x00000000000a3618                rgb2yuv422_rec601
+                0x00000000000a36f0                rgb2yuv422
+                0x00000000000a36f4                uyvy_split
+                0x00000000000a3724                yuv_resize
+                0x00000000000a37d8                yuv_halfcopy
+                0x00000000000a386c                yuv411_to_422
+                0x00000000000a38d0                yuv411_to_rgb
+                0x00000000000a39f8                yuvcpy_main
+                0x00000000000a3a64                little_cleanup
+                0x00000000000a3ae8                yuv422_get_pixel
+ *fill*         0x00000000000a3b1c        0x4 
+ .text          0x00000000000a3b20       0xb4 dialog_test.o
+                0x00000000000a3b20                get_current_dialog_handler
+                0x00000000000a3b44                canon_gui_disable_front_buffer
+                0x00000000000a3b7c                canon_gui_enable_front_buffer
+                0x00000000000a3bc8                canon_gui_front_buffer_disabled
+ .text          0x00000000000a3bd4       0x1c dietlibc.a(strlen.o)
+                0x00000000000a3bd4                strlen
+ .text          0x00000000000a3bf0       0x2c dietlibc.a(strchr.o)
+                0x00000000000a3bf0                index
+                0x00000000000a3bf0                strchr
+ .text          0x00000000000a3c1c      0x168 newlib-libc.a(lib_a-memcpy-stub.o)
+                0x00000000000a3c1c                memcpy
+ .text          0x00000000000a3d84      0x188 newlib-libc.a(lib_a-memset.o)
+                0x00000000000a3d84                memset
+ .text          0x00000000000a3f0c       0x1c newlib-libm.a(lib_a-sf_log2.o)
+                0x00000000000a3f0c                log2f
+ .text          0x00000000000a3f28       0x7c newlib-libm.a(lib_a-sf_round.o)
+                0x00000000000a3f28                roundf
+ .text          0x00000000000a3fa4      0x164 newlib-libm.a(lib_a-wf_log.o)
+                0x00000000000a3fa4                logf
+ .text          0x00000000000a4108      0x504 newlib-libm.a(lib_a-wf_pow.o)
+                0x00000000000a4108                powf
+ .text          0x00000000000a460c      0x11c newlib-libm.a(lib_a-wf_sqrt.o)
+                0x00000000000a460c                sqrtf
+ .text          0x00000000000a4728      0x3b8 newlib-libm.a(lib_a-ef_log.o)
+                0x00000000000a4728                __ieee754_logf
+ .text          0x00000000000a4ae0      0x998 newlib-libm.a(lib_a-ef_pow.o)
+                0x00000000000a4ae0                __ieee754_powf
+ .text          0x00000000000a5478      0x114 newlib-libm.a(lib_a-ef_sqrt.o)
+                0x00000000000a5478                __ieee754_sqrtf
+ .text          0x00000000000a558c        0x8 newlib-libm.a(lib_a-sf_fabs.o)
+                0x00000000000a558c                fabsf
+ .text          0x00000000000a5594       0x1c newlib-libm.a(lib_a-sf_finite.o)
+                0x00000000000a5594                finitef
+ .text          0x00000000000a55b0       0x6c newlib-libm.a(lib_a-sf_fpclassify.o)
+                0x00000000000a55b0                __fpclassifyf
+ .text          0x00000000000a561c        0xc newlib-libm.a(lib_a-sf_nan.o)
+                0x00000000000a561c                nanf
+ .text          0x00000000000a5628      0x11c newlib-libm.a(lib_a-sf_scalbn.o)
+                0x00000000000a5628                scalbnf
+ .text          0x00000000000a5744        0x0 newlib-libm.a(lib_a-s_lib_ver.o)
+ .text          0x00000000000a5744        0x8 newlib-libm.a(lib_a-s_matherr.o)
+                0x00000000000a5744                matherr
+ .text          0x00000000000a574c       0x10 newlib-libm.a(lib_a-s_nan.o)
+                0x00000000000a574c                nan
+ .text          0x00000000000a575c      0x1a0 newlib-libm.a(lib_a-s_rint.o)
+                0x00000000000a575c                rint
+ .text          0x00000000000a58fc       0x10 newlib-libm.a(lib_a-sf_copysign.o)
+                0x00000000000a58fc                copysignf
+ .text          0x00000000000a590c      0x114 gcc-libgcc.a(_udivsi3.o)
+                0x00000000000a590c                __udivsi3
+                0x00000000000a590c                __aeabi_uidiv
+                0x00000000000a5a00                __aeabi_uidivmod
+ .text          0x00000000000a5a20      0x148 gcc-libgcc.a(_divsi3.o)
+                0x00000000000a5a20                __aeabi_idiv
+                0x00000000000a5a20                __divsi3
+                0x00000000000a5b48                __aeabi_idivmod
+ .text          0x00000000000a5b68        0x4 gcc-libgcc.a(_dvmd_tls.o)
+                0x00000000000a5b68                __aeabi_ldiv0
+                0x00000000000a5b68                __aeabi_idiv0
+ .text          0x00000000000a5b6c      0x41c gcc-libgcc.a(_arm_addsubdf3.o)
+                0x00000000000a5b6c                __aeabi_drsub
+                0x00000000000a5b74                __subdf3
+                0x00000000000a5b74                __aeabi_dsub
+                0x00000000000a5b78                __aeabi_dadd
+                0x00000000000a5b78                __adddf3
+                0x00000000000a5e88                __aeabi_ui2d
+                0x00000000000a5e88                __floatunsidf
+                0x00000000000a5eac                __floatsidf
+                0x00000000000a5eac                __aeabi_i2d
+                0x00000000000a5ed4                __extendsfdf2
+                0x00000000000a5ed4                __aeabi_f2d
+                0x00000000000a5f14                __aeabi_ul2d
+                0x00000000000a5f14                __floatundidf
+                0x00000000000a5f28                __aeabi_l2d
+                0x00000000000a5f28                __floatdidf
+ .text          0x00000000000a5f88      0x49c gcc-libgcc.a(_arm_muldivdf3.o)
+                0x00000000000a5f88                __aeabi_dmul
+                0x00000000000a5f88                __muldf3
+                0x00000000000a6218                __aeabi_ddiv
+                0x00000000000a6218                __divdf3
+ .text          0x00000000000a6424      0x144 gcc-libgcc.a(_arm_cmpdf2.o)
+                0x00000000000a6424                __gedf2
+                0x00000000000a6424                __gtdf2
+                0x00000000000a642c                __ledf2
+                0x00000000000a642c                __ltdf2
+                0x00000000000a6434                __cmpdf2
+                0x00000000000a6434                __eqdf2
+                0x00000000000a6434                __nedf2
+                0x00000000000a64bc                __aeabi_cdrcmple
+                0x00000000000a64d8                __aeabi_cdcmple
+                0x00000000000a64d8                __aeabi_cdcmpeq
+                0x00000000000a64f0                __aeabi_dcmpeq
+                0x00000000000a6508                __aeabi_dcmplt
+                0x00000000000a6520                __aeabi_dcmple
+                0x00000000000a6538                __aeabi_dcmpge
+                0x00000000000a6550                __aeabi_dcmpgt
+ .text          0x00000000000a6568       0xa0 gcc-libgcc.a(_arm_truncdfsf2.o)
+                0x00000000000a6568                __aeabi_d2f
+                0x00000000000a6568                __truncdfsf2
+ .text          0x00000000000a6608      0x2ac gcc-libgcc.a(_arm_addsubsf3.o)
+                0x00000000000a6608                __aeabi_frsub
+                0x00000000000a6610                __aeabi_fsub
+                0x00000000000a6610                __subsf3
+                0x00000000000a6614                __aeabi_fadd
+                0x00000000000a6614                __addsf3
+                0x00000000000a67d0                __aeabi_ui2f
+                0x00000000000a67d0                __floatunsisf
+                0x00000000000a67d8                __floatsisf
+                0x00000000000a67d8                __aeabi_i2f
+                0x00000000000a67f8                __aeabi_ul2f
+                0x00000000000a67f8                __floatundisf
+                0x00000000000a6808                __aeabi_l2f
+                0x00000000000a6808                __floatdisf
+ .text          0x00000000000a68b4      0x2f8 gcc-libgcc.a(_arm_muldivsf3.o)
+                0x00000000000a68b4                __mulsf3
+                0x00000000000a68b4                __aeabi_fmul
+                0x00000000000a6a4c                __divsf3
+                0x00000000000a6a4c                __aeabi_fdiv
+ .text          0x00000000000a6bac      0x114 gcc-libgcc.a(_arm_cmpsf2.o)
+                0x00000000000a6bac                __gesf2
+                0x00000000000a6bac                __gtsf2
+                0x00000000000a6bb4                __ltsf2
+                0x00000000000a6bb4                __lesf2
+                0x00000000000a6bbc                __nesf2
+                0x00000000000a6bbc                __eqsf2
+                0x00000000000a6bbc                __cmpsf2
+                0x00000000000a6c20                __aeabi_cfrcmple
+                0x00000000000a6c30                __aeabi_cfcmpeq
+                0x00000000000a6c30                __aeabi_cfcmple
+                0x00000000000a6c48                __aeabi_fcmpeq
+                0x00000000000a6c60                __aeabi_fcmplt
+                0x00000000000a6c78                __aeabi_fcmple
+                0x00000000000a6c90                __aeabi_fcmpge
+                0x00000000000a6ca8                __aeabi_fcmpgt
+ .text          0x00000000000a6cc0       0x5c gcc-libgcc.a(_arm_fixsfsi.o)
+                0x00000000000a6cc0                __fixsfsi
+                0x00000000000a6cc0                __aeabi_f2iz
+ *fill*         0x00000000000a6d1c        0x4 
+ .text.__stub   0x00000000000a6d20       0x20 linker stubs
+                0x00000000000a6d40                _text_end = .
+                0x00000000000a6d40                . = ALIGN (0x40)
+ *fill*         0x00000000000a6d40        0x0 
+                0x00000000000a6d40                _rodata_start = .
  *(.rodata)
- .rodata        0x00000000000a6d80      0x360 font_direct.o
- .rodata        0x00000000000a70e0       0xc8 raw.o
- .rodata        0x00000000000a71a8       0x1d stdio.o
- *fill*         0x00000000000a71c5        0x3 
- .rodata        0x00000000000a71c8       0x18 newlib-libm.a(lib_a-ef_pow.o)
- .rodata        0x00000000000a71e0       0x10 newlib-libm.a(lib_a-s_rint.o)
-                0x00000000000a71f0                _rodata_end = .
-                0x00000000000a71f0                _data_start = .
+ .rodata        0x00000000000a6d40      0x360 font_direct.o
+ .rodata        0x00000000000a70a0       0xc8 raw.o
+ .rodata        0x00000000000a7168       0x1d stdio.o
+ *fill*         0x00000000000a7185        0x3 
+ .rodata        0x00000000000a7188       0x18 newlib-libm.a(lib_a-ef_pow.o)
+ .rodata        0x00000000000a71a0       0x10 newlib-libm.a(lib_a-s_rint.o)
+                0x00000000000a71b0                _rodata_end = .
+                0x00000000000a71b0                _data_start = .
 
-.rodata.str1.1  0x00000000000a71f0      0x4bf
+.rodata.str1.1  0x00000000000a71b0      0x4bf
  .rodata.str1.1
-                0x00000000000a71f0       0x7f minimal.o
+                0x00000000000a71b0       0x7f minimal.o
                                          0x82 (size before relaxing)
  .rodata.str1.1
-                0x00000000000a726f      0x2c8 raw.o
+                0x00000000000a722f      0x2c8 raw.o
                                         0x2ce (size before relaxing)
  .rodata.str1.1
-                0x00000000000a7537       0x49 vram.o
+                0x00000000000a74f7       0x49 vram.o
  .rodata.str1.1
-                0x00000000000a7580       0xee propvalues.o
+                0x00000000000a7540       0xee propvalues.o
                                          0xf7 (size before relaxing)
  .rodata.str1.1
-                0x00000000000a766e       0x41 stdio.o
+                0x00000000000a762e       0x41 stdio.o
 
-.rodata.str1.4  0x00000000000a76b0       0x60
+.rodata.str1.4  0x00000000000a7670       0x60
  .rodata.str1.4
-                0x00000000000a76b0       0x46 stdio.o
- *fill*         0x00000000000a76f6        0x2 
+                0x00000000000a7670       0x46 stdio.o
+ *fill*         0x00000000000a76b6        0x2 
  .rodata.str1.4
-                0x00000000000a76f8        0x5 newlib-libm.a(lib_a-wf_log.o)
+                0x00000000000a76b8        0x5 newlib-libm.a(lib_a-wf_log.o)
                                           0xc (size before relaxing)
- *fill*         0x00000000000a76fd        0x3 
+ *fill*         0x00000000000a76bd        0x3 
  .rodata.str1.4
-                0x00000000000a7700        0x5 newlib-libm.a(lib_a-wf_pow.o)
+                0x00000000000a76c0        0x5 newlib-libm.a(lib_a-wf_pow.o)
                                           0x8 (size before relaxing)
- *fill*         0x00000000000a7705        0x3 
+ *fill*         0x00000000000a76c5        0x3 
  .rodata.str1.4
-                0x00000000000a7708        0x8 newlib-libm.a(lib_a-wf_sqrt.o)
+                0x00000000000a76c8        0x8 newlib-libm.a(lib_a-wf_sqrt.o)
  .rodata.str1.4
-                0x00000000000a7710        0x4 newlib-libm.a(lib_a-ef_pow.o)
+                0x00000000000a76d0        0x4 newlib-libm.a(lib_a-ef_pow.o)
 
-.glue_7         0x00000000000a7710        0x0
- .glue_7        0x00000000000a7710        0x0 linker stubs
+.glue_7         0x00000000000a76d0        0x0
+ .glue_7        0x00000000000a76d0        0x0 linker stubs
 
-.glue_7t        0x00000000000a7710        0x0
- .glue_7t       0x00000000000a7710        0x0 linker stubs
+.glue_7t        0x00000000000a76d0        0x0
+ .glue_7t       0x00000000000a76d0        0x0 linker stubs
 
-.vfp11_veneer   0x00000000000a7710        0x0
- .vfp11_veneer  0x00000000000a7710        0x0 linker stubs
+.vfp11_veneer   0x00000000000a76d0        0x0
+ .vfp11_veneer  0x00000000000a76d0        0x0 linker stubs
 
-.v4_bx          0x00000000000a7710        0x0
- .v4_bx         0x00000000000a7710        0x0 linker stubs
+.v4_bx          0x00000000000a76d0        0x0
+ .v4_bx         0x00000000000a76d0        0x0 linker stubs
 
-.iplt           0x00000000000a7710        0x0
- .iplt          0x00000000000a7710        0x0 entry.o
+.iplt           0x00000000000a76d0        0x0
+ .iplt          0x00000000000a76d0        0x0 entry.o
 
-.rel.dyn        0x00000000000a7710        0x0
- .rel.iplt      0x00000000000a7710        0x0 entry.o
+.rel.dyn        0x00000000000a76d0        0x0
+ .rel.iplt      0x00000000000a76d0        0x0 entry.o
 
-.data           0x00000000000a7710      0x4b1
-                0x00000000000a7710                . = ALIGN (0x8)
-                0x00000000000a7710                _task_overrides_start = .
+.data           0x00000000000a76d0      0x4b5
+                0x00000000000a76d0                . = ALIGN (0x8)
+                0x00000000000a76d0                _task_overrides_start = .
  *(.task_overrides)
-                0x00000000000a7710                _task_overrides_end = .
-                0x00000000000a7710                . = ALIGN (0x8)
-                0x00000000000a7710                _tasks_start = .
+                0x00000000000a76d0                _task_overrides_end = .
+                0x00000000000a76d0                . = ALIGN (0x8)
+                0x00000000000a76d0                _tasks_start = .
  *(.tasks)
-                0x00000000000a7710                _tasks_end = .
-                0x00000000000a7710                . = ALIGN (0x8)
-                0x00000000000a7710                _init_funcs_start = .
+                0x00000000000a76d0                _tasks_end = .
+                0x00000000000a76d0                . = ALIGN (0x8)
+                0x00000000000a76d0                _init_funcs_start = .
  *(.init_funcs)
- .init_funcs    0x00000000000a7710       0x14 raw.o
-                0x00000000000a7710                task_create_raw_init
-                0x00000000000a7724                _init_funcs_end = .
-                0x00000000000a7728                . = ALIGN (0x8)
- *fill*         0x00000000000a7724        0x4 
-                0x00000000000a7728                _ptp_handlers_start = .
+ .init_funcs    0x00000000000a76d0       0x14 raw.o
+                0x00000000000a76d0                task_create_raw_init
+                0x00000000000a76e4                _init_funcs_end = .
+                0x00000000000a76e8                . = ALIGN (0x8)
+ *fill*         0x00000000000a76e4        0x4 
+                0x00000000000a76e8                _ptp_handlers_start = .
  *(.ptp_handlers)
-                0x00000000000a7728                _ptp_handlers_end = .
-                0x00000000000a7728                . = ALIGN (0x8)
-                0x00000000000a7728                _config_vars_start = .
+                0x00000000000a76e8                _ptp_handlers_end = .
+                0x00000000000a76e8                . = ALIGN (0x8)
+                0x00000000000a76e8                _config_vars_start = .
  *(.config_vars)
-                0x00000000000a7728                _config_vars_end = .
-                0x00000000000a7728                . = ALIGN (0x8)
-                0x00000000000a7728                _prop_handlers_start = .
+                0x00000000000a76e8                _config_vars_end = .
+                0x00000000000a76e8                . = ALIGN (0x8)
+                0x00000000000a76e8                _prop_handlers_start = .
  *(.prop_handlers)
  .prop_handlers
-                0x00000000000a7728       0x18 raw.o
+                0x00000000000a76e8       0x18 raw.o
  .prop_handlers
-                0x00000000000a7740       0x90 vram.o
+                0x00000000000a7700       0x90 vram.o
  .prop_handlers
-                0x00000000000a77d0      0x210 propvalues.o
-                0x00000000000a79e0                _prop_handlers_end = .
-                0x00000000000a79e0                . = ALIGN (0x8)
-                0x00000000000a79e0                _module_symbols_start = .
+                0x00000000000a7790      0x210 propvalues.o
+                0x00000000000a79a0                _prop_handlers_end = .
+                0x00000000000a79a0                . = ALIGN (0x8)
+                0x00000000000a79a0                _module_symbols_start = .
  *(.module_symbols)
  .module_symbols
-                0x00000000000a79e0       0x10 raw.o
-                0x00000000000a79f0                _module_symbols_end = .
-                0x00000000000a7a00                . = ALIGN (0x40)
- *fill*         0x00000000000a79f0       0x10 
+                0x00000000000a79a0       0x10 raw.o
+                0x00000000000a79b0                _module_symbols_end = .
+                0x00000000000a79c0                . = ALIGN (0x40)
+ *fill*         0x00000000000a79b0       0x10 
  *(.data)
- .data          0x00000000000a7a00        0x0 entry.o
- .data          0x00000000000a7a00        0x0 minimal.o
- .data          0x00000000000a7a00        0x0 cache.o
- .data          0x00000000000a7a00        0x0 font_direct.o
- .data          0x00000000000a7a00        0x0 ../../platform/EOSM.202/stubs.o
- .data          0x00000000000a7a00       0xbc raw.o
-                0x00000000000a7a00                raw_capture_info
-                0x00000000000a7a10                raw_info
- .data          0x00000000000a7abc       0x78 vram.o
-                0x00000000000a7abc                bm2lv
-                0x00000000000a7ad0                os
-                0x00000000000a7af4                vram_lv
-                0x00000000000a7b04                vram_hd
-                0x00000000000a7b14                lv2hd
-                0x00000000000a7b24                lv2raw
- .data          0x00000000000a7b34       0x8c propvalues.o
-                0x00000000000a7b34                ae_mode_movie
-                0x00000000000a7b38                artist_name
-                0x00000000000a7b78                copyright_info
-                0x00000000000a7bb8                __camera_model_short
- .data          0x00000000000a7bc0        0x0 stdio.o
- .data          0x00000000000a7bc0        0x0 imgconv.o
- .data          0x00000000000a7bc0        0x0 dialog_test.o
- .data          0x00000000000a7bc0        0x0 dietlibc.a(strlen.o)
- .data          0x00000000000a7bc0        0x0 dietlibc.a(strchr.o)
- .data          0x00000000000a7bc0        0x0 newlib-libc.a(lib_a-memcpy-stub.o)
- .data          0x00000000000a7bc0        0x0 newlib-libc.a(lib_a-memset.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-sf_log2.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-sf_round.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-wf_log.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-wf_pow.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-wf_sqrt.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-ef_log.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-ef_pow.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-ef_sqrt.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-sf_fabs.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-sf_finite.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-sf_fpclassify.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-sf_nan.o)
- .data          0x00000000000a7bc0        0x0 newlib-libm.a(lib_a-sf_scalbn.o)
- .data          0x00000000000a7bc0        0x1 newlib-libm.a(lib_a-s_lib_ver.o)
-                0x00000000000a7bc0                __fdlib_version
- .data          0x00000000000a7bc1        0x0 newlib-libm.a(lib_a-s_matherr.o)
- .data          0x00000000000a7bc1        0x0 newlib-libm.a(lib_a-s_nan.o)
- .data          0x00000000000a7bc1        0x0 newlib-libm.a(lib_a-s_rint.o)
- .data          0x00000000000a7bc1        0x0 newlib-libm.a(lib_a-sf_copysign.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_udivsi3.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_divsi3.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_dvmd_tls.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_addsubdf3.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_muldivdf3.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_cmpdf2.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_truncdfsf2.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_addsubsf3.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_muldivsf3.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_cmpsf2.o)
- .data          0x00000000000a7bc1        0x0 gcc-libgcc.a(_arm_fixsfsi.o)
-                0x00000000000a7bc1                _data.end = .
-                0x00000000000a7bc1                __exidx_start = .
+ .data          0x00000000000a79c0        0x0 entry.o
+ .data          0x00000000000a79c0        0x0 minimal.o
+ .data          0x00000000000a79c0        0x0 cache.o
+ .data          0x00000000000a79c0        0x0 font_direct.o
+ .data          0x00000000000a79c0        0x0 ../../platform/EOSM.202/stubs.o
+ .data          0x00000000000a79c0       0xc0 raw.o
+                0x00000000000a79c0                raw_capture_info
+                0x00000000000a79d0                raw_info
+                0x00000000000a7a74                BitDepth_Analog
+ .data          0x00000000000a7a80       0x78 vram.o
+                0x00000000000a7a80                bm2lv
+                0x00000000000a7a94                os
+                0x00000000000a7ab8                vram_lv
+                0x00000000000a7ac8                vram_hd
+                0x00000000000a7ad8                lv2hd
+                0x00000000000a7ae8                lv2raw
+ .data          0x00000000000a7af8       0x8c propvalues.o
+                0x00000000000a7af8                ae_mode_movie
+                0x00000000000a7afc                artist_name
+                0x00000000000a7b3c                copyright_info
+                0x00000000000a7b7c                __camera_model_short
+ .data          0x00000000000a7b84        0x0 stdio.o
+ .data          0x00000000000a7b84        0x0 imgconv.o
+ .data          0x00000000000a7b84        0x0 dialog_test.o
+ .data          0x00000000000a7b84        0x0 dietlibc.a(strlen.o)
+ .data          0x00000000000a7b84        0x0 dietlibc.a(strchr.o)
+ .data          0x00000000000a7b84        0x0 newlib-libc.a(lib_a-memcpy-stub.o)
+ .data          0x00000000000a7b84        0x0 newlib-libc.a(lib_a-memset.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-sf_log2.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-sf_round.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-wf_log.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-wf_pow.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-wf_sqrt.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-ef_log.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-ef_pow.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-ef_sqrt.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-sf_fabs.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-sf_finite.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-sf_fpclassify.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-sf_nan.o)
+ .data          0x00000000000a7b84        0x0 newlib-libm.a(lib_a-sf_scalbn.o)
+ .data          0x00000000000a7b84        0x1 newlib-libm.a(lib_a-s_lib_ver.o)
+                0x00000000000a7b84                __fdlib_version
+ .data          0x00000000000a7b85        0x0 newlib-libm.a(lib_a-s_matherr.o)
+ .data          0x00000000000a7b85        0x0 newlib-libm.a(lib_a-s_nan.o)
+ .data          0x00000000000a7b85        0x0 newlib-libm.a(lib_a-s_rint.o)
+ .data          0x00000000000a7b85        0x0 newlib-libm.a(lib_a-sf_copysign.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_udivsi3.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_divsi3.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_dvmd_tls.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_addsubdf3.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_muldivdf3.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_cmpdf2.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_truncdfsf2.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_addsubsf3.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_muldivsf3.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_cmpsf2.o)
+ .data          0x00000000000a7b85        0x0 gcc-libgcc.a(_arm_fixsfsi.o)
+                0x00000000000a7b85                _data.end = .
+                0x00000000000a7b85                __exidx_start = .
 
-.igot.plt       0x00000000000a7bc4        0x0
- .igot.plt      0x00000000000a7bc4        0x0 entry.o
+.igot.plt       0x00000000000a7b88        0x0
+ .igot.plt      0x00000000000a7b88        0x0 entry.o
 
 .ARM.exidx
  *(.ARM.exidx*)
-                0x00000000000a7bc4                __exidx_end = .
-                0x00000000000a7c00                . = ALIGN (0x40)
-                0x00000000000a7c00                _bss_start = .
+                0x00000000000a7b88                __exidx_end = .
+                0x00000000000a7bc0                . = ALIGN (0x40)
+                0x00000000000a7bc0                _bss_start = .
 
-.bss            0x00000000000a7c00     0x59f0
+.bss            0x00000000000a7bc0     0x59f0
  *(.bss)
- .bss           0x00000000000a7c00        0x0 entry.o
- .bss           0x00000000000a7c00     0x3024 minimal.o
- .bss           0x00000000000aac24        0x0 cache.o
- .bss           0x00000000000aac24        0x0 font_direct.o
- .bss           0x00000000000aac24        0x0 ../../platform/EOSM.202/stubs.o
- .bss           0x00000000000aac24       0x4c raw.o
-                0x00000000000aac34                mlv_lite_reallocate_please
-                0x00000000000aac38                allocating_new_buffer_is_needed
- .bss           0x00000000000aac70       0x20 vram.o
- .bss           0x00000000000aac90       0x3c propvalues.o
-                0x00000000000aac90                shutter_count
-                0x00000000000aac94                shutter_count_plus_lv_actuations
-                0x00000000000aac98                display_sensor
-                0x00000000000aac9c                video_mode_crop
-                0x00000000000aaca0                video_mode_resolution
-                0x00000000000aaca4                video_mode_fps
-                0x00000000000aaca8                lv
-                0x00000000000aacac                camera_model_id
-                0x00000000000aacb8                __recording_custom
-                0x00000000000aacc8                lv_paused
- .bss           0x00000000000aaccc        0x4 stdio.o
- .bss           0x00000000000aacd0        0x8 imgconv.o
- .bss           0x00000000000aacd8        0x0 dialog_test.o
- .bss           0x00000000000aacd8        0x0 dietlibc.a(strlen.o)
- .bss           0x00000000000aacd8        0x0 dietlibc.a(strchr.o)
- .bss           0x00000000000aacd8        0x0 newlib-libc.a(lib_a-memcpy-stub.o)
- .bss           0x00000000000aacd8        0x0 newlib-libc.a(lib_a-memset.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_log2.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_round.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-wf_log.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-wf_pow.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-wf_sqrt.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-ef_log.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-ef_pow.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-ef_sqrt.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_fabs.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_finite.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_fpclassify.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_nan.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_scalbn.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-s_lib_ver.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-s_matherr.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-s_nan.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-s_rint.o)
- .bss           0x00000000000aacd8        0x0 newlib-libm.a(lib_a-sf_copysign.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_udivsi3.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_divsi3.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_dvmd_tls.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_addsubdf3.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_muldivdf3.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_cmpdf2.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_truncdfsf2.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_addsubsf3.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_muldivsf3.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_cmpsf2.o)
- .bss           0x00000000000aacd8        0x0 gcc-libgcc.a(_arm_fixsfsi.o)
- COMMON         0x00000000000aacd8       0xb8 minimal.o
-                0x00000000000aacd8                font_med
-                0x00000000000aace4                bmp_lock
-                0x00000000000aace8                lens_info
- COMMON         0x00000000000aad90     0x1770 vram.o
-                0x00000000000aad90                bm2lv_x_cache
-                0x00000000000abc90                y_times_BMPPITCH_cache
- COMMON         0x00000000000ac500       0xf0 propvalues.o
-                0x00000000000ac500                continuous_af_movie
-                0x00000000000ac504                lv_movie_select
-                0x00000000000ac508                auto_power_off_time
-                0x00000000000ac50c                lv_disp_mode
-                0x00000000000ac510                metering_mode
-                0x00000000000ac514                avail_shot
-                0x00000000000ac518                burst_count
-                0x00000000000ac51c                mirror_down
-                0x00000000000ac520                lv_af_mode
-                0x00000000000ac524                sensor_cleaning
-                0x00000000000ac528                firmware_version
-                0x00000000000ac548                image_review_time
-                0x00000000000ac54c                shooting_mode
-                0x00000000000ac550                camera_model
-                0x00000000000ac570                drive_mode
-                0x00000000000ac574                gui_state
-                0x00000000000ac578                __recording
-                0x00000000000ac57c                pic_quality
-                0x00000000000ac580                lv_dispsize
-                0x00000000000ac584                shooting_mode_custom
-                0x00000000000ac588                ext_monitor_hdmi
-                0x00000000000ac58c                icu_uilock
-                0x00000000000ac590                sound_recording_mode
-                0x00000000000ac594                efic_temp
-                0x00000000000ac598                auto_iso_range
-                0x00000000000ac59c                af_mode
-                0x00000000000ac5a0                battery_level_bars
-                0x00000000000ac5a4                video_system_pal
-                0x00000000000ac5a8                lv_focus_status
-                0x00000000000ac5ac                hdmi_code
-                0x00000000000ac5b0                camera_serial
-                0x00000000000ac5d0                strobo_firing
-                0x00000000000ac5d4                _ext_monitor_rca
-                0x00000000000ac5d8                shooting_type
-                0x00000000000ac5dc                continuous_af_photo
-                0x00000000000ac5e0                backlight_level
-                0x00000000000ac5e4                date_format
-                0x00000000000ac5e8                dofpreview
-                0x00000000000ac5ec                _expsim
- COMMON         0x00000000000ac5f0     0x1000 imgconv.o
-                0x00000000000ac5f0                yuv2rgb_GU
-                0x00000000000ac9f0                yuv2rgb_GV
-                0x00000000000acdf0                yuv2rgb_RV
-                0x00000000000ad1f0                yuv2rgb_BU
-                0x00000000000ad600                . = ALIGN (0x40)
-                0x00000000000ad600                _bss_end = .
+ .bss           0x00000000000a7bc0        0x0 entry.o
+ .bss           0x00000000000a7bc0     0x3024 minimal.o
+ .bss           0x00000000000aabe4        0x0 cache.o
+ .bss           0x00000000000aabe4        0x0 font_direct.o
+ .bss           0x00000000000aabe4        0x0 ../../platform/EOSM.202/stubs.o
+ .bss           0x00000000000aabe4       0x4c raw.o
+                0x00000000000aabf8                mlv_lite_reallocate_please
+                0x00000000000aabfc                allocating_new_buffer_is_needed
+ .bss           0x00000000000aac30       0x20 vram.o
+ .bss           0x00000000000aac50       0x3c propvalues.o
+                0x00000000000aac50                shutter_count
+                0x00000000000aac54                shutter_count_plus_lv_actuations
+                0x00000000000aac58                display_sensor
+                0x00000000000aac5c                video_mode_crop
+                0x00000000000aac60                video_mode_resolution
+                0x00000000000aac64                video_mode_fps
+                0x00000000000aac68                lv
+                0x00000000000aac6c                camera_model_id
+                0x00000000000aac78                __recording_custom
+                0x00000000000aac88                lv_paused
+ .bss           0x00000000000aac8c        0x4 stdio.o
+ .bss           0x00000000000aac90        0x8 imgconv.o
+ .bss           0x00000000000aac98        0x0 dialog_test.o
+ .bss           0x00000000000aac98        0x0 dietlibc.a(strlen.o)
+ .bss           0x00000000000aac98        0x0 dietlibc.a(strchr.o)
+ .bss           0x00000000000aac98        0x0 newlib-libc.a(lib_a-memcpy-stub.o)
+ .bss           0x00000000000aac98        0x0 newlib-libc.a(lib_a-memset.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_log2.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_round.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-wf_log.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-wf_pow.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-wf_sqrt.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-ef_log.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-ef_pow.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-ef_sqrt.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_fabs.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_finite.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_fpclassify.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_nan.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_scalbn.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-s_lib_ver.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-s_matherr.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-s_nan.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-s_rint.o)
+ .bss           0x00000000000aac98        0x0 newlib-libm.a(lib_a-sf_copysign.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_udivsi3.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_divsi3.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_dvmd_tls.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_addsubdf3.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_muldivdf3.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_cmpdf2.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_truncdfsf2.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_addsubsf3.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_muldivsf3.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_cmpsf2.o)
+ .bss           0x00000000000aac98        0x0 gcc-libgcc.a(_arm_fixsfsi.o)
+ COMMON         0x00000000000aac98       0xb8 minimal.o
+                0x00000000000aac98                font_med
+                0x00000000000aaca4                bmp_lock
+                0x00000000000aaca8                lens_info
+ COMMON         0x00000000000aad50     0x1770 vram.o
+                0x00000000000aad50                bm2lv_x_cache
+                0x00000000000abc50                y_times_BMPPITCH_cache
+ COMMON         0x00000000000ac4c0       0xf0 propvalues.o
+                0x00000000000ac4c0                continuous_af_movie
+                0x00000000000ac4c4                lv_movie_select
+                0x00000000000ac4c8                auto_power_off_time
+                0x00000000000ac4cc                lv_disp_mode
+                0x00000000000ac4d0                metering_mode
+                0x00000000000ac4d4                avail_shot
+                0x00000000000ac4d8                burst_count
+                0x00000000000ac4dc                mirror_down
+                0x00000000000ac4e0                lv_af_mode
+                0x00000000000ac4e4                sensor_cleaning
+                0x00000000000ac4e8                firmware_version
+                0x00000000000ac508                image_review_time
+                0x00000000000ac50c                shooting_mode
+                0x00000000000ac510                camera_model
+                0x00000000000ac530                drive_mode
+                0x00000000000ac534                gui_state
+                0x00000000000ac538                __recording
+                0x00000000000ac53c                pic_quality
+                0x00000000000ac540                lv_dispsize
+                0x00000000000ac544                shooting_mode_custom
+                0x00000000000ac548                ext_monitor_hdmi
+                0x00000000000ac54c                icu_uilock
+                0x00000000000ac550                sound_recording_mode
+                0x00000000000ac554                efic_temp
+                0x00000000000ac558                auto_iso_range
+                0x00000000000ac55c                af_mode
+                0x00000000000ac560                battery_level_bars
+                0x00000000000ac564                video_system_pal
+                0x00000000000ac568                lv_focus_status
+                0x00000000000ac56c                hdmi_code
+                0x00000000000ac570                camera_serial
+                0x00000000000ac590                strobo_firing
+                0x00000000000ac594                _ext_monitor_rca
+                0x00000000000ac598                shooting_type
+                0x00000000000ac59c                continuous_af_photo
+                0x00000000000ac5a0                backlight_level
+                0x00000000000ac5a4                date_format
+                0x00000000000ac5a8                dofpreview
+                0x00000000000ac5ac                _expsim
+ COMMON         0x00000000000ac5b0     0x1000 imgconv.o
+                0x00000000000ac5b0                yuv2rgb_GU
+                0x00000000000ac9b0                yuv2rgb_GV
+                0x00000000000acdb0                yuv2rgb_RV
+                0x00000000000ad1b0                yuv2rgb_BU
+                0x00000000000ad5c0                . = ALIGN (0x40)
+                0x00000000000ad5c0                _bss_end = .
 
 .stab
  *(.stab)
@@ -1833,37 +1833,37 @@ Linker script and memory map
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000     0xcc16
+.debug_info     0x0000000000000000     0xcb95
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000     0x15c6 minimal.o
  .debug_info    0x00000000000015c6      0x22c cache.o
  .debug_info    0x00000000000017f2      0x293 font_direct.o
- .debug_info    0x0000000000001a85     0x47fe raw.o
- .debug_info    0x0000000000006283      0xc48 vram.o
- .debug_info    0x0000000000006ecb     0x1c2e propvalues.o
- .debug_info    0x0000000000008af9      0x891 stdio.o
- .debug_info    0x000000000000938a      0xcae imgconv.o
- .debug_info    0x000000000000a038      0xe6a dialog_test.o
- .debug_info    0x000000000000aea2      0x130 newlib-libc.a(lib_a-memcpy-stub.o)
- .debug_info    0x000000000000afd2      0x116 newlib-libc.a(lib_a-memset.o)
- .debug_info    0x000000000000b0e8       0xbb newlib-libm.a(lib_a-sf_log2.o)
- .debug_info    0x000000000000b1a3      0x14a newlib-libm.a(lib_a-sf_round.o)
- .debug_info    0x000000000000b2ed      0x17f newlib-libm.a(lib_a-wf_log.o)
- .debug_info    0x000000000000b46c      0x18c newlib-libm.a(lib_a-wf_pow.o)
- .debug_info    0x000000000000b5f8      0x17f newlib-libm.a(lib_a-wf_sqrt.o)
- .debug_info    0x000000000000b777      0x29a newlib-libm.a(lib_a-ef_log.o)
- .debug_info    0x000000000000ba11      0x57e newlib-libm.a(lib_a-ef_pow.o)
- .debug_info    0x000000000000bf8f      0x1aa newlib-libm.a(lib_a-ef_sqrt.o)
- .debug_info    0x000000000000c139       0xc4 newlib-libm.a(lib_a-sf_fabs.o)
- .debug_info    0x000000000000c1fd       0xc8 newlib-libm.a(lib_a-sf_finite.o)
- .debug_info    0x000000000000c2c5       0xc6 newlib-libm.a(lib_a-sf_fpclassify.o)
- .debug_info    0x000000000000c38b       0xca newlib-libm.a(lib_a-sf_nan.o)
- .debug_info    0x000000000000c455      0x1d7 newlib-libm.a(lib_a-sf_scalbn.o)
- .debug_info    0x000000000000c62c       0xc1 newlib-libm.a(lib_a-s_lib_ver.o)
- .debug_info    0x000000000000c6ed      0x131 newlib-libm.a(lib_a-s_matherr.o)
- .debug_info    0x000000000000c81e       0xcd newlib-libm.a(lib_a-s_nan.o)
- .debug_info    0x000000000000c8eb      0x209 newlib-libm.a(lib_a-s_rint.o)
- .debug_info    0x000000000000caf4      0x122 newlib-libm.a(lib_a-sf_copysign.o)
+ .debug_info    0x0000000000001a85     0x477d raw.o
+ .debug_info    0x0000000000006202      0xc48 vram.o
+ .debug_info    0x0000000000006e4a     0x1c2e propvalues.o
+ .debug_info    0x0000000000008a78      0x891 stdio.o
+ .debug_info    0x0000000000009309      0xcae imgconv.o
+ .debug_info    0x0000000000009fb7      0xe6a dialog_test.o
+ .debug_info    0x000000000000ae21      0x130 newlib-libc.a(lib_a-memcpy-stub.o)
+ .debug_info    0x000000000000af51      0x116 newlib-libc.a(lib_a-memset.o)
+ .debug_info    0x000000000000b067       0xbb newlib-libm.a(lib_a-sf_log2.o)
+ .debug_info    0x000000000000b122      0x14a newlib-libm.a(lib_a-sf_round.o)
+ .debug_info    0x000000000000b26c      0x17f newlib-libm.a(lib_a-wf_log.o)
+ .debug_info    0x000000000000b3eb      0x18c newlib-libm.a(lib_a-wf_pow.o)
+ .debug_info    0x000000000000b577      0x17f newlib-libm.a(lib_a-wf_sqrt.o)
+ .debug_info    0x000000000000b6f6      0x29a newlib-libm.a(lib_a-ef_log.o)
+ .debug_info    0x000000000000b990      0x57e newlib-libm.a(lib_a-ef_pow.o)
+ .debug_info    0x000000000000bf0e      0x1aa newlib-libm.a(lib_a-ef_sqrt.o)
+ .debug_info    0x000000000000c0b8       0xc4 newlib-libm.a(lib_a-sf_fabs.o)
+ .debug_info    0x000000000000c17c       0xc8 newlib-libm.a(lib_a-sf_finite.o)
+ .debug_info    0x000000000000c244       0xc6 newlib-libm.a(lib_a-sf_fpclassify.o)
+ .debug_info    0x000000000000c30a       0xca newlib-libm.a(lib_a-sf_nan.o)
+ .debug_info    0x000000000000c3d4      0x1d7 newlib-libm.a(lib_a-sf_scalbn.o)
+ .debug_info    0x000000000000c5ab       0xc1 newlib-libm.a(lib_a-s_lib_ver.o)
+ .debug_info    0x000000000000c66c      0x131 newlib-libm.a(lib_a-s_matherr.o)
+ .debug_info    0x000000000000c79d       0xcd newlib-libm.a(lib_a-s_nan.o)
+ .debug_info    0x000000000000c86a      0x209 newlib-libm.a(lib_a-s_rint.o)
+ .debug_info    0x000000000000ca73      0x122 newlib-libm.a(lib_a-sf_copysign.o)
 
 .debug_abbrev   0x0000000000000000     0x2915
  *(.debug_abbrev)
@@ -1897,162 +1897,162 @@ Linker script and memory map
  .debug_abbrev  0x0000000000002744      0x11b newlib-libm.a(lib_a-s_rint.o)
  .debug_abbrev  0x000000000000285f       0xb6 newlib-libm.a(lib_a-sf_copysign.o)
 
-.debug_line     0x0000000000000000     0x5263
+.debug_line     0x0000000000000000     0x526a
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000      0x5c5 minimal.o
  .debug_line    0x00000000000005c5      0x358 cache.o
  .debug_line    0x000000000000091d      0x437 font_direct.o
- .debug_line    0x0000000000000d54      0xf9a raw.o
- .debug_line    0x0000000000001cee      0x807 vram.o
- .debug_line    0x00000000000024f5      0x717 propvalues.o
- .debug_line    0x0000000000002c0c      0x57d stdio.o
- .debug_line    0x0000000000003189      0x72b imgconv.o
- .debug_line    0x00000000000038b4      0x54f dialog_test.o
- .debug_line    0x0000000000003e03      0x197 newlib-libc.a(lib_a-memcpy-stub.o)
- .debug_line    0x0000000000003f9a      0x181 newlib-libc.a(lib_a-memset.o)
- .debug_line    0x000000000000411b       0x96 newlib-libm.a(lib_a-sf_log2.o)
- .debug_line    0x00000000000041b1      0x109 newlib-libm.a(lib_a-sf_round.o)
- .debug_line    0x00000000000042ba       0xc7 newlib-libm.a(lib_a-wf_log.o)
- .debug_line    0x0000000000004381      0x15c newlib-libm.a(lib_a-wf_pow.o)
- .debug_line    0x00000000000044dd       0xb5 newlib-libm.a(lib_a-wf_sqrt.o)
- .debug_line    0x0000000000004592      0x17a newlib-libm.a(lib_a-ef_log.o)
- .debug_line    0x000000000000470c      0x23c newlib-libm.a(lib_a-ef_pow.o)
- .debug_line    0x0000000000004948      0x11b newlib-libm.a(lib_a-ef_sqrt.o)
- .debug_line    0x0000000000004a63       0xe0 newlib-libm.a(lib_a-sf_fabs.o)
- .debug_line    0x0000000000004b43       0xe5 newlib-libm.a(lib_a-sf_finite.o)
- .debug_line    0x0000000000004c28       0xf7 newlib-libm.a(lib_a-sf_fpclassify.o)
- .debug_line    0x0000000000004d1f       0x92 newlib-libm.a(lib_a-sf_nan.o)
- .debug_line    0x0000000000004db1      0x118 newlib-libm.a(lib_a-sf_scalbn.o)
- .debug_line    0x0000000000004ec9       0x57 newlib-libm.a(lib_a-s_lib_ver.o)
- .debug_line    0x0000000000004f20       0x98 newlib-libm.a(lib_a-s_matherr.o)
- .debug_line    0x0000000000004fb8       0x93 newlib-libm.a(lib_a-s_nan.o)
- .debug_line    0x000000000000504b      0x125 newlib-libm.a(lib_a-s_rint.o)
- .debug_line    0x0000000000005170       0xf3 newlib-libm.a(lib_a-sf_copysign.o)
+ .debug_line    0x0000000000000d54      0xfa1 raw.o
+ .debug_line    0x0000000000001cf5      0x807 vram.o
+ .debug_line    0x00000000000024fc      0x717 propvalues.o
+ .debug_line    0x0000000000002c13      0x57d stdio.o
+ .debug_line    0x0000000000003190      0x72b imgconv.o
+ .debug_line    0x00000000000038bb      0x54f dialog_test.o
+ .debug_line    0x0000000000003e0a      0x197 newlib-libc.a(lib_a-memcpy-stub.o)
+ .debug_line    0x0000000000003fa1      0x181 newlib-libc.a(lib_a-memset.o)
+ .debug_line    0x0000000000004122       0x96 newlib-libm.a(lib_a-sf_log2.o)
+ .debug_line    0x00000000000041b8      0x109 newlib-libm.a(lib_a-sf_round.o)
+ .debug_line    0x00000000000042c1       0xc7 newlib-libm.a(lib_a-wf_log.o)
+ .debug_line    0x0000000000004388      0x15c newlib-libm.a(lib_a-wf_pow.o)
+ .debug_line    0x00000000000044e4       0xb5 newlib-libm.a(lib_a-wf_sqrt.o)
+ .debug_line    0x0000000000004599      0x17a newlib-libm.a(lib_a-ef_log.o)
+ .debug_line    0x0000000000004713      0x23c newlib-libm.a(lib_a-ef_pow.o)
+ .debug_line    0x000000000000494f      0x11b newlib-libm.a(lib_a-ef_sqrt.o)
+ .debug_line    0x0000000000004a6a       0xe0 newlib-libm.a(lib_a-sf_fabs.o)
+ .debug_line    0x0000000000004b4a       0xe5 newlib-libm.a(lib_a-sf_finite.o)
+ .debug_line    0x0000000000004c2f       0xf7 newlib-libm.a(lib_a-sf_fpclassify.o)
+ .debug_line    0x0000000000004d26       0x92 newlib-libm.a(lib_a-sf_nan.o)
+ .debug_line    0x0000000000004db8      0x118 newlib-libm.a(lib_a-sf_scalbn.o)
+ .debug_line    0x0000000000004ed0       0x57 newlib-libm.a(lib_a-s_lib_ver.o)
+ .debug_line    0x0000000000004f27       0x98 newlib-libm.a(lib_a-s_matherr.o)
+ .debug_line    0x0000000000004fbf       0x93 newlib-libm.a(lib_a-s_nan.o)
+ .debug_line    0x0000000000005052      0x125 newlib-libm.a(lib_a-s_rint.o)
+ .debug_line    0x0000000000005177       0xf3 newlib-libm.a(lib_a-sf_copysign.o)
 
-.debug_frame    0x0000000000000000     0x1590
+.debug_frame    0x0000000000000000     0x1588
  *(.debug_frame)
  .debug_frame   0x0000000000000000      0x278 minimal.o
  .debug_frame   0x0000000000000278       0x20 cache.o
  .debug_frame   0x0000000000000298       0x3c font_direct.o
- .debug_frame   0x00000000000002d4      0x658 raw.o
- .debug_frame   0x000000000000092c      0x1fc vram.o
- .debug_frame   0x0000000000000b28      0x36c propvalues.o
- .debug_frame   0x0000000000000e94      0x188 stdio.o
- .debug_frame   0x000000000000101c      0x1a8 imgconv.o
- .debug_frame   0x00000000000011c4       0x70 dialog_test.o
- .debug_frame   0x0000000000001234       0x30 newlib-libc.a(lib_a-memcpy-stub.o)
- .debug_frame   0x0000000000001264       0x30 newlib-libc.a(lib_a-memset.o)
- .debug_frame   0x0000000000001294       0x28 newlib-libm.a(lib_a-sf_log2.o)
- .debug_frame   0x00000000000012bc       0x28 newlib-libm.a(lib_a-sf_round.o)
- .debug_frame   0x00000000000012e4       0x30 newlib-libm.a(lib_a-wf_log.o)
- .debug_frame   0x0000000000001314       0x34 newlib-libm.a(lib_a-wf_pow.o)
- .debug_frame   0x0000000000001348       0x30 newlib-libm.a(lib_a-wf_sqrt.o)
- .debug_frame   0x0000000000001378       0x34 newlib-libm.a(lib_a-ef_log.o)
- .debug_frame   0x00000000000013ac       0x38 newlib-libm.a(lib_a-ef_pow.o)
- .debug_frame   0x00000000000013e4       0x30 newlib-libm.a(lib_a-ef_sqrt.o)
- .debug_frame   0x0000000000001414       0x20 newlib-libm.a(lib_a-sf_fabs.o)
- .debug_frame   0x0000000000001434       0x20 newlib-libm.a(lib_a-sf_finite.o)
- .debug_frame   0x0000000000001454       0x20 newlib-libm.a(lib_a-sf_fpclassify.o)
- .debug_frame   0x0000000000001474       0x20 newlib-libm.a(lib_a-sf_nan.o)
- .debug_frame   0x0000000000001494       0x28 newlib-libm.a(lib_a-sf_scalbn.o)
- .debug_frame   0x00000000000014bc       0x20 newlib-libm.a(lib_a-s_matherr.o)
- .debug_frame   0x00000000000014dc       0x20 newlib-libm.a(lib_a-s_nan.o)
- .debug_frame   0x00000000000014fc       0x34 newlib-libm.a(lib_a-s_rint.o)
- .debug_frame   0x0000000000001530       0x20 newlib-libm.a(lib_a-sf_copysign.o)
- .debug_frame   0x0000000000001550       0x20 gcc-libgcc.a(_udivsi3.o)
- .debug_frame   0x0000000000001570       0x20 gcc-libgcc.a(_divsi3.o)
+ .debug_frame   0x00000000000002d4      0x650 raw.o
+ .debug_frame   0x0000000000000924      0x1fc vram.o
+ .debug_frame   0x0000000000000b20      0x36c propvalues.o
+ .debug_frame   0x0000000000000e8c      0x188 stdio.o
+ .debug_frame   0x0000000000001014      0x1a8 imgconv.o
+ .debug_frame   0x00000000000011bc       0x70 dialog_test.o
+ .debug_frame   0x000000000000122c       0x30 newlib-libc.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x000000000000125c       0x30 newlib-libc.a(lib_a-memset.o)
+ .debug_frame   0x000000000000128c       0x28 newlib-libm.a(lib_a-sf_log2.o)
+ .debug_frame   0x00000000000012b4       0x28 newlib-libm.a(lib_a-sf_round.o)
+ .debug_frame   0x00000000000012dc       0x30 newlib-libm.a(lib_a-wf_log.o)
+ .debug_frame   0x000000000000130c       0x34 newlib-libm.a(lib_a-wf_pow.o)
+ .debug_frame   0x0000000000001340       0x30 newlib-libm.a(lib_a-wf_sqrt.o)
+ .debug_frame   0x0000000000001370       0x34 newlib-libm.a(lib_a-ef_log.o)
+ .debug_frame   0x00000000000013a4       0x38 newlib-libm.a(lib_a-ef_pow.o)
+ .debug_frame   0x00000000000013dc       0x30 newlib-libm.a(lib_a-ef_sqrt.o)
+ .debug_frame   0x000000000000140c       0x20 newlib-libm.a(lib_a-sf_fabs.o)
+ .debug_frame   0x000000000000142c       0x20 newlib-libm.a(lib_a-sf_finite.o)
+ .debug_frame   0x000000000000144c       0x20 newlib-libm.a(lib_a-sf_fpclassify.o)
+ .debug_frame   0x000000000000146c       0x20 newlib-libm.a(lib_a-sf_nan.o)
+ .debug_frame   0x000000000000148c       0x28 newlib-libm.a(lib_a-sf_scalbn.o)
+ .debug_frame   0x00000000000014b4       0x20 newlib-libm.a(lib_a-s_matherr.o)
+ .debug_frame   0x00000000000014d4       0x20 newlib-libm.a(lib_a-s_nan.o)
+ .debug_frame   0x00000000000014f4       0x34 newlib-libm.a(lib_a-s_rint.o)
+ .debug_frame   0x0000000000001528       0x20 newlib-libm.a(lib_a-sf_copysign.o)
+ .debug_frame   0x0000000000001548       0x20 gcc-libgcc.a(_udivsi3.o)
+ .debug_frame   0x0000000000001568       0x20 gcc-libgcc.a(_divsi3.o)
 
-.debug_str      0x0000000000000000    0x1890a
+.debug_str      0x0000000000000000    0x1891c
  *(.debug_str)
- .debug_str     0x0000000000000000    0x1342a minimal.o
-                                      0x1376a (size before relaxing)
- .debug_str     0x000000000001342a       0x4d cache.o
-                                       0x6d74 (size before relaxing)
- .debug_str     0x0000000000013477      0x223 font_direct.o
-                                       0x93c2 (size before relaxing)
- .debug_str     0x000000000001369a     0x3248 raw.o
-                                      0x167af (size before relaxing)
- .debug_str     0x00000000000168e2      0x4ff vram.o
-                                      0x129ec (size before relaxing)
- .debug_str     0x0000000000016de1      0xc38 propvalues.o
-                                      0x1325a (size before relaxing)
- .debug_str     0x0000000000017a19       0xb0 stdio.o
-                                       0xe9f8 (size before relaxing)
- .debug_str     0x0000000000017ac9      0x1a5 imgconv.o
-                                       0xfd6b (size before relaxing)
- .debug_str     0x0000000000017c6e      0x63b dialog_test.o
-                                      0x13682 (size before relaxing)
- .debug_str     0x00000000000182a9       0xe9 newlib-libc.a(lib_a-memcpy-stub.o)
+ .debug_str     0x0000000000000000    0x1342c minimal.o
+                                      0x1376c (size before relaxing)
+ .debug_str     0x000000000001342c       0x4d cache.o
+                                       0x6d76 (size before relaxing)
+ .debug_str     0x0000000000013479      0x223 font_direct.o
+                                       0x93c4 (size before relaxing)
+ .debug_str     0x000000000001369c     0x3258 raw.o
+                                      0x167c1 (size before relaxing)
+ .debug_str     0x00000000000168f4      0x4ff vram.o
+                                      0x129ee (size before relaxing)
+ .debug_str     0x0000000000016df3      0xc38 propvalues.o
+                                      0x1325c (size before relaxing)
+ .debug_str     0x0000000000017a2b       0xb0 stdio.o
+                                       0xe9fa (size before relaxing)
+ .debug_str     0x0000000000017adb      0x1a5 imgconv.o
+                                       0xfd6d (size before relaxing)
+ .debug_str     0x0000000000017c80      0x63b dialog_test.o
+                                      0x13684 (size before relaxing)
+ .debug_str     0x00000000000182bb       0xe9 newlib-libc.a(lib_a-memcpy-stub.o)
                                         0x180 (size before relaxing)
- .debug_str     0x0000000000018392       0x74 newlib-libc.a(lib_a-memset.o)
+ .debug_str     0x00000000000183a4       0x74 newlib-libc.a(lib_a-memset.o)
                                         0x15b (size before relaxing)
- .debug_str     0x0000000000018406       0x70 newlib-libm.a(lib_a-sf_log2.o)
+ .debug_str     0x0000000000018418       0x70 newlib-libm.a(lib_a-sf_log2.o)
                                         0x161 (size before relaxing)
- .debug_str     0x0000000000018476       0x74 newlib-libm.a(lib_a-sf_round.o)
+ .debug_str     0x0000000000018488       0x74 newlib-libm.a(lib_a-sf_round.o)
                                         0x1b4 (size before relaxing)
- .debug_str     0x00000000000184ea       0x7e newlib-libm.a(lib_a-wf_log.o)
+ .debug_str     0x00000000000184fc       0x7e newlib-libm.a(lib_a-wf_log.o)
                                         0x1d3 (size before relaxing)
- .debug_str     0x0000000000018568       0x28 newlib-libm.a(lib_a-wf_pow.o)
+ .debug_str     0x000000000001857a       0x28 newlib-libm.a(lib_a-wf_pow.o)
                                         0x1d3 (size before relaxing)
- .debug_str     0x0000000000018590       0x29 newlib-libm.a(lib_a-wf_sqrt.o)
+ .debug_str     0x00000000000185a2       0x29 newlib-libm.a(lib_a-wf_sqrt.o)
                                         0x1d5 (size before relaxing)
- .debug_str     0x00000000000185b9       0x5a newlib-libm.a(lib_a-ef_log.o)
+ .debug_str     0x00000000000185cb       0x5a newlib-libm.a(lib_a-ef_log.o)
                                         0x1bb (size before relaxing)
- .debug_str     0x0000000000018613       0x84 newlib-libm.a(lib_a-ef_pow.o)
+ .debug_str     0x0000000000018625       0x84 newlib-libm.a(lib_a-ef_pow.o)
                                         0x1ef (size before relaxing)
- .debug_str     0x0000000000018697       0x39 newlib-libm.a(lib_a-ef_sqrt.o)
+ .debug_str     0x00000000000186a9       0x39 newlib-libm.a(lib_a-ef_sqrt.o)
                                         0x19f (size before relaxing)
- .debug_str     0x00000000000186d0       0x2f newlib-libm.a(lib_a-sf_fabs.o)
+ .debug_str     0x00000000000186e2       0x2f newlib-libm.a(lib_a-sf_fabs.o)
                                         0x160 (size before relaxing)
- .debug_str     0x00000000000186ff       0x35 newlib-libm.a(lib_a-sf_finite.o)
+ .debug_str     0x0000000000018711       0x35 newlib-libm.a(lib_a-sf_finite.o)
                                         0x167 (size before relaxing)
- .debug_str     0x0000000000018734       0x3f newlib-libm.a(lib_a-sf_fpclassify.o)
+ .debug_str     0x0000000000018746       0x3f newlib-libm.a(lib_a-sf_fpclassify.o)
                                         0x172 (size before relaxing)
- .debug_str     0x0000000000018773       0x36 newlib-libm.a(lib_a-sf_nan.o)
+ .debug_str     0x0000000000018785       0x36 newlib-libm.a(lib_a-sf_nan.o)
                                         0x15e (size before relaxing)
- .debug_str     0x00000000000187a9       0x3c newlib-libm.a(lib_a-sf_scalbn.o)
+ .debug_str     0x00000000000187bb       0x3c newlib-libm.a(lib_a-sf_scalbn.o)
                                         0x1b4 (size before relaxing)
- .debug_str     0x00000000000187e5       0x2d newlib-libm.a(lib_a-s_lib_ver.o)
+ .debug_str     0x00000000000187f7       0x2d newlib-libm.a(lib_a-s_lib_ver.o)
                                         0x1b0 (size before relaxing)
- .debug_str     0x0000000000018812       0x35 newlib-libm.a(lib_a-s_matherr.o)
+ .debug_str     0x0000000000018824       0x35 newlib-libm.a(lib_a-s_matherr.o)
                                         0x182 (size before relaxing)
- .debug_str     0x0000000000018847       0x29 newlib-libm.a(lib_a-s_nan.o)
+ .debug_str     0x0000000000018859       0x29 newlib-libm.a(lib_a-s_nan.o)
                                         0x158 (size before relaxing)
- .debug_str     0x0000000000018870       0x61 newlib-libm.a(lib_a-s_rint.o)
+ .debug_str     0x0000000000018882       0x61 newlib-libm.a(lib_a-s_rint.o)
                                         0x1a4 (size before relaxing)
- .debug_str     0x00000000000188d1       0x39 newlib-libm.a(lib_a-sf_copysign.o)
+ .debug_str     0x00000000000188e3       0x39 newlib-libm.a(lib_a-sf_copysign.o)
                                         0x192 (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x899e
+.debug_loc      0x0000000000000000     0x89b6
  *(.debug_loc)
  .debug_loc     0x0000000000000000      0x323 minimal.o
  .debug_loc     0x0000000000000323       0x50 cache.o
  .debug_loc     0x0000000000000373      0x1cd font_direct.o
- .debug_loc     0x0000000000000540     0x3a80 raw.o
- .debug_loc     0x0000000000003fc0      0x26d vram.o
- .debug_loc     0x000000000000422d      0xf32 propvalues.o
- .debug_loc     0x000000000000515f      0x522 stdio.o
- .debug_loc     0x0000000000005681     0x166c imgconv.o
- .debug_loc     0x0000000000006ced       0x6d dialog_test.o
- .debug_loc     0x0000000000006d5a      0x1ed newlib-libc.a(lib_a-memcpy-stub.o)
- .debug_loc     0x0000000000006f47      0x227 newlib-libc.a(lib_a-memset.o)
- .debug_loc     0x000000000000716e       0x33 newlib-libm.a(lib_a-sf_log2.o)
- .debug_loc     0x00000000000071a1      0x16e newlib-libm.a(lib_a-sf_round.o)
- .debug_loc     0x000000000000730f       0x68 newlib-libm.a(lib_a-wf_log.o)
- .debug_loc     0x0000000000007377      0x10b newlib-libm.a(lib_a-wf_pow.o)
- .debug_loc     0x0000000000007482       0x68 newlib-libm.a(lib_a-wf_sqrt.o)
- .debug_loc     0x00000000000074ea      0x3b2 newlib-libm.a(lib_a-ef_log.o)
- .debug_loc     0x000000000000789c      0xa9a newlib-libm.a(lib_a-ef_pow.o)
- .debug_loc     0x0000000000008336      0x1ee newlib-libm.a(lib_a-ef_sqrt.o)
- .debug_loc     0x0000000000008524       0x13 newlib-libm.a(lib_a-sf_fabs.o)
- .debug_loc     0x0000000000008537       0x39 newlib-libm.a(lib_a-sf_finite.o)
- .debug_loc     0x0000000000008570       0x13 newlib-libm.a(lib_a-sf_fpclassify.o)
- .debug_loc     0x0000000000008583       0x13 newlib-libm.a(lib_a-sf_nan.o)
- .debug_loc     0x0000000000008596      0x17d newlib-libm.a(lib_a-sf_scalbn.o)
- .debug_loc     0x0000000000008713       0x13 newlib-libm.a(lib_a-s_matherr.o)
- .debug_loc     0x0000000000008726       0x13 newlib-libm.a(lib_a-s_nan.o)
- .debug_loc     0x0000000000008739      0x23f newlib-libm.a(lib_a-s_rint.o)
- .debug_loc     0x0000000000008978       0x26 newlib-libm.a(lib_a-sf_copysign.o)
+ .debug_loc     0x0000000000000540     0x3a98 raw.o
+ .debug_loc     0x0000000000003fd8      0x26d vram.o
+ .debug_loc     0x0000000000004245      0xf32 propvalues.o
+ .debug_loc     0x0000000000005177      0x522 stdio.o
+ .debug_loc     0x0000000000005699     0x166c imgconv.o
+ .debug_loc     0x0000000000006d05       0x6d dialog_test.o
+ .debug_loc     0x0000000000006d72      0x1ed newlib-libc.a(lib_a-memcpy-stub.o)
+ .debug_loc     0x0000000000006f5f      0x227 newlib-libc.a(lib_a-memset.o)
+ .debug_loc     0x0000000000007186       0x33 newlib-libm.a(lib_a-sf_log2.o)
+ .debug_loc     0x00000000000071b9      0x16e newlib-libm.a(lib_a-sf_round.o)
+ .debug_loc     0x0000000000007327       0x68 newlib-libm.a(lib_a-wf_log.o)
+ .debug_loc     0x000000000000738f      0x10b newlib-libm.a(lib_a-wf_pow.o)
+ .debug_loc     0x000000000000749a       0x68 newlib-libm.a(lib_a-wf_sqrt.o)
+ .debug_loc     0x0000000000007502      0x3b2 newlib-libm.a(lib_a-ef_log.o)
+ .debug_loc     0x00000000000078b4      0xa9a newlib-libm.a(lib_a-ef_pow.o)
+ .debug_loc     0x000000000000834e      0x1ee newlib-libm.a(lib_a-ef_sqrt.o)
+ .debug_loc     0x000000000000853c       0x13 newlib-libm.a(lib_a-sf_fabs.o)
+ .debug_loc     0x000000000000854f       0x39 newlib-libm.a(lib_a-sf_finite.o)
+ .debug_loc     0x0000000000008588       0x13 newlib-libm.a(lib_a-sf_fpclassify.o)
+ .debug_loc     0x000000000000859b       0x13 newlib-libm.a(lib_a-sf_nan.o)
+ .debug_loc     0x00000000000085ae      0x17d newlib-libm.a(lib_a-sf_scalbn.o)
+ .debug_loc     0x000000000000872b       0x13 newlib-libm.a(lib_a-s_matherr.o)
+ .debug_loc     0x000000000000873e       0x13 newlib-libm.a(lib_a-s_nan.o)
+ .debug_loc     0x0000000000008751      0x23f newlib-libm.a(lib_a-s_rint.o)
+ .debug_loc     0x0000000000008990       0x26 newlib-libm.a(lib_a-sf_copysign.o)
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -2072,17 +2072,17 @@ Linker script and memory map
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x0000000000000000      0xa80
+.debug_ranges   0x0000000000000000      0xa98
  *(.debug_ranges)
  .debug_ranges  0x0000000000000000       0x30 minimal.o
  .debug_ranges  0x0000000000000030       0x70 font_direct.o
- .debug_ranges  0x00000000000000a0      0x808 raw.o
- .debug_ranges  0x00000000000008a8       0x50 vram.o
- .debug_ranges  0x00000000000008f8       0x18 stdio.o
- .debug_ranges  0x0000000000000910      0x108 imgconv.o
- .debug_ranges  0x0000000000000a18       0x38 newlib-libm.a(lib_a-ef_pow.o)
- .debug_ranges  0x0000000000000a50       0x18 newlib-libm.a(lib_a-sf_scalbn.o)
- .debug_ranges  0x0000000000000a68       0x18 newlib-libm.a(lib_a-s_rint.o)
+ .debug_ranges  0x00000000000000a0      0x820 raw.o
+ .debug_ranges  0x00000000000008c0       0x50 vram.o
+ .debug_ranges  0x0000000000000910       0x18 stdio.o
+ .debug_ranges  0x0000000000000928      0x108 imgconv.o
+ .debug_ranges  0x0000000000000a30       0x38 newlib-libm.a(lib_a-ef_pow.o)
+ .debug_ranges  0x0000000000000a68       0x18 newlib-libm.a(lib_a-sf_scalbn.o)
+ .debug_ranges  0x0000000000000a80       0x18 newlib-libm.a(lib_a-s_rint.o)
 
 .debug_macro    0x0000000000000000     0x686a
  *(.debug_macro)

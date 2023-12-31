@@ -421,14 +421,14 @@ Linker script and memory map
  .debug_frame   0x00000000000000d0       0x3c font_direct.o
  .debug_frame   0x000000000000010c       0x20 gcc-libgcc.a(_udivsi3.o)
 
-.debug_str      0x0000000000000000    0x1208e
+.debug_str      0x0000000000000000    0x12090
  *(.debug_str)
- .debug_str     0x0000000000000000    0x11dd1 minimal.o
-                                      0x12089 (size before relaxing)
- .debug_str     0x0000000000011dd1       0x52 cache.o
-                                       0x6d76 (size before relaxing)
- .debug_str     0x0000000000011e23      0x26b font_direct.o
-                                       0x93c4 (size before relaxing)
+ .debug_str     0x0000000000000000    0x11dd3 minimal.o
+                                      0x1208b (size before relaxing)
+ .debug_str     0x0000000000011dd3       0x52 cache.o
+                                       0x6d78 (size before relaxing)
+ .debug_str     0x0000000000011e25      0x26b font_direct.o
+                                       0x93c6 (size before relaxing)
 
 .debug_loc      0x0000000000000000      0x38c
  *(.debug_loc)
