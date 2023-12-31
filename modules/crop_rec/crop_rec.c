@@ -5007,11 +5007,10 @@ static struct menu_entry customize_buttons_menu[] =
             {
                .name     = "Half-Shutter",
                .max      = 2,
-               .choices  = CHOICES("OFF", "Zoom x10", "Focus aid"),
+               .choices  = CHOICES("OFF", "Zoom x10", "Zoom aid"),
                .update   = Half_Shutter_update,
                .priv     = &Half_Shutter,
                .help     = "Assign Half-Shutter button to a task.",
-               .help2    = "Get close up focus while filming\n"
             },
             {
                .name     = "SET Button",
