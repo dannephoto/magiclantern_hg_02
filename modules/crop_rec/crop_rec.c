@@ -24,6 +24,8 @@
 #define dbg_printf(fmt,...) {}
 #endif
 
+static int zoom = 0;
+
 static int is_DIGIC_5 = 0;
 static int is_5D3 = 0;
 static int is_6D = 0;
@@ -3594,6 +3596,7 @@ static void FAST EngDrvOuts_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
 uint32_t REG_C0F38024_Val = 0;
 void CheckPreviewRegsValuesAndForce()
 {
+    if (Half_Shutter == 2 && zoom) return;
     if (!lv) return;
     if (!CROP_PRESET_MENU) return;
     if (lv_dispsize != 5) return;
@@ -4985,7 +4988,7 @@ static MENU_UPDATE_FUNC(customize_buttons_update)
 
 static MENU_UPDATE_FUNC(Half_Shutter_update)
 {
-    if (Half_Shutter && !is_manual_focus())
+    if (Half_Shutter == 1 && !is_manual_focus())
     {
         MENU_SET_WARNING(MENU_WARN_NOT_WORKING, "Half-Shutter assignment only works with manual focus.");
     }
@@ -5003,8 +5006,8 @@ static struct menu_entry customize_buttons_menu[] =
         .children   =  (struct menu_entry[]) {
             {
                .name     = "Half-Shutter",
-               .max      = 1,
-               .choices  = CHOICES("OFF", "Zoom x10"),
+               .max      = 2,
+               .choices  = CHOICES("OFF", "Zoom x10", "Zoom aid"),
                .update   = Half_Shutter_update,
                .priv     = &Half_Shutter,
                .help     = "Assign Half-Shutter button to a task.",
@@ -5389,6 +5392,46 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
 static unsigned int crop_rec_keypress_cbr(unsigned int key)
 {
     extern int kill_canon_gui_mode;
+    //Reset zoom when stopping recording
+    
+if (Half_Shutter == 2)
+{
+    if (key == MODULE_KEY_REC && RECORDING)
+    {
+        zoom = 0;
+    }
+    
+    //Resets the preview zoom when releasing halfshutter. Better for when using autofocus
+    if (!get_halfshutter_pressed() && zoom)
+    {
+        zoom = 0;
+        key = MODULE_KEY_UNPRESS_SET;
+        CheckPreviewRegsValuesAndForce();
+        msleep(400);
+    }
+    
+    if (get_halfshutter_pressed() && RECORDING)
+    {
+        key = MODULE_KEY_PRESS_SET;
+    }
+    
+    //If zoomaid is turned off
+    if (get_halfshutter_pressed() && !RECORDING && !gui_menu_shown() && lv && is_movie_mode())
+    {
+        key = MODULE_KEY_PRESS_SET;
+    }
+    
+    
+    if (key == MODULE_KEY_PRESS_SET && !zoom)
+    {
+        zoom = 1;
+        key = MODULE_KEY_UNPRESS_SET;
+        msleep(400);
+        EngDrvOutLV(0xc0f11B8C, 0x0);
+        EngDrvOutLV(0xc0f11BCC, 0x0);
+        EngDrvOutLV(0xc0f11BC8, 0x0);
+    }
+}
     
     /* Opens up last magic lantern menu tab by tapping display */
     if (key == MODULE_KEY_TOUCH_1_FINGER && !gui_menu_shown() && is_movie_mode() && lv && !RECORDING && lv_dispsize != 10)
@@ -5411,7 +5454,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
             {
                 if (((key == MODULE_KEY_PRESS_SET         ) && SET_button  == 1)                 ||
                     ((key == MODULE_KEY_INFO              ) && INFO_button == 1)                 ||
-                    ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter && is_manual_focus()) )
+                    ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter == 1 && is_manual_focus()) )
                 {
                     set_zoom(10);
 
@@ -5431,7 +5474,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
             {
                 if (((key == MODULE_KEY_PRESS_SET           ) && SET_button  == 1)                 ||
                     ((key == MODULE_KEY_INFO                ) && INFO_button == 1)                 ||
-                    ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter && is_manual_focus()) )
+                    ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter == 1 && is_manual_focus()) )
                 {
                     set_zoom(1); // Get to x1 first, sometime we get black preview when going x10 --> x5
                     set_zoom(5);
