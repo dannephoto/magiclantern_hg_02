@@ -3596,7 +3596,6 @@ static void FAST EngDrvOuts_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
 uint32_t REG_C0F38024_Val = 0;
 void CheckPreviewRegsValuesAndForce()
 {
-    if (Half_Shutter == 2 && zoom) return;
     if (!lv) return;
     if (!CROP_PRESET_MENU) return;
     if (lv_dispsize != 5) return;
@@ -5408,10 +5407,9 @@ if (Half_Shutter == 2 && RECORDING)
     {
         zoom = 0;
         CheckPreviewRegsValuesAndForce();
-        msleep(400);
     }
     
-    if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode())
+    if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode() && !zoom)
     {
         zoom = 1;
         msleep(400);
