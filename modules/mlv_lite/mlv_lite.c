@@ -164,7 +164,7 @@ static CONFIG_INT("raw.preview_toggle", preview_toggle, 0);
 
 static CONFIG_INT("raw.warm.up", warm_up, 0);
 static CONFIG_INT("raw.use.srm.memory", use_srm_memory, 1);
-static CONFIG_INT("raw.small.hacks", small_hacks, 1);
+static CONFIG_INT("raw.small.hacks", small_hacks, 2);
 static CONFIG_INT("raw.killgd", kill_gd, 0);
 
 static CONFIG_INT("raw.h264.proxy", h264_proxy_menu, 0);
@@ -2365,21 +2365,13 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    //Allows for af while using hacks
-                    if (is_manual_focus())
-                    {
-                        aewbSuspend();
-                    }
+                    //aewbSuspend(); Sorry bilal. If we can´t modify iso while filming with this on it gptta go.
                 }
 
                 if (small_hacks == 3 && CartridgeCancel_works) // CartridgeCancel_works: calling CartridgeCancel(); freezes LiveView in some models
                 {
                     lvfaceEnd();
-                    //Allows for af while using hacks
-                    if (is_manual_focus())
-                    {
-                        aewbSuspend();
-                    }
+                    aewbSuspend();
                     CartridgeCancel();
                     wait_lv_frames(2); /* In some cases the first frame would be corrupted when calling CartridgeCancel */
                 }

@@ -5406,16 +5406,17 @@ if (Half_Shutter == 2 && RECORDING)
     if (!get_halfshutter_pressed() && zoom)
     {
         zoom = 0;
+        EngDrvOutLV(0xc0f11A88, 0x0);
         CheckPreviewRegsValuesAndForce();
     }
     
     if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode() && !zoom)
     {
         zoom = 1;
-        msleep(400);
         EngDrvOutLV(0xc0f11B8C, 0x0);
         EngDrvOutLV(0xc0f11BCC, 0x0);
         EngDrvOutLV(0xc0f11BC8, 0x0);
+        EngDrvOutLV(0xc0f11A88, 0x1);
     }
     
 }
