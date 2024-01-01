@@ -5396,7 +5396,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
     //Reset zoom when stopping recording
     
 //Focus aid function
-if (Half_Shutter == 2)
+if (Half_Shutter == 2 && RECORDING)
 {
     if (key == MODULE_KEY_REC && RECORDING)
     {
