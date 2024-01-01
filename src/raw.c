@@ -1143,11 +1143,11 @@ int raw_update_params_work()
     
     raw_info.black_level = black_mean;
     
-    //Correct black level for digic V cameras
-    if (black_mean == 2047)
-    {
-        raw_info.black_level = 2048;
-    }
+    //Correct black level for digic V cameras. Maybe not after all. Tests performed
+    //if (black_mean == 2047)
+    //{
+    //    raw_info.black_level = 2048;
+    //}
 
     if (!lv)
     {
