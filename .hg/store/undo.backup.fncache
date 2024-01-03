@@ -4717,3 +4717,8 @@ data/.git/objects/0a/f2b7aadae3ff7878935675a164cbc62c1a5d0c.i
 data/tcc/tests/tests2/06_case.c.i
 data/.git/objects/70/d8374d04fa471a642db4e96f33a2addba92bfb.i
 data/installer/5DC.111/build_scripts/eos_tools_v11/decrypt_40D105_flasher/Makefile.i
+data/.git/index.d
+data/.git/objects/pack/pack-c96cb4774a14e6e33684064afab6f825b5f80cbf.idx.i
+data/.git/objects/pack/pack-c96cb4774a14e6e33684064afab6f825b5f80cbf.idx.d
+data/.git/objects/pack/pack-c96cb4774a14e6e33684064afab6f825b5f80cbf.pack.i
+data/.git/objects/pack/pack-c96cb4774a14e6e33684064afab6f825b5f80cbf.pack.d

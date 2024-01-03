@@ -5429,6 +5429,7 @@ if (Half_Shutter == 2 && RECORDING)
             // Use INFO key to cycle LV as normal when not in the LV with ML overlays
             return 1;
         }
+        select_menu_by_name("Movie", "Crop mood");
         gui_open_menu();
     }
 
