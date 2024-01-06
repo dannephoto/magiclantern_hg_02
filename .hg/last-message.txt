@@ -1,1 +1,0 @@
-crop_rec.c:(Focus aid differ in 1x1)
