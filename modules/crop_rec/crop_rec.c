@@ -5461,7 +5461,7 @@ if (Half_Shutter == 2 && RECORDING)
         EngDrvOutLV(0xc0f11B8C, 0x0);
         EngDrvOutLV(0xc0f11BCC, 0x0);
         EngDrvOutLV(0xc0f11BC8, 0x0);
-        if (crop_preset == CROP_PRESET_1X3 || crop_preset == CROP_PRESET_3X3)
+        if (crop_preset == CROP_PRESET_1X3)
         {
             EngDrvOutLV(0xc0f11A88, 0x1);
         }
