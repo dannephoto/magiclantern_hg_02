@@ -126,13 +126,13 @@ static const char * aspect_ratio_choices[] =       {"5:1","4:1","3:1","2.67:1","
 
 /* config variables */
 
-CONFIG_INT("raw.video.enabled", raw_video_enabled, 0);
+CONFIG_INT("raw.video.enabled", raw_video_enabled, 1);
 
 /* Card spanning */
 static CONFIG_INT("raw.card_spanning", card_spanning, 0);
 #define MAX_WRITER_THREADS 2
 
-static CONFIG_INT("raw.res_x", resolution_index_x, 4);
+static CONFIG_INT("raw.res_x", resolution_index_x, 11);
 static CONFIG_INT("raw.res_x_fine", res_x_fine, 0);
 static CONFIG_INT("raw.aspect.ratio", aspect_ratio_index, 10);
 

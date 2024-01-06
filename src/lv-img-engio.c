@@ -901,6 +901,7 @@ static struct menu_entry lv_img_menu[] = {
         .priv = &vignetting_correction_enable,
         .select = vignetting_correction_toggle,
         .help = "Vignetting correction or effects.",
+        .shidden = 1,//Crop mood
         .depends_on = DEP_MOVIE_MODE,
         .submenu_width = 710,
         .submenu_height = 250,

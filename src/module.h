@@ -35,10 +35,10 @@
 #define CBR_DISPLAY_FILTER            4
 /**
  * Display filters (things that alter the LiveView image)
- * 
+ *
  * - ctx=0: should return 1 if the display filter mode should be enabled, 0 if not
  *          (but must not do any heavy processing!!!)
- * 
+ *
  * - else: ctx is a (struct display_filter_buffers *), see vram.h
  *         (contains src_buf and dst_buf)
  *         in this case, the cbr should paint the new image in dst_buf,
@@ -84,7 +84,7 @@
 #define MODULE_KEY_PRESS_DOWN_LEFT         (18)
 #define MODULE_KEY_PRESS_DOWN              (19)
 #define MODULE_KEY_UNPRESS_UDLR            (20)
-#define MODULE_KEY_PRESS_ZOOMIN            (21)     
+#define MODULE_KEY_PRESS_ZOOMIN            (21)
 #define MODULE_KEY_MENU                    (22)
 #define MODULE_KEY_INFO                    (23)
 #define MODULE_KEY_PLAY                    (24)
@@ -184,6 +184,7 @@ typedef struct
     int valid;
     int enabled;
     int error;
+    int is_core;
 } module_entry_t;
 
 
@@ -210,7 +211,7 @@ typedef struct
 #define MODULE_STRINGS_START__(prefix,modname)                  module_strpair_t prefix##modname[] MODULE_STRINGS_SECTION = {
 #define MODULE_STRING(field,value)                                  { field, value },
 #define MODULE_STRINGS_END()                                        { (const char *)0, (const char *)0 }\
-                                                                };                                                                
+                                                                };
 #define MODULE_CBRS_START()                                     MODULE_CBRS_START_(MODULE_CBR_PREFIX,MODULE_NAME)
 #define MODULE_CBRS_START_(prefix,modname)                      MODULE_CBRS_START__(prefix,modname)
 #define MODULE_CBRS_START__(prefix,modname)                     module_cbr_t prefix##modname[] = {
@@ -307,18 +308,18 @@ struct module_symbol_entry
     void** address;
 };
 
-/* 
+/*
  * For module routines that may be called from core:
  *
  * usage:
  * static void(*auto_ettr_intervalometer_wait)(void) = MODULE_FUNCTION(auto_ettr_intervalometer_wait);
  * (if that module is not available, it simply calls ret_0)
- * 
+ *
  * or, a little more advanced:
  * static void(*foobar)(int, int) = MODULE_SYMBOL(do_foobar, default_function)
- * 
+ *
  * All module symbols are updated after modules are loaded.
- * 
+ *
  * You **MUST** declare these symbols static.
  * If you don't, the error will only be detected at runtime, if no modules are loaded.
  */

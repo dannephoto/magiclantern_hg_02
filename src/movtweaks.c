@@ -944,6 +944,7 @@ static struct menu_entry mov_menus[] = {
         .max = 1,
         .help   = "Use smooth exposure transitions, by compensating with ISO.",
         .help2  = "=> adjust ISO, shutter speed and aperture without large jumps.",
+        .shidden = 1, //Crop mood
         .submenu_width = 700,
         .depends_on = DEP_MOVIE_MODE | DEP_MANUAL_ISO,
         .children =  (struct menu_entry[]) {

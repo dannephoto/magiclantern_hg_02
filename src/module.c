@@ -43,6 +43,8 @@ CONFIG_INT("module.console", module_console_enabled, 0);
 CONFIG_INT("module.ignore_crashes", module_ignore_crashes, 0);
 char *module_lockfile = MODULE_PATH"LOADING.LCK";
 
+char *core_modules[] = {"mlv_lite", "crop_rec", "mlv_play", "mlv_snd", "sd_uhs", "lua", "file_man", "dual_iso", "silent"};
+
 static struct msg_queue * module_mq = 0;
 // #define MSG_MODULE_LOAD_ALL 1
 // #define MSG_MODULE_UNLOAD_ALL 2
@@ -267,11 +269,21 @@ static void _module_load_all(uint32_t list_only)
             /* check for a .en file that tells the module is enabled */
             char enable_file[FIO_MAX_PATH_LENGTH];
             snprintf(enable_file, sizeof(enable_file), "%s%s.en", get_config_dir(), module_list[module_cnt].name);
+
+            unsigned int core_modules_count = COUNT(core_modules);
+            unsigned int index_in_core_modules;
+            for(index_in_core_modules = 0; index_in_core_modules < core_modules_count; ++index_in_core_modules) {
+                if (strcmp(core_modules[index_in_core_modules], module_list[module_cnt].name) == 0) {
+                    module_list[module_cnt].is_core = 1;
+                    break;
+                }
+            }
             
-            /* if enable-file is nonexistent, dont load module */
-            if(!config_flag_file_setting_load(enable_file))
+            /* if enable-file is nonexistent, dont load module, unless it's a core module */
+            if(!config_flag_file_setting_load(enable_file) && index_in_core_modules >= core_modules_count)
             {
                 module_list[module_cnt].enabled = 0;
+                module_list[module_cnt].is_core = 0;
                 snprintf(module_list[module_cnt].status, sizeof(module_list[module_cnt].status), "OFF");
                 snprintf(module_list[module_cnt].long_status, sizeof(module_list[module_cnt].long_status), "Module disabled");
                 //printf("  [i] %s\n", module_list[module_cnt].long_status);
@@ -309,7 +321,7 @@ static void _module_load_all(uint32_t list_only)
         {
             if (
                     /* loaded modules first, then alphabetically */
-                    (module_list[i].enabled == 0 && module_list[j].enabled) || 
+                    (module_list[i].enabled == 0 && module_list[j].enabled) ||
                     (module_list[i].enabled == module_list[j].enabled && strcmp(module_list[i].name, module_list[j].name) > 0)
                )
             {
@@ -545,6 +557,7 @@ static void _module_load_all(uint32_t list_only)
     #else
     module_state = state;
     #endif
+
     
     printf("Modules loaded\n");
 }
@@ -1012,7 +1025,7 @@ int module_display_filter_update()
         {
             while(cbr->name)
             {
-                /* run the first module display filter that returned 1 in module_display_filter_enabled */ 
+                /* run the first module display filter that returned 1 in module_display_filter_enabled */
                 if(cbr->type == CBR_DISPLAY_FILTER && cbr->ctx)
                 {
                     /* arg!=0: draw the filtered image in these buffers */
@@ -1158,7 +1171,7 @@ static MENU_UPDATE_FUNC(module_menu_update_entry)
     {
         if (
                 !module_list[mod_number].valid &&
-                module_list[mod_number].strings && 
+                module_list[mod_number].strings &&
                 module_list[mod_number].strings != module_default_strings
             )
         {
@@ -1209,7 +1222,12 @@ static void module_menu_update()
         {
             ASSERT(mod_number == (int) entry->priv);
 
-            if(module_list[mod_number].valid)
+             // Don't show core modules, they are not optional in this build
+            if(module_list[mod_number].is_core == 1)
+            {
+                MENU_SET_SHIDDEN(1);
+            }
+            else if(module_list[mod_number].valid)
             {
                 MENU_SET_SHIDDEN(0);
             }
@@ -1465,7 +1483,7 @@ static MENU_UPDATE_FUNC(module_menu_info_update)
         if (props && *props)
         {
             y += 10;
-            bmp_printf(FONT_MED, x - 32, y, 
+            bmp_printf(FONT_MED, x - 32, y,
                 #if defined(CONFIG_UNREGISTER_PROP)
                 "Properties:"
                 #else
@@ -1760,7 +1778,6 @@ static void module_load_task(void* unused)
             
             if(!first_run)
             {
-                FILE *file = FIO_CreateFile( "ML/SETTINGS/TLAPSE.LEN" );
                 FILE *file2 = FIO_CreateFile( "ML/FIRST" );
                 //throw in custom folder here for now
                 static char* CM1;

@@ -24,15 +24,15 @@ extern int FAST get_y_skip_offset_for_overlays();
 extern int nondigic_zoom_overlay_enabled();
 
 
-CONFIG_INT( "hist.draw", hist_draw,  1 );
+CONFIG_INT( "hist.draw", hist_draw,  0 );
 #ifdef FEATURE_RAW_HISTOGRAM
-CONFIG_INT( "hist.type", hist_type,  2 );
+CONFIG_INT( "hist.type", hist_type,  0 );
 #else
-CONFIG_INT( "hist.type", hist_type,  1 );
+CONFIG_INT( "hist.type", hist_type,  0 );
 #endif
-CONFIG_INT( "hist.warn", hist_warn,  1 );
-CONFIG_INT( "hist.log",  hist_log,   1 );
-CONFIG_INT( "hist.meter", hist_meter,  2);
+CONFIG_INT( "hist.warn", hist_warn,  0 );
+CONFIG_INT( "hist.log",  hist_log,   0 );
+CONFIG_INT( "hist.meter", hist_meter,  0);
 
 struct Histogram histogram;
 

@@ -179,7 +179,7 @@ static CONFIG_INT( "global.draw",   global_draw, 3 );
 #define ZEBRAS_IN_QUICKREVIEW (global_draw > 1)
 #define ZEBRAS_IN_LIVEVIEW (global_draw & 1)
 
-static CONFIG_INT( "zebra.draw",    zebra_draw, 1 );
+static CONFIG_INT( "zebra.draw",    zebra_draw, 0 );
 #ifdef FEATURE_ZEBRA_FAST
 static CONFIG_INT( "zebra.colorspace",    zebra_colorspace,   2 );// luma/rgb/lumafast
 #else
@@ -358,7 +358,7 @@ static CONFIG_INT( "clear.preview.delay", clearscreen_delay, 1000); // ms
 //~ #define clearscreen (clearscreen_enabled ? clearscreen_mode+1 : 0)
 
 static CONFIG_INT( "spotmeter.size",        spotmeter_size, 5 );
-static CONFIG_INT( "spotmeter.draw",        spotmeter_draw, 1 );
+static CONFIG_INT( "spotmeter.draw",        spotmeter_draw, 0 );
 static CONFIG_INT( "spotmeter.formula",     spotmeter_formula, 0 ); // 0 percent, 1 IRE AJ, 2 IRE Piers
 static CONFIG_INT( "spotmeter.position",        spotmeter_position, 1 ); // fixed / attached to AF frame
 
@@ -603,7 +603,7 @@ hist_build()
 
 #ifdef FEATURE_RAW_ZEBRAS
 
-static CONFIG_INT("raw.zebra", raw_zebra_enable, 2); /* 1 = always, 2 = photo only */
+static CONFIG_INT("raw.zebra", raw_zebra_enable, 0); /* 1 = always, 2 = photo only */
 #define RAW_ZEBRA_ENABLE (raw_zebra_enable == 1 || (raw_zebra_enable == 2 && !lv))
 
 static void FAST draw_zebras_raw()

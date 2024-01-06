@@ -31,7 +31,7 @@ static uint32_t sdr_240MHz2[]    = {        0x3,        0x3,                    
 static uint32_t uhs_vals[COUNT(uhs_regs)];  /* current values */
 static int sd_setup_mode_enable = 0;
 static int turned_on = 0;
-static CONFIG_INT("sd.sd_overclock", sd_overclock, 0);
+static CONFIG_INT("sd.sd_overclock", sd_overclock, 3);
 static CONFIG_INT("sd.sd_access_mode", access_mode, 1);
 
 /* CID info hook, should work on all DIGIC 5 models */
@@ -626,7 +626,7 @@ static unsigned int sd_uhs_init()
         sd_uhs_menu[0].help2   = sd_choices_help2_others;
     }
     
-    menu_add("Debug", sd_uhs_menu, COUNT(sd_uhs_menu));
+    menu_add("Movie", sd_uhs_menu, COUNT(sd_uhs_menu));
     
     if (is_camera("5D3", "1.1.3"))
     {

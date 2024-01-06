@@ -517,6 +517,7 @@ static struct menu_entry mov_menus[] = {
         .select     = bitrate_toggle,
         .icon_type  = IT_PERCENT_OFF,
         .help = "Change H.264 bitrate. Be careful, recording may stop!",
+        .shidden = 1,//Crop mood
         .depends_on = DEP_MOVIE_MODE,
         .children =  (struct menu_entry[]) {
             {

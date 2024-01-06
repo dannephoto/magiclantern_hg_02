@@ -83,6 +83,7 @@ static struct menu_entry crop_hack_menus[] = {
         .priv = &video_mode_crop,
         .help   = "Enables 600D movie crop-mode",
         .depends_on = DEP_MOVIE_MODE,
+        .shidden = 1 //Crop mood
     },
 };
 

@@ -25,6 +25,7 @@
 #endif
 
 static int zoom = 0;
+static int submenu = 0;
 
 static int is_DIGIC_5 = 0;
 static int is_5D3 = 0;
@@ -36,11 +37,13 @@ static int is_100D = 0;
 static int is_EOSM = 0;
 static int is_basic = 0;
 
-static CONFIG_INT("crop.preset", crop_preset_index, 0);
+static CONFIG_INT("crop.tapdisp", tapdisp, 1);
+static CONFIG_INT("crop.preset_fps", crop_preset_fps_reduce, 1);
+static CONFIG_INT("crop.preset", crop_preset_index, 2);
 static CONFIG_INT("crop.shutter_range", shutter_range, 0);
 static CONFIG_INT("crop.fix_dual_iso_flicker", fix_dual_iso_flicker, 1);
 
-static CONFIG_INT("crop.bit_depth", bit_depth_analog, 0);
+static CONFIG_INT("crop.bit_depth", bit_depth_analog, 1);
 #define OUTPUT_14BIT (bit_depth_analog == 0)
 #define OUTPUT_12BIT (bit_depth_analog == 1)
 #define OUTPUT_11BIT (bit_depth_analog == 2)
@@ -68,7 +71,7 @@ static int crop_preset_1x1_res = 0;
 #define CROP_1280p     (crop_preset_1x1_res == 4)
 #define CROP_Full_Res  (crop_preset_1x1_res == 5)
 
-static CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 0);
+static CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
 static int crop_preset_1x3_res = 0;
 #define Anam_Highest   (crop_preset_1x3_res == 0)
 #define Anam_Higher    (crop_preset_1x3_res == 1)
@@ -86,11 +89,11 @@ static int crop_preset_fps = 0;
 #define Framerate_30   (crop_preset_fps == 2)
 
 /* customized buttons variables */
-static CONFIG_INT("crop.button_SET",       SET_button, 0);
-static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 0);
+static CONFIG_INT("crop.button_SET",       SET_button, 1);
+static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 2);
 static CONFIG_INT("crop.button_INFO",      INFO_button, 0);
+static CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 1);
 static CONFIG_INT("crop.arrows_L_R",       Arrows_L_R, 0);
-static CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 0);
 
 enum crop_preset {
     CROP_PRESET_OFF = 0,
@@ -2968,7 +2971,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
             {
                 RAW_H         = 0x1D4;
                 RAW_V         = 0x3EC;
-                TimerB        = 0x50E;
+                TimerB        = crop_preset_fps_reduce == 0x1 ? 0x5a2: 0x50E;
                 TimerA        = 0x20F;  // can go lower down to 0x207
             }
 
@@ -2992,7 +2995,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
             {
                 RAW_H         = 0x1D4;
                 RAW_V         = 0x380;
-                TimerB        = 0x4CD;
+                TimerB        = crop_preset_fps_reduce == 0x1 ? 0x501: 0x4CD;
                 TimerA        = 0x207;
             }
 
@@ -3016,7 +3019,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
             {
                 RAW_H         = 0x1D4;
                 RAW_V         = 0x332;
-                TimerB        = 0x472; // we might be able to lower it even more
+                TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x472;
                 TimerA        = 0x207;
             }
 
@@ -3040,7 +3043,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
             {
                 RAW_H         = 0x1D4;
                 RAW_V         = 0x2FE;
-                TimerB        = 0x436;  // it can go lower but with risk of corrupted frames
+                TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x436;
                 TimerA        = 0x207;
             }
 
@@ -4279,6 +4282,8 @@ static MENU_UPDATE_FUNC(crop_update)
         crop_rec_menu[0].children[0].shidden = (crop_preset_index != 1);  // 1 CROP_PRESET_1X1
         crop_rec_menu[0].children[1].shidden = (crop_preset_index != 2);  // 2 CROP_PRESET_1X3
         crop_rec_menu[0].children[2].shidden = (crop_preset_index != 3);  // 3 CROP_PRESET_3X3
+        crop_rec_menu[0].children[5].shidden = (CROP_PRESET_MENU == CROP_PRESET_1X3);  // 3 CROP_PRESET_3X3
+        
 
         if (CROP_PRESET_MENU && lv && patch_active)
         {
@@ -4677,15 +4682,18 @@ static MENU_UPDATE_FUNC(crop_preset_fps_update)
 
     if (CROP_PRESET_MENU == CROP_PRESET_3X3)
     {
+        
+        int current_fps = fps_get_current_x1000();
+                    
         if (crop_preset_3x3_res_menu == 0) // High FPS
         {
             if (is_650D || is_700D || is_EOSM)
             {
-                if (crop_preset_ar_menu == 0) MENU_SET_VALUE("46.800 FPS"); // AR_16_9
-                if (crop_preset_ar_menu == 1) MENU_SET_VALUE("50 FPS");     // AR_2_1
-                if (crop_preset_ar_menu == 2) MENU_SET_VALUE("54 FPS");     // AR_2_20_1
-                if (crop_preset_ar_menu == 3) MENU_SET_VALUE("57 FPS");     // AR_2_35_1
-                if (crop_preset_ar_menu == 4) MENU_SET_VALUE("60 FPS");     // AR_2_39_1  // actually 2.50:1 aspect ratio
+                if (crop_preset_ar_menu == 0) MENU_SET_VALUE("%d.%03d",current_fps/1000, current_fps%1000); // AR_16_9
+                if (crop_preset_ar_menu == 1) MENU_SET_VALUE("%d.%03d",current_fps/1000, current_fps%1000);     // AR_2_1
+                if (crop_preset_ar_menu == 2) MENU_SET_VALUE("%d.%03d",current_fps/1000, current_fps%1000);     // AR_2_20_1
+                if (crop_preset_ar_menu == 3) MENU_SET_VALUE("%d.%03d",current_fps/1000, current_fps%1000);     // AR_2_35_1
+                if (crop_preset_ar_menu == 4) MENU_SET_VALUE("%d.%03d",current_fps/1000, current_fps%1000);     // AR_2_39_1  // actually 2.50:1 aspect ratio
             }
 
             if (is_100D)
@@ -4762,6 +4770,15 @@ static struct menu_entry crop_rec_menu[] =
                               "1736x1160 @ 23.976, 25 and 30 FPS.",
                 .shidden    = 1,
             },
+            /*
+            {
+                .name       = "Preset shortcuts",
+                .priv       = &presets,
+                .max        = 7,
+                .choices    = CHOICES("None selected", "4.2K (16:9)", "1440p (16:9)", "976p (16:9)", "1080p (16:9)", "4.8K (2.35:1)", "2.8k (2.35:1)", "738p (2.35:1)"),
+                .help       = "16:9 presets",
+            },
+             */
             {
                 .name       = "Aspect ratio:",
                 .priv       = &crop_preset_ar_menu,
@@ -4778,6 +4795,14 @@ static struct menu_entry crop_rec_menu[] =
                 .max        = 2,
                 .choices    = CHOICES("23.976 FPS", "25 FPS", "30 FPS"),
                 .help       = "Select framerate for current preset.",
+                .shidden    = 1,
+            },
+            {
+                .name       = "Reduced framerate HFR",
+                .priv       = &crop_preset_fps_reduce,
+                .max        = 1,
+                .choices    = CHOICES("OFF", "Activated"),
+                .help       = "Reduces framerates slightly for HFR presets",
                 .shidden    = 1,
             },
             {
@@ -5027,6 +5052,13 @@ static struct menu_entry customize_buttons_menu[] =
                 .help     = "Assign INFO button to a task.",
             },
             {
+                .name   = "Tap display",
+                .priv   = &tapdisp,
+                .max    = 1,
+                .choices = CHOICES("OFF", "Preset access"),
+                .help   = "Tap display to reach Crop mood preset list",
+            },
+            {
                 .name     = "U/D Arrows",
                 .max      = 2,
                 .choices  = CHOICES("OFF", "ISO", "Aperture"),
@@ -5195,6 +5227,16 @@ int check_if_settings_changed()
 /* when closing ML menu, check whether we need to refresh the LiveView */
 static unsigned int crop_rec_polling_cbr(unsigned int unused)
 {
+    
+    /* connected to MODULE_KEY_TOUCH_1_FINGER for entering Movie tab menu */
+    if (gui_menu_shown() && submenu && !RECORDING && tapdisp)
+    {
+        module_send_keypress(MODULE_KEY_Q);
+        module_send_keypress(MODULE_KEY_PRESS_SET);
+        msleep(10);
+        module_send_keypress(MODULE_KEY_UNPRESS_SET);
+        submenu = 0;
+    }
     /* also check at startup */
     static int lv_dirty = 1;
 
@@ -5428,7 +5470,7 @@ if (Half_Shutter == 2 && RECORDING)
 }
     
     /* Opens up last magic lantern menu tab by tapping display */
-    if (key == MODULE_KEY_TOUCH_1_FINGER && !gui_menu_shown() && is_movie_mode() && lv && !RECORDING && lv_dispsize != 10)
+    if (tapdisp && key == MODULE_KEY_TOUCH_1_FINGER && !gui_menu_shown() && is_movie_mode() && lv && !RECORDING && lv_dispsize != 10)
     {
         msleep(100);
         if(lv_disp_mode != 0){
@@ -5437,6 +5479,8 @@ if (Half_Shutter == 2 && RECORDING)
         }
         select_menu_by_name("Movie", "Crop mood");
         gui_open_menu();
+        msleep(10);
+        submenu = 1;
     }
 
     /* we need to use customize buttons in LiveView while ML isn't showing and when using Crop mood */
@@ -6133,7 +6177,7 @@ static unsigned int crop_rec_init()
     }
 
     menu_add("Movie", crop_rec_menu, COUNT(crop_rec_menu));
-    menu_add("Prefs", customize_buttons_menu, COUNT(customize_buttons_menu));
+    menu_add("Movie", customize_buttons_menu, COUNT(customize_buttons_menu));
     lvinfo_add_items (info_items, COUNT(info_items));
 
     return 0;
@@ -6158,11 +6202,13 @@ MODULE_CONFIGS_START()
     MODULE_CONFIG(crop_preset_3x3_res_menu)
     MODULE_CONFIG(crop_preset_ar_menu)
     MODULE_CONFIG(crop_preset_fps_menu)
+    MODULE_CONFIG(crop_preset_fps_reduce)
     MODULE_CONFIG(fix_dual_iso_flicker)
     MODULE_CONFIG(brighten_lv_method)
     MODULE_CONFIG(Half_Shutter)
     MODULE_CONFIG(SET_button)
     MODULE_CONFIG(INFO_button)
+    MODULE_CONFIG(tapdisp)
     MODULE_CONFIG(Arrows_L_R)
     MODULE_CONFIG(Arrows_U_D)
 MODULE_CONFIGS_END()
