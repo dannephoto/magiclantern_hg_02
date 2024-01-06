@@ -62,7 +62,7 @@ static int crop_preset_ar = 0;
 #define AR_2_35_1      (crop_preset_ar == 3)
 #define AR_2_39_1      (crop_preset_ar == 4)
 
-static CONFIG_INT("crop.preset_1x1", crop_preset_1x1_res_menu, 0);
+static CONFIG_INT("crop.preset_1x1", crop_preset_1x1_res_menu, 3);
 static int crop_preset_1x1_res = 0;
 #define CROP_2_5K      (crop_preset_1x1_res == 0)
 #define CROP_2_8K      (crop_preset_1x1_res == 1)
