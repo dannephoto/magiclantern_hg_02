@@ -407,13 +407,23 @@ static unsigned int photo_keypress_cbr(unsigned int key)
             
         }
         
-        if (key == MODULE_KEY_INFO && INFO_button == 3)
+        /* Aperture change shortcuts */
+        if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
+            ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
         {
+            if (lens_info.raw_aperture == lens_info.raw_aperture_max) return 0; // We reached max aperture, don't do anything
+            aperture_toggle(0, 1);
+            return 0;
+        }
+        if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 2) ||
+            ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 2)  )
+        {
+            if (lens_info.raw_aperture == lens_info.raw_aperture_min) return 0; // We reached min aperture, don't do anything
             aperture_toggle(0, -1);
             return 0;
         }
-        
-        if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
+        if (((key == MODULE_KEY_INFO)       && INFO_button == 3) ||
+            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 3))
         {
             aperture_toggle(0, 1);
             return 0;
