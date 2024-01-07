@@ -407,6 +407,37 @@ static unsigned int photo_keypress_cbr(unsigned int key)
             
         }
         
+        if (key == MODULE_KEY_INFO && INFO_button == 3)
+        {
+            aperture_toggle(0, -1);
+            return 0;
+        }
+        
+        if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
+        {
+            aperture_toggle(0, 1);
+            return 0;
+        }
+        
+        /* Dual ISO ON / OFF */
+        if (((key == MODULE_KEY_INFO)       && INFO_button == 4) ||
+            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 4))
+        {
+            if (!RECORDING)
+            {
+                if (!dual_iso_is_enabled())
+                {
+                    menu_set_str_value_from_script("Expo", "Dual ISO", "ON", 1);
+                    return 0;
+                }
+                if (dual_iso_is_enabled())
+                {
+                    menu_set_str_value_from_script("Expo", "Dual ISO", "OFF", 0);
+                    return 0;
+                }
+            }
+        }
+        
         /* False color ON / OFF */
         if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
             ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
