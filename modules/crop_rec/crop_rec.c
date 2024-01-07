@@ -285,6 +285,163 @@ static int default_fps_1k[11] = { 23976, 25000, 29970, 50000, 59940, 29970, 2397
  * PropMgr: *** mpu_send(06 05 09 11 01 00)     ; finally triggered PROP_LV_DISPSIZE...
  */
 
+//Photo mode
+static int reciso = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(reciso) isoless_recovery_iso;
+static int base_recovery_iso = 0;
+
+/* customize buttons and buttons shortcuts, FIXME: implement these as feature in ML core? */
+static unsigned int photo_keypress_cbr(unsigned int key)
+{
+    
+    if (lv && !gui_menu_shown() && !is_movie_mode() && Arrows_U_D == 1)
+    {
+        
+        if (key == MODULE_KEY_PRESS_UP)
+        {
+            
+            // Don't change ISO when set to auto ISO
+            if (lens_info.raw_iso == 0x0){
+                return 0;
+            }
+            
+            int a = lens_info.raw_iso;
+            if (a == 0x78) return 0;
+            
+            iso_toggle(0, 2);
+            
+            return 0;
+        }
+        
+        if (key == MODULE_KEY_PRESS_DOWN)
+        {
+            
+            // Don't change ISO when set to auto ISO
+            if (lens_info.raw_iso == 0x0){
+                return 0;
+            }
+            
+            int a = lens_info.raw_iso;
+            if (a == 0x48) return 0;
+            
+            iso_toggle(0, -2);
+            
+            return 0;
+        }
+        
+        
+        if (key == MODULE_KEY_PRESS_UP)
+        {
+            // Don't change ISO when set to auto ISO
+            if (lens_info.raw_iso == 0x0){
+                return 0;
+            }
+            
+            
+            int a = lens_info.raw_iso;
+            if (a == 0x78) return 0;
+            
+            iso_toggle(0, 2);
+            
+            return 0;
+        }
+        
+        if (key == MODULE_KEY_PRESS_DOWN)
+        {
+            // Don't change ISO when set to auto ISO
+            if (lens_info.raw_iso == 0x0){
+                return 0;
+            }
+            
+            int a = lens_info.raw_iso;
+            if (a == 0x48) return 0;
+            
+            iso_toggle(0, -2);
+            
+            return 0;
+        }
+        
+        
+        if (key == MODULE_KEY_PRESS_UP)
+        {
+            // Don't change ISO when set to auto ISO
+            if (lens_info.raw_iso == 0x0){
+                return 0;
+            }
+            
+            if (!dual_iso_is_enabled())
+            {
+                base_recovery_iso = 1;
+                return 0;
+            }
+            
+            isoless_recovery_iso++;
+            //We hit 6400 iso already
+            if (isoless_recovery_iso > 7)
+            {
+                isoless_recovery_iso = 7;
+            }
+            
+            return 0;
+        }
+        
+        if (key == MODULE_KEY_PRESS_DOWN)
+        {
+            // Don't change ISO when set to auto ISO
+            if (lens_info.raw_iso == 0x0){
+                return 0;
+            }
+            
+            if (!dual_iso_is_enabled())
+            {
+                base_recovery_iso = 1;
+                return 0;
+            }
+            
+            isoless_recovery_iso--;
+            //We hit 100 iso already
+            if (isoless_recovery_iso < 0)
+            {
+                isoless_recovery_iso = 0;
+            }
+            
+        }
+        
+        /* False color ON / OFF */
+        if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
+            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
+        {
+            extern int falsecolor_draw;
+            if (!falsecolor_draw)
+            {
+                falsecolor_draw = 1;
+                return 0;
+            }
+            if (falsecolor_draw)
+            {
+                falsecolor_draw = 0;
+                redraw();
+                return 0;
+            }
+        }
+        
+        /* Opens up last magic lantern menu tab by tapping display */
+        if (tapdisp && key == MODULE_KEY_TOUCH_1_FINGER && !gui_menu_shown() && lv)
+        {
+            msleep(100);
+            if(lv_disp_mode != 0){
+                // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                return 1;
+            }
+            select_menu_by_name("Expo", "Shutter");
+            gui_open_menu();
+        }
+        
+    }
+
+return 1;
+}
+
 /* PATH_SelectPathDriveMode S:%d Z:%lx R:%lx DZ:%d SM:%d */
 /* offsets verified on 5D3, 6D, 70D, EOSM, 100D, 60D, 80D, 200D */
 const struct PathDriveMode
@@ -6217,6 +6374,7 @@ MODULE_CBRS_START()
     MODULE_CBR(CBR_SHOOT_TASK, crop_rec_polling_cbr, 0)
     MODULE_CBR(CBR_RAW_INFO_UPDATE, raw_info_update_cbr, 0)
     MODULE_CBR(CBR_KEYPRESS, crop_rec_keypress_cbr, 0)
+    MODULE_CBR(CBR_KEYPRESS, photo_keypress_cbr, 0)
 MODULE_CBRS_END()
 
 MODULE_PROPHANDLERS_START()
