@@ -5214,7 +5214,7 @@ static MENU_UPDATE_FUNC(customize_buttons_update)
 
 static MENU_UPDATE_FUNC(Half_Shutter_update)
 {
-    if (Half_Shutter == 1 && !is_manual_focus())
+    if (Half_Shutter && !is_manual_focus())
     {
         MENU_SET_WARNING(MENU_WARN_NOT_WORKING, "Half-Shutter assignment only works with manual focus.");
     }
@@ -5242,14 +5242,14 @@ static struct menu_entry customize_buttons_menu[] =
             {
                .name     = "SET Button",
                .max      = 5,
-               .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture", "Dual ISO", "False color"),
+               .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture +", "Dual ISO", "False color"),
                .priv     = &SET_button,
                .help     = "Assign SET button to a task.",
             },
             {
                 .name     = "INFO Button",
                 .max      = 5,
-                .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture", "Dual ISO", "False color"),
+                .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture -", "Dual ISO", "False color"),
                 .priv     = &INFO_button,
                 .help     = "Assign INFO button to a task.",
             },
@@ -5695,7 +5695,7 @@ if (Half_Shutter == 2 && RECORDING)
             {
                 if (((key == MODULE_KEY_PRESS_SET         ) && SET_button  == 1)                 ||
                     ((key == MODULE_KEY_INFO              ) && INFO_button == 1)                 ||
-                    ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter == 1 && is_manual_focus()) )
+                    ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter && is_manual_focus()) )
                 {
                     set_zoom(10);
 
@@ -5715,7 +5715,7 @@ if (Half_Shutter == 2 && RECORDING)
             {
                 if (((key == MODULE_KEY_PRESS_SET           ) && SET_button  == 1)                 ||
                     ((key == MODULE_KEY_INFO                ) && INFO_button == 1)                 ||
-                    ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter == 1 && is_manual_focus()) )
+                    ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter && is_manual_focus()) )
                 {
                     set_zoom(1); // Get to x1 first, sometime we get black preview when going x10 --> x5
                     set_zoom(5);
@@ -5768,8 +5768,12 @@ if (Half_Shutter == 2 && RECORDING)
                     aperture_toggle(0, -1);
                     return 0;
                 }
-                if (((key == MODULE_KEY_INFO)       && INFO_button == 3) ||
-                    ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 3))
+                if (key == MODULE_KEY_INFO && INFO_button == 3)
+                {
+                    aperture_toggle(0, -1);
+                    return 0;
+                }
+                if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
                 {
                     aperture_toggle(0, 1);
                     return 0;
