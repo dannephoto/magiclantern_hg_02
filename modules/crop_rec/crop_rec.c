@@ -422,8 +422,12 @@ static unsigned int photo_keypress_cbr(unsigned int key)
             aperture_toggle(0, -1);
             return 0;
         }
-        if (((key == MODULE_KEY_INFO)       && INFO_button == 3) ||
-            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 3))
+        if (key == MODULE_KEY_INFO && INFO_button == 3)
+        {
+            aperture_toggle(0, -1);
+            return 0;
+        }
+        if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
         {
             aperture_toggle(0, 1);
             return 0;
