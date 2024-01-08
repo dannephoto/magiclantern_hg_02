@@ -5256,9 +5256,10 @@ static struct menu_entry customize_buttons_menu[] =
             {
                 .name   = "Tap display",
                 .priv   = &tapdisp,
-                .max    = 1,
-                .choices = CHOICES("OFF", "Preset access"),
+                .max    = 2,
+                .choices = CHOICES("OFF", "Preset list", "Expo tab"),
                 .help   = "Tap display to reach Crop mood preset list",
+                .help2  = "Expo tab 'shutter' as starting point\n"
             },
             {
                 .name     = "U/D Arrows",
@@ -5679,10 +5680,18 @@ if (Half_Shutter == 2 && RECORDING)
             // Use INFO key to cycle LV as normal when not in the LV with ML overlays
             return 1;
         }
-        select_menu_by_name("Movie", "Crop mood");
-        gui_open_menu();
-        msleep(10);
-        submenu = 1;
+        if (tapdisp == 2)
+        {
+            select_menu_by_name("Expo", "Shutter");
+        }
+        if (tapdisp == 1)
+        {
+            select_menu_by_name("Movie", "Crop mood");
+            submenu = 1;
+        }
+            gui_open_menu();
+            msleep(10);
+
     }
 
     /* we need to use customize buttons in LiveView while ML isn't showing and when using Crop mood */
