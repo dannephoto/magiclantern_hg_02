@@ -297,6 +297,56 @@ static unsigned int photo_keypress_cbr(unsigned int key)
     if (lv && !gui_menu_shown() && !is_movie_mode() && Arrows_U_D == 1)
     {
         
+        /* ISO change shortcuts */
+        if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 1) ||
+            ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 1)  )
+        {
+            if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
+            if (lens_info.raw_iso == ISO_6400) return 0; // We reached highest ISO, don't do anything
+            iso_toggle(0, 2);
+            return 0;
+        }
+        if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 1) ||
+            ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 1)  )
+        {
+            if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
+            if (lens_info.raw_iso == ISO_100) return 0; // We reached lowest ISO, don't do anything
+            iso_toggle(0, -2);
+            return 0;
+        }
+        if (((key == MODULE_KEY_INFO)       && INFO_button == 2) ||
+            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 2))
+        {
+            iso_toggle(0, 2);
+            return 0;
+        }
+
+        /* Aperture change shortcuts */
+        if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
+            ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
+        {
+            if (lens_info.raw_aperture == lens_info.raw_aperture_max) return 0; // We reached max aperture, don't do anything
+            aperture_toggle(0, 1);
+            return 0;
+        }
+        if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 2) ||
+            ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 2)  )
+        {
+            if (lens_info.raw_aperture == lens_info.raw_aperture_min) return 0; // We reached min aperture, don't do anything
+            aperture_toggle(0, -1);
+            return 0;
+        }
+        if (key == MODULE_KEY_INFO && INFO_button == 3)
+        {
+            aperture_toggle(0, -1);
+            return 0;
+        }
+        if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
+        {
+            aperture_toggle(0, 1);
+            return 0;
+        }
+        
         if (key == MODULE_KEY_PRESS_UP)
         {
             
@@ -427,7 +477,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
             aperture_toggle(0, -1);
             return 0;
         }
-        if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
+        if (key == MODULE_KEY_PRESS_SET && SET_button == 3)
         {
             aperture_toggle(0, 1);
             return 0;
@@ -435,7 +485,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
         
         /* Dual ISO ON / OFF */
         if (((key == MODULE_KEY_INFO)       && INFO_button == 4) ||
-            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 4))
+            ((key == MODULE_KEY_PRESS_SET)  && SET_button == 4))
         {
             if (!RECORDING)
             {
@@ -469,19 +519,45 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                 return 0;
             }
         }
-        
+                
         /* Opens up last magic lantern menu tab by tapping display */
-        if (tapdisp && key == MODULE_KEY_TOUCH_1_FINGER && !gui_menu_shown() && lv)
+        if (!is_movie_mode() && !gui_menu_shown() && lv)
         {
-            msleep(100);
-            if(lv_disp_mode != 0){
-                // Use INFO key to cycle LV as normal when not in the LV with ML overlays
-                return 1;
+
+            if ((key == MODULE_KEY_TOUCH_1_FINGER && tapdisp == 2) || (key == MODULE_KEY_PRESS_SET && SET_button == 7) || (key == MODULE_KEY_INFO && INFO_button == 6))
+            {
+                msleep(100);
+                if(lv_disp_mode != 0){
+                    // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                    return 1;
+                }
+                select_menu_by_name("Expo", "Shutter");
+                gui_open_menu();
+                submenu = 1;
             }
-            select_menu_by_name("Expo", "Shutter");
-            gui_open_menu();
+            if ((key == MODULE_KEY_PRESS_SET && SET_button == 6) || (key == MODULE_KEY_TOUCH_1_FINGER && tapdisp == 3) || (key == MODULE_KEY_INFO && INFO_button == 7))
+            {
+                msleep(100);
+                if(lv_disp_mode != 0){
+                    // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                    return 1;
+                }
+                select_menu_by_name("Expo", "Aperture");
+                gui_open_menu();
+                submenu = 1;
+            }
+            if ((key == MODULE_KEY_PRESS_SET && SET_button == 8) || (key == MODULE_KEY_TOUCH_1_FINGER && tapdisp == 4) || (key == MODULE_KEY_INFO && INFO_button == 8))
+            {
+                msleep(100);
+                if(lv_disp_mode != 0){
+                    // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                    return 1;
+                }
+                select_menu_by_name("Expo", "ISO");
+                gui_open_menu();
+                submenu = 1;
+            }
         }
-        
     }
 
 return 1;
@@ -5241,25 +5317,24 @@ static struct menu_entry customize_buttons_menu[] =
             },
             {
                .name     = "SET Button",
-               .max      = 5,
-               .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture +", "Dual ISO", "False color"),
+               .max      = 8,
+               .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture +", "Dual ISO", "False color", "Aperture Expo", "Shutter Expo", "ISO Expo"),
                .priv     = &SET_button,
                .help     = "Assign SET button to a task.",
             },
             {
                 .name     = "INFO Button",
-                .max      = 5,
-                .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture -", "Dual ISO", "False color"),
+                .max      = 8,
+                .choices  = CHOICES("OFF", "Zoom x10", "ISO", "Aperture -", "Dual ISO", "False color", "Shutter Expo", "Aperture Expo", "ISO Expo"),
                 .priv     = &INFO_button,
                 .help     = "Assign INFO button to a task.",
             },
             {
                 .name   = "Tap display",
                 .priv   = &tapdisp,
-                .max    = 2,
-                .choices = CHOICES("OFF", "Preset list", "Expo tab"),
-                .help   = "Tap display to reach Crop mood preset list",
-                .help2  = "Expo tab 'shutter' as starting point\n"
+                .max    = 4,
+                .choices = CHOICES("OFF", "Preset list", "Shutter Expo", "Aperture Expo", "ISO Expo"),
+                .help     = "Assign Tap display to a task.",
             },
             {
                 .name     = "U/D Arrows",
@@ -5434,10 +5509,11 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
     /* connected to MODULE_KEY_TOUCH_1_FINGER for entering Movie tab menu */
     if (gui_menu_shown() && submenu && !RECORDING && tapdisp)
     {
-        module_send_keypress(MODULE_KEY_Q);
+        if (is_movie_mode())
+        {
+            module_send_keypress(MODULE_KEY_Q);
+        }
         module_send_keypress(MODULE_KEY_PRESS_SET);
-        msleep(10);
-        module_send_keypress(MODULE_KEY_UNPRESS_SET);
         submenu = 0;
     }
     /* also check at startup */
@@ -5672,28 +5748,6 @@ if (Half_Shutter == 2 && RECORDING)
     
 }
     
-    /* Opens up last magic lantern menu tab by tapping display */
-    if (tapdisp && key == MODULE_KEY_TOUCH_1_FINGER && !gui_menu_shown() && is_movie_mode() && lv && !RECORDING && lv_dispsize != 10)
-    {
-        msleep(100);
-        if(lv_disp_mode != 0){
-            // Use INFO key to cycle LV as normal when not in the LV with ML overlays
-            return 1;
-        }
-        if (tapdisp == 2)
-        {
-            select_menu_by_name("Expo", "Shutter");
-        }
-        if (tapdisp == 1)
-        {
-            select_menu_by_name("Movie", "Crop mood");
-            submenu = 1;
-        }
-            gui_open_menu();
-            msleep(10);
-
-    }
-
     /* we need to use customize buttons in LiveView while ML isn't showing and when using Crop mood */
     if (lv)
     {
@@ -5782,7 +5836,7 @@ if (Half_Shutter == 2 && RECORDING)
                     aperture_toggle(0, -1);
                     return 0;
                 }
-                if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
+                if (key == MODULE_KEY_PRESS_SET && SET_button == 3)
                 {
                     aperture_toggle(0, 1);
                     return 0;
@@ -5790,7 +5844,7 @@ if (Half_Shutter == 2 && RECORDING)
 
                 /* Dual ISO ON / OFF */
                 if (((key == MODULE_KEY_INFO)       && INFO_button == 4) ||
-                    ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 4))
+                    ((key == MODULE_KEY_PRESS_SET)  && SET_button == 4))
                 {
                     if (!RECORDING)
                     {
@@ -5824,6 +5878,37 @@ if (Half_Shutter == 2 && RECORDING)
                         return 0;
                     }
                 }
+            }
+            
+            /* Opens up last magic lantern menu tab by tapping display */
+            if (((key == MODULE_KEY_TOUCH_1_FINGER || key == MODULE_KEY_PRESS_SET || key == MODULE_KEY_INFO) && (tapdisp == 1 || tapdisp == 2 || SET_button == 7 || INFO_button == 6 || tapdisp == 3 || SET_button == 6 || INFO_button == 7 || tapdisp == 4 || SET_button == 8 || INFO_button == 8)) && !gui_menu_shown() && is_movie_mode() && lv && !RECORDING && lv_dispsize != 10)
+            {
+                msleep(100);
+                if(lv_disp_mode != 0){
+                    // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                    return 1;
+                }
+                if ((tapdisp == 2 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 7 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 6 && key == MODULE_KEY_INFO))
+                {
+                    select_menu_by_name("Expo", "Shutter");
+                }
+                if ((tapdisp == 3 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 6 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 7 && key == MODULE_KEY_INFO))
+                {
+                    select_menu_by_name("Expo", "Aperture");
+                }
+                if ((tapdisp == 4 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 8 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 8 && key == MODULE_KEY_INFO))
+                {
+                    select_menu_by_name("Expo", "ISO");
+                }
+                if (tapdisp == 1 && key == MODULE_KEY_TOUCH_1_FINGER)
+                {
+                    select_menu_by_name("Movie", "Crop mood");
+                    submenu = 1;
+                }
+                    gui_open_menu();
+                    msleep(10);
+                    submenu = 1;
+
             }
 
             /* Block SET/Arrows/One finger touch while recording to prevent changing focus box position. 
