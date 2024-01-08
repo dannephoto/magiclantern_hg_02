@@ -168,7 +168,7 @@ static CONFIG_INT( "zoom.disable.x1", zoom_disable_x1, 0);
 static CONFIG_INT( "zoom.disable.x5", zoom_disable_x5, 0);
 static CONFIG_INT( "zoom.disable.x10", zoom_disable_x10, 0);
 static CONFIG_INT( "zoom.sharpen", zoom_sharpen, 0);
-static CONFIG_INT( "zoom.halfshutter", zoom_halfshutter, 1);
+static CONFIG_INT( "zoom.halfshutter", zoom_halfshutter, 0);
 static CONFIG_INT( "zoom.focus_ring", zoom_focus_ring, 0);
        CONFIG_INT( "zoom.auto.exposure", zoom_auto_exposure, 0);
 

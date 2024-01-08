@@ -285,6 +285,26 @@ static int default_fps_1k[11] = { 23976, 25000, 29970, 50000, 59940, 29970, 2397
  * PropMgr: *** mpu_send(06 05 09 11 01 00)     ; finally triggered PROP_LV_DISPSIZE...
  */
 
+/* faster version than the one from ML core */
+static void set_zoom(int zoom)
+{
+    if (!lv) return;
+    if (RECORDING) return;
+    if (is_movie_mode() && video_mode_crop) return;
+    zoom = COERCE(zoom, 1, 10);
+    if (zoom > 1 && zoom < 10) zoom = 5;
+    prop_request_change_wait(PROP_LV_DISPSIZE, &zoom, 4, 1000);
+}
+
+/* faster version than the one from ML core */
+static void set_lv_af_mode(int lv_af_mode)
+{
+    if (!lv) return;
+    if (RECORDING) return;
+    if (lv_af_mode > 3 && lv_af_mode != 0) lv_af_mode = 1;
+    prop_request_change(PROP_LIVE_VIEW_AF_SYSTEM, &lv_af_mode, 4);
+}
+
 //Photo mode
 static int reciso = 0; /* coming from crop_rec.c */
 extern int WEAK_FUNC(reciso) isoless_recovery_iso;
@@ -294,8 +314,47 @@ static int base_recovery_iso = 0;
 static unsigned int photo_keypress_cbr(unsigned int key)
 {
     
-    if (lv && !gui_menu_shown() && !is_movie_mode() && Arrows_U_D == 1)
+    if (lv && !gui_menu_shown() && !is_movie_mode())
     {
+        
+        extern int kill_canon_gui_mode;
+        /* Quick x10 mode */
+
+        if (lv_dispsize == 1)
+        {
+            if (((key == MODULE_KEY_PRESS_SET         ) && SET_button  == 1)                 ||
+                ((key == MODULE_KEY_INFO              ) && INFO_button == 1)                 ||
+                ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter) )
+            {
+            if (key == MODULE_KEY_PRESS_HALFSHUTTER && Half_Shutter)
+            {
+                msleep(400);
+            }
+                set_zoom(10);
+                /* Enable Canon overlays in x10 mode */
+                kill_canon_gui_mode = 0;
+                if (canon_gui_front_buffer_disabled())
+                {
+                        canon_gui_enable_front_buffer(0);
+                }
+                return 0;
+            }
+        }
+
+        /* Finished from x10 mode? Let's get back to normal preview */
+        if (lv_dispsize == 10)
+        {
+            if (((key == MODULE_KEY_PRESS_SET           ) && SET_button  == 1)                 ||
+                ((key == MODULE_KEY_INFO                ) && INFO_button == 1)                 ||
+                ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter) )
+            {
+                set_zoom(1); // Get to x1 first, sometime we get black preview when going x10 --> x5
+
+                /* Disable Canon overlays in x5 mode */
+                kill_canon_gui_mode = 1;
+                return 0;
+            }
+        }
         
         /* ISO change shortcuts */
         if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 1) ||
@@ -5457,25 +5516,6 @@ static void center_canon_preview()
     sei(old);
 }
 
-/* faster version than the one from ML core */
-static void set_zoom(int zoom)
-{
-    if (!lv) return;
-    if (RECORDING) return;
-    if (is_movie_mode() && video_mode_crop) return;
-    zoom = COERCE(zoom, 1, 10);
-    if (zoom > 1 && zoom < 10) zoom = 5;
-    prop_request_change_wait(PROP_LV_DISPSIZE, &zoom, 4, 1000);
-}
-
-/* faster version than the one from ML core */
-static void set_lv_af_mode(int lv_af_mode)
-{
-    if (!lv) return;
-    if (RECORDING) return;
-    if (lv_af_mode > 3 && lv_af_mode != 0) lv_af_mode = 1;
-    prop_request_change(PROP_LIVE_VIEW_AF_SYSTEM, &lv_af_mode, 4);
-}
 
 /* variables for 650D / 700D / EOSM/M2 / 100D help to detect if settings changed */
 static int old_ar_preset;
