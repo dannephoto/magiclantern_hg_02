@@ -578,7 +578,23 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                 return 0;
             }
         }
-                
+        
+        if (tapdisp == 5 && key == MODULE_KEY_TOUCH_1_FINGER)
+        {
+            extern int falsecolor_draw;
+            if (!falsecolor_draw)
+            {
+                falsecolor_draw = 1;
+                return 0;
+            }
+            if (falsecolor_draw)
+            {
+                falsecolor_draw = 0;
+                redraw();
+                return 0;
+            }
+        }
+                        
         /* Opens up last magic lantern menu tab by tapping display */
         if (!is_movie_mode() && !gui_menu_shown() && lv)
         {
@@ -5391,8 +5407,8 @@ static struct menu_entry customize_buttons_menu[] =
             {
                 .name   = "Tap display",
                 .priv   = &tapdisp,
-                .max    = 4,
-                .choices = CHOICES("OFF", "Preset list", "Shutter Expo", "Aperture Expo", "ISO Expo"),
+                .max    = 5,
+                .choices = CHOICES("OFF", "Preset list", "Shutter Expo", "Aperture Expo", "ISO Expo", "False color"),
                 .help     = "Assign Tap display to a task.",
             },
             {
@@ -5904,6 +5920,22 @@ if (Half_Shutter == 2 && RECORDING)
                 /* False color ON / OFF */
                 if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
                     ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
+                {
+                    extern int falsecolor_draw;
+                    if (!falsecolor_draw)
+                    {
+                        falsecolor_draw = 1;
+                        return 0;
+                    }
+                    if (falsecolor_draw)
+                    {
+                        falsecolor_draw = 0;
+                        redraw();
+                        return 0;
+                    }
+                }
+                
+                if (tapdisp == 5 && key == MODULE_KEY_TOUCH_1_FINGER)
                 {
                     extern int falsecolor_draw;
                     if (!falsecolor_draw)
