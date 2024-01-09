@@ -5547,7 +5547,7 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
 {
     
     /* connected to MODULE_KEY_TOUCH_1_FINGER for entering Movie tab menu */
-    if (gui_menu_shown() && submenu && !RECORDING && tapdisp)
+    if (gui_menu_shown() && submenu && !RECORDING)
     {
         if (is_movie_mode())
         {
@@ -5920,36 +5920,55 @@ if (Half_Shutter == 2 && RECORDING)
                 }
             }
             
-            /* Opens up last magic lantern menu tab by tapping display */
-            if (((key == MODULE_KEY_TOUCH_1_FINGER || key == MODULE_KEY_PRESS_SET || key == MODULE_KEY_INFO) && (tapdisp == 1 || tapdisp == 2 || SET_button == 7 || INFO_button == 6 || tapdisp == 3 || SET_button == 6 || INFO_button == 7 || tapdisp == 4 || SET_button == 8 || INFO_button == 8)) && !gui_menu_shown() && is_movie_mode() && lv && !RECORDING && lv_dispsize != 10)
-            {
-                msleep(100);
-                if(lv_disp_mode != 0){
-                    // Use INFO key to cycle LV as normal when not in the LV with ML overlays
-                    return 1;
-                }
+
                 if ((tapdisp == 2 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 7 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 6 && key == MODULE_KEY_INFO))
                 {
+                    msleep(100);
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
                     select_menu_by_name("Expo", "Shutter");
-                }
-                if ((tapdisp == 3 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 6 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 7 && key == MODULE_KEY_INFO))
-                {
-                    select_menu_by_name("Expo", "Aperture");
-                }
-                if ((tapdisp == 4 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 8 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 8 && key == MODULE_KEY_INFO))
-                {
-                    select_menu_by_name("Expo", "ISO");
-                }
-                if (tapdisp == 1 && key == MODULE_KEY_TOUCH_1_FINGER)
-                {
-                    select_menu_by_name("Movie", "Crop mood");
-                    submenu = 1;
-                }
                     gui_open_menu();
                     msleep(10);
                     submenu = 1;
-
-            }
+                }
+                if ((tapdisp == 3 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 6 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 7 && key == MODULE_KEY_INFO))
+                {
+                    msleep(100);
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
+                    select_menu_by_name("Expo", "Aperture");
+                    gui_open_menu();
+                    msleep(10);
+                    submenu = 1;
+                }
+                if ((tapdisp == 4 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 8 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 8 && key == MODULE_KEY_INFO))
+                {
+                    msleep(100);
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
+                    select_menu_by_name("Expo", "ISO");
+                    gui_open_menu();
+                    msleep(10);
+                    submenu = 1;
+                }
+                if (tapdisp == 1 && key == MODULE_KEY_TOUCH_1_FINGER)
+                {
+                    msleep(100);
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
+                    select_menu_by_name("Movie", "Crop mood");
+                    gui_open_menu();
+                    msleep(10);
+                    submenu = 1;
+                }
 
             /* Block SET/Arrows/One finger touch while recording to prevent changing focus box position. 
              * When changing focus box position, a part of preview configuration changes, we don't 
