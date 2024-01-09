@@ -88,6 +88,9 @@ static GUARDED_BY(GuiMainTask) int show_edmac = 0;
 /* from mlv_play module */
 extern WEAK_FUNC(ret_0) void mlv_play_file(char *filename);
 
+static int isotoggle = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(isotoggle) Arrows_U_D;
+
 /* camera-specific tricks */
 static int cam_eos_m = 0;
 static int cam_5d2 = 0;
@@ -2365,7 +2368,11 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    //aewbSuspend(); Sorry bilal. If we can´t modify iso while filming with this on it gptta go.
+                    if (Arrows_U_D != 1 && is_manual_focus()) 
+                    {
+                        aewbSuspend();
+                    }
+
                 }
 
                 if (small_hacks == 3 && CartridgeCancel_works) // CartridgeCancel_works: calling CartridgeCancel(); freezes LiveView in some models

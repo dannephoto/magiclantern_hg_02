@@ -89,10 +89,10 @@ static int crop_preset_fps = 0;
 #define Framerate_30   (crop_preset_fps == 2)
 
 /* customized buttons variables */
-static CONFIG_INT("crop.button_SET",       SET_button, 1);
+static CONFIG_INT("crop.button_SET",       SET_button, 6);
 static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 2);
-static CONFIG_INT("crop.button_INFO",      INFO_button, 0);
-static CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 1);
+static CONFIG_INT("crop.button_INFO",      INFO_button, 6);
+CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 1);
 static CONFIG_INT("crop.arrows_L_R",       Arrows_L_R, 0);
 
 enum crop_preset {
