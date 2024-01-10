@@ -137,7 +137,7 @@ static CONFIG_INT("raw.card_spanning", card_spanning, 0);
 
 static CONFIG_INT("raw.res_x", resolution_index_x, 11);
 static CONFIG_INT("raw.res_x_fine", res_x_fine, 0);
-static CONFIG_INT("raw.aspect.ratio", aspect_ratio_index, 10);
+static CONFIG_INT("raw.aspect.ratio", aspect_ratio_index, 17);
 
 static CONFIG_INT("raw.write.speed", measured_write_speed, 0);
 static int measured_write_speed_thread[MAX_WRITER_THREADS] = {0};

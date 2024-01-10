@@ -76,6 +76,7 @@ static int crop_preset_1x3_res = 0;
 #define Anam_Highest   (crop_preset_1x3_res == 0)
 #define Anam_Higher    (crop_preset_1x3_res == 1)
 #define Anam_Medium    (crop_preset_1x3_res == 2)
+#define Anam_FLV    (crop_preset_1x3_res == 3)
 
 static CONFIG_INT("crop.preset_3x3", crop_preset_3x3_res_menu, 0);
 static int crop_preset_3x3_res = 0;
@@ -1270,6 +1271,11 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                     cmos_new[7] = 0xB27;
                 }
             }
+                if (Anam_FLV)
+                {
+                    cmos_new[5] = 0x20 + CMOS_5_Debug;
+                    cmos_new[7] = 0xC00 + CMOS_7_Debug;
+                }
             break;
 
             case CROP_PRESET_3X3:
@@ -2687,580 +2693,596 @@ int TimerB_Debug = 0;
 
 static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
 {
-    if (AR_16_9)
+    if (Anam_FLV)
     {
-        if (Anam_Highest) /* 1504x2538 */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x19A;  /*  @ 23.976 FPS */
-                RAW_V         = 0xA06;
-                TimerB        = 0xB47;
-                TimerA        = 0x1CD;
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x19A; /*  @ 22.250 FPS */
-                RAW_V         = 0xA06;
-                TimerB        = 0xAF7;
-                TimerA        = 0x1FF;  // Danne confirmed that EOS M has 0x1FF limit. it seems same as 100D
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x1A3; /*  @ 22.250 FPS */
-                RAW_V         = 0xA0B;
-                TimerB        = 0xB07;  // we might be able to lower TimerB a little more
-                TimerA        = 0x1FF;  // lowering TimerA under 0x1FF --> black image (RAW data), anyway to exceed minimal Timer A limit?
-            }
-
-            Preview_H     = 1500;
-            Preview_V     = 2538;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x105017B;
-            YUV_HD_S_V    = 0x10503BE;
-        }
-
-        if (Anam_Higher)
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x17E;  /* 1392x2350 @ 23.976 and 25 FPS */
-                RAW_V         = 0x94A;
-                TimerA        = 0x1B9;
-                if (Framerate_24) TimerB = 0xBCA;
-                if (Framerate_25) TimerB = 0xB4E;
-                if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
-
-                Preview_H     = 1388;
-                Preview_V     = 2350;
-                Preview_R     = 0x1D000D;
-                YUV_HD_S_H    = 0x105015F;
-                YUV_HD_S_V    = 0x1050377;
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x17A;  /* 1376x2322 to achieve 23.976 FPS */
-                RAW_V         = 0x92E;
-                TimerB        = 0xA2E;
-                TimerA        = 0x1FF;
-
-                Preview_H     = 1372;
-                Preview_V     = 2322;
-                Preview_R     = 0x1D000D;
-                YUV_HD_S_H    = 0x105015B;
-                YUV_HD_S_V    = 0x105036D;
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x183;  /* 1376x2322 to achieve 23.976 FPS */
-                RAW_V         = 0x933;
-                TimerB        = 0xA2E;
-                TimerA        = 0x1FF;
-
-                Preview_H     = 1372;
-                Preview_V     = 2322;
-                Preview_R     = 0x1D000D;
-                YUV_HD_S_H    = 0x105015B;
-                YUV_HD_S_V    = 0x105036E;
-            }
-        }
-
-        if (Anam_Medium) /* 1280x2160 @ 23.976 and 25 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x162;  
-                RAW_V         = 0x88C;
-                TimerA        = 0x1B9;
-                if (Framerate_24) TimerB = 0xBCA;
-                if (Framerate_25) TimerB = 0xB4E;
-                if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x162;
-                RAW_V         = 0x88C;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2E;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x16B;
-                RAW_V         = 0x891;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2E;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            Preview_H     = 1276;
-            Preview_V     = 2160;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050142;
-            YUV_HD_S_V    = 0x105032F;
-        }
+        RAW_H         = 0x1D4;  // from mv1080 mode
+        RAW_V         = 0xDB0;
+        TimerB        = 0x1407;
+        TimerA        = 0x207;
+        
+        //From AR_2_35_1
+        Preview_H     = 1728;      // from mv1080 mode
+        Preview_V     = 2214;
+        Preview_R     = 0x1D000E;  // from mv1080 mode
+        YUV_HD_S_H    = 0x10501B5;
+        YUV_HD_S_V    = 0x1050341;
     }
-
-    if (AR_2_1)
+    else
     {
-        if (Anam_Highest) /* 1600x2400 */
+        if (AR_16_9)
         {
-            if (is_650D || is_700D)
+            if (Anam_Highest) /* 1504x2538 */
             {
-                RAW_H         = 0x1B2;  /* @ 23.976 FPS */
-                RAW_V         = 0x97C;
-                TimerB        = 0xAB9;
-                TimerA        = 0x1E5;
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x1B2; /* @ 23.300 FPS */
-                RAW_V         = 0x97C;
-                TimerB        = 0xA79;
-                TimerA        = 0x1FF;
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x1BB; /* @ 23.300 FPS */
-                RAW_V         = 0x981;
-                TimerB        = 0xA79;
-                TimerA        = 0x1FF;
-            }
-
-            Preview_H     = 1596;
-            Preview_V     = 2400;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050193;
-            YUV_HD_S_V    = 0x1050389;
-        }
-
-        if (Anam_Higher) /* 1472x2208 @ 23.976 and 25 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x192;  
-                RAW_V         = 0x8BC;
-                TimerA        = 0x1C5;
-                if (Framerate_24) TimerB = 0xB7A;
-                if (Framerate_25) TimerB = 0xB02;
-                if (Framerate_30) TimerB = 0xB02; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x192;
-                RAW_V         = 0x8BC;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x19B;
-                RAW_V         = 0x8C1;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            Preview_H     = 1468;
-            Preview_V     = 2208;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050173;
-            YUV_HD_S_V    = 0x1050341;
-        }
-
-        if (Anam_Medium) /* 1360x2040 @ 23.976 and 25 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x176;  
-                RAW_V         = 0x814;
-                TimerA        = 0x1B9;
-                if (Framerate_24) TimerB = 0xBCA;
-                if (Framerate_25) TimerB = 0xB4E;
-                if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x176;
-                RAW_V         = 0x814;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x17F;
-                RAW_V         = 0x819;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            Preview_H     = 1356;
-            Preview_V     = 2040;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050157;
-            YUV_HD_S_V    = 0x1050301;
-        }
-    }
-
-    if (AR_2_20_1)
-    {
-        if (Anam_Highest)
-        {
-            if (is_650D || is_700D) /* 1680x2290 @ 23.976 FPS */
-            {
-                RAW_H         = 0x1C6;
-                RAW_V         = 0x90E;
-                TimerB        = 0xA4C;
-                TimerA        = 0x1F9;
-
-                Preview_H     = 1676;
-                Preview_V     = 2290;
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x19A;  /*  @ 23.976 FPS */
+                    RAW_V         = 0xA06;
+                    TimerB        = 0xB47;
+                    TimerA        = 0x1CD;
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x19A; /*  @ 22.250 FPS */
+                    RAW_V         = 0xA06;
+                    TimerB        = 0xAF7;
+                    TimerA        = 0x1FF;  // Danne confirmed that EOS M has 0x1FF limit. it seems same as 100D
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x1A3; /*  @ 22.250 FPS */
+                    RAW_V         = 0xA0B;
+                    TimerB        = 0xB07;  // we might be able to lower TimerB a little more
+                    TimerA        = 0x1FF;  // lowering TimerA under 0x1FF --> black image (RAW data), anyway to exceed minimal Timer A limit?
+                }
+                
+                Preview_H     = 1500;
+                Preview_V     = 2538;
                 Preview_R     = 0x1D000D;
-                YUV_HD_S_H    = 0x10501A8;
-                YUV_HD_S_V    = 0x1050362;
-            }
-
-            if (is_EOSM) /* 1664x2268 @ 23.976 FPS */
-            {
-                RAW_H         = 0x1C2;
-                RAW_V         = 0x8F8;
-                TimerB        = 0xA2D;
-                TimerA        = 0x1FF;
-
-                Preview_H     = 1660;
-                Preview_V     = 2268;
-                Preview_R     = 0x1D000D;
-                YUV_HD_S_H    = 0x10501A3;
-                YUV_HD_S_V    = 0x1050359;
-            }
-
-            if (is_100D) /* 1664x2268 @ 23.976 FPS */
-            {
-                RAW_H         = 0x1CB;
-                RAW_V         = 0x8FD;
-                TimerB        = 0xA2D;
-                TimerA        = 0x1FF;
-
-                Preview_H     = 1660;
-                Preview_V     = 2268;
-                Preview_R     = 0x1D000D;
-                YUV_HD_S_H    = 0x10501A3;
-                YUV_HD_S_V    = 0x1050359;
-            }
-        }
-
-        if (Anam_Higher) /* 1552x2216 @ 23.976 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x1A6;
-                RAW_V         = 0x860;
-                TimerA        = 0x1D9;
-                if (Framerate_24) TimerB = 0xAFE;
-                if (Framerate_25) TimerB = 0xA8B;
-                if (Framerate_30) TimerB = 0xA8B; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x1A6;
-                RAW_V         = 0x860;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2E;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x1AF;
-                RAW_V         = 0x865;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2E;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            Preview_H     = 1548;
-            Preview_V     = 2216;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050187;
-            YUV_HD_S_V    = 0x105031C;
-        }
-
-        if (Anam_Medium) /* 1424x1942 @ 23.976 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x186;
-                RAW_V         = 0x7B2;
-                TimerA        = 0x1B9;
-                if (Framerate_24) TimerB = 0xBCA;
-                if (Framerate_25) TimerB = 0xB4E;
-                if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x186;
-                RAW_V         = 0x7B2;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2E;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x18F;
-                RAW_V         = 0x7B7;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2E;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            Preview_H     = 1420;
-            Preview_V     = 1942;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050167;
-            YUV_HD_S_V    = 0x10502DB;
-        }
-    }
-
-    if (AR_2_35_1)
-    {
-        if (Anam_Highest) /* 1736x2214 @ 23.976 FPS */
-        {
-            if (is_650D || is_700D || is_EOSM)
-            {
-                RAW_H         = 0x1D4;  // from mv1080 mode
-                RAW_V         = 0x8C2;
-                TimerB        = 0xA05;
-                TimerA        = 0x207;
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x1DD;
-                RAW_V         = 0x8C7;
-                TimerB        = 0x9DF;
-                TimerA        = 0x20F;
-            }
-
-            Preview_H     = 1728;      // from mv1080 mode
-            Preview_V     = 2214;
-            Preview_R     = 0x1D000E;  // from mv1080 mode
-            YUV_HD_S_H    = 0x10501B5;
-            YUV_HD_S_V    = 0x1050341;
-        }
-
-        if (Anam_Higher) /* 1600x2040 @ 23.976 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x1B2;
-                RAW_V         = 0x814;
-                TimerA        = 0x1E5;
-                if (Framerate_24) TimerB = 0xAB9;
-                if (Framerate_25) TimerB = 0xA48;
-                if (Framerate_30) TimerB = 0xA48; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x1B2;
-                RAW_V         = 0x814;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x1BB;
-                RAW_V         = 0x819;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                YUV_HD_S_H    = 0x105017B;
+                YUV_HD_S_V    = 0x10503BE;
             }
             
-            Preview_H     = 1596;
-            Preview_V     = 2040;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050193;
-            YUV_HD_S_V    = 0x1050301;
+            if (Anam_Higher)
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x17E;  /* 1392x2350 @ 23.976 and 25 FPS */
+                    RAW_V         = 0x94A;
+                    TimerA        = 0x1B9;
+                    if (Framerate_24) TimerB = 0xBCA;
+                    if (Framerate_25) TimerB = 0xB4E;
+                    if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
+                    
+                    Preview_H     = 1388;
+                    Preview_V     = 2350;
+                    Preview_R     = 0x1D000D;
+                    YUV_HD_S_H    = 0x105015F;
+                    YUV_HD_S_V    = 0x1050377;
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x17A;  /* 1376x2322 to achieve 23.976 FPS */
+                    RAW_V         = 0x92E;
+                    TimerB        = 0xA2E;
+                    TimerA        = 0x1FF;
+                    
+                    Preview_H     = 1372;
+                    Preview_V     = 2322;
+                    Preview_R     = 0x1D000D;
+                    YUV_HD_S_H    = 0x105015B;
+                    YUV_HD_S_V    = 0x105036D;
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x183;  /* 1376x2322 to achieve 23.976 FPS */
+                    RAW_V         = 0x933;
+                    TimerB        = 0xA2E;
+                    TimerA        = 0x1FF;
+                    
+                    Preview_H     = 1372;
+                    Preview_V     = 2322;
+                    Preview_R     = 0x1D000D;
+                    YUV_HD_S_H    = 0x105015B;
+                    YUV_HD_S_V    = 0x105036E;
+                }
+            }
+            
+            if (Anam_Medium) /* 1280x2160 @ 23.976 and 25 FPS */
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x162;
+                    RAW_V         = 0x88C;
+                    TimerA        = 0x1B9;
+                    if (Framerate_24) TimerB = 0xBCA;
+                    if (Framerate_25) TimerB = 0xB4E;
+                    if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x162;
+                    RAW_V         = 0x88C;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2E;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x16B;
+                    RAW_V         = 0x891;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2E;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1276;
+                Preview_V     = 2160;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050142;
+                YUV_HD_S_V    = 0x105032F;
+            }
         }
-
-        if (Anam_Medium) /* 1472x1878 @ 23.976 FPS */
+        
+        if (AR_2_1)
         {
-            if (is_650D || is_700D)
+            if (Anam_Highest) /* 1600x2400 */
             {
-                RAW_H         = 0x192;
-                RAW_V         = 0x772;
-                TimerA        = 0x1C5;
-                if (Framerate_24) TimerB = 0xB7A;
-                if (Framerate_25) TimerB = 0xB02;
-                if (Framerate_30) TimerB = 0xB02; // 30 Doesn't work, make it 25
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x1B2;  /* @ 23.976 FPS */
+                    RAW_V         = 0x97C;
+                    TimerB        = 0xAB9;
+                    TimerA        = 0x1E5;
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x1B2; /* @ 23.300 FPS */
+                    RAW_V         = 0x97C;
+                    TimerB        = 0xA79;
+                    TimerA        = 0x1FF;
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x1BB; /* @ 23.300 FPS */
+                    RAW_V         = 0x981;
+                    TimerB        = 0xA79;
+                    TimerA        = 0x1FF;
+                }
+                
+                Preview_H     = 1596;
+                Preview_V     = 2400;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050193;
+                YUV_HD_S_V    = 0x1050389;
             }
-
-            if (is_EOSM)
+            
+            if (Anam_Higher) /* 1472x2208 @ 23.976 and 25 FPS */
             {
-                RAW_H         = 0x192;
-                RAW_V         = 0x772;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x192;
+                    RAW_V         = 0x8BC;
+                    TimerA        = 0x1C5;
+                    if (Framerate_24) TimerB = 0xB7A;
+                    if (Framerate_25) TimerB = 0xB02;
+                    if (Framerate_30) TimerB = 0xB02; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x192;
+                    RAW_V         = 0x8BC;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x19B;
+                    RAW_V         = 0x8C1;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1468;
+                Preview_V     = 2208;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050173;
+                YUV_HD_S_V    = 0x1050341;
             }
-
-            if (is_100D)
+            
+            if (Anam_Medium) /* 1360x2040 @ 23.976 and 25 FPS */
             {
-                RAW_H         = 0x19B;
-                RAW_V         = 0x777;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x176;
+                    RAW_V         = 0x814;
+                    TimerA        = 0x1B9;
+                    if (Framerate_24) TimerB = 0xBCA;
+                    if (Framerate_25) TimerB = 0xB4E;
+                    if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x176;
+                    RAW_V         = 0x814;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x17F;
+                    RAW_V         = 0x819;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1356;
+                Preview_V     = 2040;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050157;
+                YUV_HD_S_V    = 0x1050301;
             }
-
-            Preview_H     = 1468;
-            Preview_V     = 1878;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050173;
-            YUV_HD_S_V    = 0x10502C4;
+        }
+        
+        if (AR_2_20_1)
+        {
+            if (Anam_Highest)
+            {
+                if (is_650D || is_700D) /* 1680x2290 @ 23.976 FPS */
+                {
+                    RAW_H         = 0x1C6;
+                    RAW_V         = 0x90E;
+                    TimerB        = 0xA4C;
+                    TimerA        = 0x1F9;
+                    
+                    Preview_H     = 1676;
+                    Preview_V     = 2290;
+                    Preview_R     = 0x1D000D;
+                    YUV_HD_S_H    = 0x10501A8;
+                    YUV_HD_S_V    = 0x1050362;
+                }
+                
+                if (is_EOSM) /* 1664x2268 @ 23.976 FPS */
+                {
+                    RAW_H         = 0x1C2;
+                    RAW_V         = 0x8F8;
+                    TimerB        = 0xA2D;
+                    TimerA        = 0x1FF;
+                    
+                    Preview_H     = 1660;
+                    Preview_V     = 2268;
+                    Preview_R     = 0x1D000D;
+                    YUV_HD_S_H    = 0x10501A3;
+                    YUV_HD_S_V    = 0x1050359;
+                }
+                
+                if (is_100D) /* 1664x2268 @ 23.976 FPS */
+                {
+                    RAW_H         = 0x1CB;
+                    RAW_V         = 0x8FD;
+                    TimerB        = 0xA2D;
+                    TimerA        = 0x1FF;
+                    
+                    Preview_H     = 1660;
+                    Preview_V     = 2268;
+                    Preview_R     = 0x1D000D;
+                    YUV_HD_S_H    = 0x10501A3;
+                    YUV_HD_S_V    = 0x1050359;
+                }
+            }
+            
+            if (Anam_Higher) /* 1552x2216 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x1A6;
+                    RAW_V         = 0x860;
+                    TimerA        = 0x1D9;
+                    if (Framerate_24) TimerB = 0xAFE;
+                    if (Framerate_25) TimerB = 0xA8B;
+                    if (Framerate_30) TimerB = 0xA8B; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x1A6;
+                    RAW_V         = 0x860;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2E;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x1AF;
+                    RAW_V         = 0x865;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2E;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1548;
+                Preview_V     = 2216;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050187;
+                YUV_HD_S_V    = 0x105031C;
+            }
+            
+            if (Anam_Medium) /* 1424x1942 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x186;
+                    RAW_V         = 0x7B2;
+                    TimerA        = 0x1B9;
+                    if (Framerate_24) TimerB = 0xBCA;
+                    if (Framerate_25) TimerB = 0xB4E;
+                    if (Framerate_30) TimerB = 0xB4E; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x186;
+                    RAW_V         = 0x7B2;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2E;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x18F;
+                    RAW_V         = 0x7B7;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2E;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1420;
+                Preview_V     = 1942;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050167;
+                YUV_HD_S_V    = 0x10502DB;
+            }
+        }
+        
+        if (AR_2_35_1)
+        {
+            if (Anam_Highest) /* 1736x2214 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D || is_EOSM)
+                {
+                    RAW_H         = 0x1D4 + RAW_H_Debug;  // from mv1080 mode
+                    RAW_V         = 0x8C2 + RAW_V_Debug;
+                    TimerB        = 0xA05 + TimerB_Debug;
+                    TimerA        = 0x207 + TimerA_Debug;
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x1DD;
+                    RAW_V         = 0x8C7;
+                    TimerB        = 0x9DF;
+                    TimerA        = 0x20F;
+                }
+                
+                Preview_H     = 1728;      // from mv1080 mode
+                Preview_V     = 2214;
+                Preview_R     = 0x1D000E;  // from mv1080 mode
+                YUV_HD_S_H    = 0x10501B5;
+                YUV_HD_S_V    = 0x1050341;
+            }
+            
+            if (Anam_Higher) /* 1600x2040 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x1B2;
+                    RAW_V         = 0x814;
+                    TimerA        = 0x1E5;
+                    if (Framerate_24) TimerB = 0xAB9;
+                    if (Framerate_25) TimerB = 0xA48;
+                    if (Framerate_30) TimerB = 0xA48; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x1B2;
+                    RAW_V         = 0x814;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x1BB;
+                    RAW_V         = 0x819;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1596;
+                Preview_V     = 2040;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050193;
+                YUV_HD_S_V    = 0x1050301;
+            }
+            
+            if (Anam_Medium) /* 1472x1878 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x192;
+                    RAW_V         = 0x772;
+                    TimerA        = 0x1C5;
+                    if (Framerate_24) TimerB = 0xB7A;
+                    if (Framerate_25) TimerB = 0xB02;
+                    if (Framerate_30) TimerB = 0xB02; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x192;
+                    RAW_V         = 0x772;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x19B;
+                    RAW_V         = 0x777;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1468;
+                Preview_V     = 1878;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050173;
+                YUV_HD_S_V    = 0x10502C4;
+            }
+        }
+        
+        if (AR_2_39_1)
+        {
+            if (Anam_Highest) /* 1736x2178 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D || is_EOSM)
+                {
+                    RAW_H         = 0x1D4;  // from mv1080 mode
+                    RAW_V         = 0x89E;
+                    TimerB        = 0xA05;
+                    TimerA        = 0x207;
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x1DD;
+                    RAW_V         = 0x8A3;
+                    TimerB        = 0x9CB;
+                    TimerA        = 0x213;  // can be lowered even more? need to be fine tuned
+                }
+                
+                Preview_H     = 1728;      // from mv1080 mode
+                Preview_V     = 2178;
+                Preview_R     = 0x1D000E;  // from mv1080 mode
+                YUV_HD_S_H    = 0x10501B5;
+                YUV_HD_S_V    = 0x1050336;
+            }
+            
+            if (Anam_Higher) /* 1600x2008 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x1B2;
+                    RAW_V         = 0x7F4;
+                    TimerA        = 0x1E5;
+                    if (Framerate_24) TimerB = 0xAB9;
+                    if (Framerate_25) TimerB = 0xA48;
+                    if (Framerate_30) TimerB = 0xA48; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x1B2;
+                    RAW_V         = 0x7F4;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x1BB;
+                    RAW_V         = 0x7F9;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1596;
+                Preview_V     = 2008;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050193;
+                YUV_HD_S_V    = 0x10502F4;
+            }
+            
+            if (Anam_Medium) /* 1472x1846 @ 23.976 FPS */
+            {
+                if (is_650D || is_700D)
+                {
+                    RAW_H         = 0x192;
+                    RAW_V         = 0x752;
+                    TimerA        = 0x1C5;
+                    if (Framerate_24) TimerB = 0xB7A;
+                    if (Framerate_25) TimerB = 0xB02;
+                    if (Framerate_30) TimerB = 0xB02; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_EOSM)
+                {
+                    RAW_H         = 0x192;
+                    RAW_V         = 0x752;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                if (is_100D)
+                {
+                    RAW_H         = 0x19B;
+                    RAW_V         = 0x757;
+                    TimerA        = 0x1FF;
+                    if (Framerate_24) TimerB = 0xA2D;
+                    if (Framerate_25) TimerB = 0x9C3;
+                    if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
+                }
+                
+                Preview_H     = 1468;
+                Preview_V     = 1846;
+                Preview_R     = 0x1D000D;
+                YUV_HD_S_H    = 0x1050173;
+                YUV_HD_S_V    = 0x10502B6;
+            }
         }
     }
-
-    if (AR_2_39_1)
-    {
-        if (Anam_Highest) /* 1736x2178 @ 23.976 FPS */
-        {
-            if (is_650D || is_700D || is_EOSM)
-            {
-                RAW_H         = 0x1D4;  // from mv1080 mode
-                RAW_V         = 0x89E;
-                TimerB        = 0xA05;
-                TimerA        = 0x207;
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x1DD;
-                RAW_V         = 0x8A3;
-                TimerB        = 0x9CB;
-                TimerA        = 0x213;  // can be lowered even more? need to be fine tuned
-            }
-
-            Preview_H     = 1728;      // from mv1080 mode
-            Preview_V     = 2178;
-            Preview_R     = 0x1D000E;  // from mv1080 mode
-            YUV_HD_S_H    = 0x10501B5;
-            YUV_HD_S_V    = 0x1050336;
-        }
-
-        if (Anam_Higher) /* 1600x2008 @ 23.976 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x1B2;
-                RAW_V         = 0x7F4;
-                TimerA        = 0x1E5;
-                if (Framerate_24) TimerB = 0xAB9;
-                if (Framerate_25) TimerB = 0xA48;
-                if (Framerate_30) TimerB = 0xA48; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x1B2;
-                RAW_V         = 0x7F4;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x1BB;
-                RAW_V         = 0x7F9;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            Preview_H     = 1596;
-            Preview_V     = 2008;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050193;
-            YUV_HD_S_V    = 0x10502F4;
-        }
-
-        if (Anam_Medium) /* 1472x1846 @ 23.976 FPS */
-        {
-            if (is_650D || is_700D)
-            {
-                RAW_H         = 0x192;
-                RAW_V         = 0x752;
-                TimerA        = 0x1C5;
-                if (Framerate_24) TimerB = 0xB7A;
-                if (Framerate_25) TimerB = 0xB02;
-                if (Framerate_30) TimerB = 0xB02; // 30 Doesn't work, make it 25
-            }
-
-            if (is_EOSM)
-            {
-                RAW_H         = 0x192;
-                RAW_V         = 0x752;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            if (is_100D)
-            {
-                RAW_H         = 0x19B;
-                RAW_V         = 0x757;
-                TimerA        = 0x1FF;
-                if (Framerate_24) TimerB = 0xA2D;
-                if (Framerate_25) TimerB = 0x9C3;
-                if (Framerate_30) TimerB = 0x9C3; // 30 Doesn't work, make it 25
-            }
-
-            Preview_H     = 1468;
-            Preview_V     = 1846;
-            Preview_R     = 0x1D000D;
-            YUV_HD_S_H    = 0x1050173;
-            YUV_HD_S_V    = 0x10502B6;
-        }
-    }
-
     Black_Bar = 0;
     YUV_HD_S_V_E  = 0;
     Preview_Control = 1;
@@ -4801,7 +4823,12 @@ static MENU_UPDATE_FUNC(crop_preset_1x3_res_update)
         {
             MENU_SET_VALUE("UHD");
             MENU_SET_HELP("1280x2160 @ 23.976 and 25 FPS");
-        }            
+        } 
+        if (crop_preset_1x3_res_menu == 3) // Anam_Medium
+        {
+            MENU_SET_VALUE("Full-Res LV");
+            MENU_SET_HELP("1736x3476 @ 12.000 FPS, framing preview");
+        }
     }
 
     if (crop_preset_ar_menu == 1) // AR_2_1
@@ -5119,8 +5146,8 @@ static struct menu_entry crop_rec_menu[] =
                 .name       = "Preset: ",  // CROP_PRESET_1X3
                 .priv       = &crop_preset_1x3_res_menu,
                 .update     = crop_preset_1x3_res_update,
-                .max        = 2,
-                .choices    = CHOICES("Highest", "Higher", "Medium"),  // dummy choices, strings are being changed depending on aspect ratio and res
+                .max        = 3,
+                .choices    = CHOICES("Highest", "Higher", "Medium", "Full-Res LV"),  // dummy choices, strings are being changed depending on aspect ratio and res
                 .help       = "Choose 1x3 preset.",
                 .shidden    = 1,
             },
