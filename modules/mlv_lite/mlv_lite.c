@@ -4602,24 +4602,25 @@ unsigned int raw_rec_update_preview(unsigned int ctx)
 
     /* when recording, preview both full-size buffers,
      * to make sure it's not recording every other frame */
-    static int fi = 0; fi = !fi;
+    static int fi = 0;
+    fi = !fi;
+
     raw_preview_fast_ex(
         RAW_IS_RECORDING ? fullsize_buffers[fi] : (void*)-1,
         PREVIEW_HACKED && RAW_IS_RECORDING ? (void*)-1 : buffers->dst_buf,
         -1,
         -1,
-        (need_for_speed && !get_halfshutter_pressed())
-            ? RAW_PREVIEW_GRAY_ULTRA_FAST
-            : RAW_PREVIEW_COLOR_HALFRES
+        RAW_IS_RECORDING ? RAW_PREVIEW_GRAY_ULTRA_FAST : RAW_PREVIEW_COLOR_HALFRES
     );
+
 
     give_semaphore(settings_sem);
 
     /* be gentle with the CPU, save it for recording (especially if the buffer is almost full) */
     msleep(
-        (need_for_speed)
-            ? ((queued_frames > valid_slot_count / 2) ? 1000 : 500)
-            : 50
+           (need_for_speed)
+           ? ((queued_frames > valid_slot_count / 2) ? 416 : 208)
+           : 20
     );
 
     preview_dirty = 1;
