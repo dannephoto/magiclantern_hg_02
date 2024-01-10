@@ -642,7 +642,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Expo", "White balance");
+                select_menu_by_name("Expo", "White Balance");
                 gui_open_menu();
             }
         }
