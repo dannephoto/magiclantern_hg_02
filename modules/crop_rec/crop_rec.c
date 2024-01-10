@@ -356,247 +356,250 @@ static unsigned int photo_keypress_cbr(unsigned int key)
             }
         }
         
-        /* ISO change shortcuts */
-        if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 1) ||
-            ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 1)  )
+        if (lv_dispsize != 10)
         {
-            if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
-            if (lens_info.raw_iso == ISO_6400) return 0; // We reached highest ISO, don't do anything
-            iso_toggle(0, 2);
-            return 0;
-        }
-        if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 1) ||
-            ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 1)  )
-        {
-            if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
-            if (lens_info.raw_iso == ISO_100) return 0; // We reached lowest ISO, don't do anything
-            iso_toggle(0, -2);
-            return 0;
-        }
-        if (((key == MODULE_KEY_INFO)       && INFO_button == 2) ||
-            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 2))
-        {
-            iso_toggle(0, 2);
-            return 0;
-        }
-
-        /* Aperture change shortcuts */
-        if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
-            ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
-        {
-            if (lens_info.raw_aperture == lens_info.raw_aperture_max) return 0; // We reached max aperture, don't do anything
-            aperture_toggle(0, 1);
-            return 0;
-        }
-        if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 2) ||
-            ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 2)  )
-        {
-            if (lens_info.raw_aperture == lens_info.raw_aperture_min) return 0; // We reached min aperture, don't do anything
-            aperture_toggle(0, -1);
-            return 0;
-        }
-        if (key == MODULE_KEY_INFO && INFO_button == 3)
-        {
-            aperture_toggle(0, -1);
-            return 0;
-        }
-        if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
-        {
-            aperture_toggle(0, 1);
-            return 0;
-        }
-        
-        if (key == MODULE_KEY_PRESS_UP)
-        {
-            
-            // Don't change ISO when set to auto ISO
-            if (lens_info.raw_iso == 0x0){
-                return 0;
-            }
-            
-            int a = lens_info.raw_iso;
-            if (a == 0x78) return 0;
-            
-            iso_toggle(0, 2);
-            
-            return 0;
-        }
-        
-        if (key == MODULE_KEY_PRESS_DOWN)
-        {
-            
-            // Don't change ISO when set to auto ISO
-            if (lens_info.raw_iso == 0x0){
-                return 0;
-            }
-            
-            int a = lens_info.raw_iso;
-            if (a == 0x48) return 0;
-            
-            iso_toggle(0, -2);
-            
-            return 0;
-        }
-        
-        
-        if (key == MODULE_KEY_PRESS_UP)
-        {
-            // Don't change ISO when set to auto ISO
-            if (lens_info.raw_iso == 0x0){
-                return 0;
-            }
-            
-            
-            int a = lens_info.raw_iso;
-            if (a == 0x78) return 0;
-            
-            iso_toggle(0, 2);
-            
-            return 0;
-        }
-        
-        if (key == MODULE_KEY_PRESS_DOWN)
-        {
-            // Don't change ISO when set to auto ISO
-            if (lens_info.raw_iso == 0x0){
-                return 0;
-            }
-            
-            int a = lens_info.raw_iso;
-            if (a == 0x48) return 0;
-            
-            iso_toggle(0, -2);
-            
-            return 0;
-        }
-        
-        
-        if (key == MODULE_KEY_PRESS_UP)
-        {
-            // Don't change ISO when set to auto ISO
-            if (lens_info.raw_iso == 0x0){
-                return 0;
-            }
-            
-            if (!dual_iso_is_enabled())
+            /* ISO change shortcuts */
+            if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 1) ||
+                ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 1)  )
             {
-                base_recovery_iso = 1;
+                if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
+                if (lens_info.raw_iso == ISO_6400) return 0; // We reached highest ISO, don't do anything
+                iso_toggle(0, 2);
+                return 0;
+            }
+            if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 1) ||
+                ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 1)  )
+            {
+                if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
+                if (lens_info.raw_iso == ISO_100) return 0; // We reached lowest ISO, don't do anything
+                iso_toggle(0, -2);
+                return 0;
+            }
+            if (((key == MODULE_KEY_INFO)       && INFO_button == 2) ||
+                ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 2))
+            {
+                iso_toggle(0, 2);
                 return 0;
             }
             
-            isoless_recovery_iso++;
-            //We hit 6400 iso already
-            if (isoless_recovery_iso > 7)
+            /* Aperture change shortcuts */
+            if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
+                ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
             {
-                isoless_recovery_iso = 7;
+                if (lens_info.raw_aperture == lens_info.raw_aperture_max) return 0; // We reached max aperture, don't do anything
+                aperture_toggle(0, 1);
+                return 0;
             }
-            
-            return 0;
-        }
-        
-        if (key == MODULE_KEY_PRESS_DOWN)
-        {
-            // Don't change ISO when set to auto ISO
-            if (lens_info.raw_iso == 0x0){
+            if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 2) ||
+                ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 2)  )
+            {
+                if (lens_info.raw_aperture == lens_info.raw_aperture_min) return 0; // We reached min aperture, don't do anything
+                aperture_toggle(0, -1);
+                return 0;
+            }
+            if (key == MODULE_KEY_INFO && INFO_button == 3)
+            {
+                aperture_toggle(0, -1);
+                return 0;
+            }
+            if (key == MODULE_KEY_PRESS_SET && INFO_button == 3)
+            {
+                aperture_toggle(0, 1);
                 return 0;
             }
             
-            if (!dual_iso_is_enabled())
+            if (key == MODULE_KEY_PRESS_UP)
             {
-                base_recovery_iso = 1;
+                
+                // Don't change ISO when set to auto ISO
+                if (lens_info.raw_iso == 0x0){
+                    return 0;
+                }
+                
+                int a = lens_info.raw_iso;
+                if (a == 0x78) return 0;
+                
+                iso_toggle(0, 2);
+                
                 return 0;
             }
             
-            isoless_recovery_iso--;
-            //We hit 100 iso already
-            if (isoless_recovery_iso < 0)
+            if (key == MODULE_KEY_PRESS_DOWN)
             {
-                isoless_recovery_iso = 0;
+                
+                // Don't change ISO when set to auto ISO
+                if (lens_info.raw_iso == 0x0){
+                    return 0;
+                }
+                
+                int a = lens_info.raw_iso;
+                if (a == 0x48) return 0;
+                
+                iso_toggle(0, -2);
+                
+                return 0;
             }
             
-        }
-        
-        /* Aperture change shortcuts */
-        if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
-            ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
-        {
-            if (lens_info.raw_aperture == lens_info.raw_aperture_max) return 0; // We reached max aperture, don't do anything
-            aperture_toggle(0, 1);
-            return 0;
-        }
-        if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 2) ||
-            ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 2)  )
-        {
-            if (lens_info.raw_aperture == lens_info.raw_aperture_min) return 0; // We reached min aperture, don't do anything
-            aperture_toggle(0, -1);
-            return 0;
-        }
-        if (key == MODULE_KEY_INFO && INFO_button == 3)
-        {
-            aperture_toggle(0, -1);
-            return 0;
-        }
-        if (key == MODULE_KEY_PRESS_SET && SET_button == 3)
-        {
-            aperture_toggle(0, 1);
-            return 0;
-        }
-        
-        /* Dual ISO ON / OFF */
-        if (((key == MODULE_KEY_INFO)       && INFO_button == 4) ||
-            ((key == MODULE_KEY_PRESS_SET)  && SET_button == 4))
-        {
-            if (!RECORDING)
+            
+            if (key == MODULE_KEY_PRESS_UP)
             {
+                // Don't change ISO when set to auto ISO
+                if (lens_info.raw_iso == 0x0){
+                    return 0;
+                }
+                
+                
+                int a = lens_info.raw_iso;
+                if (a == 0x78) return 0;
+                
+                iso_toggle(0, 2);
+                
+                return 0;
+            }
+            
+            if (key == MODULE_KEY_PRESS_DOWN)
+            {
+                // Don't change ISO when set to auto ISO
+                if (lens_info.raw_iso == 0x0){
+                    return 0;
+                }
+                
+                int a = lens_info.raw_iso;
+                if (a == 0x48) return 0;
+                
+                iso_toggle(0, -2);
+                
+                return 0;
+            }
+            
+            
+            if (key == MODULE_KEY_PRESS_UP)
+            {
+                // Don't change ISO when set to auto ISO
+                if (lens_info.raw_iso == 0x0){
+                    return 0;
+                }
+                
                 if (!dual_iso_is_enabled())
                 {
-                    menu_set_str_value_from_script("Expo", "Dual ISO", "ON", 1);
+                    base_recovery_iso = 1;
                     return 0;
                 }
-                if (dual_iso_is_enabled())
+                
+                isoless_recovery_iso++;
+                //We hit 6400 iso already
+                if (isoless_recovery_iso > 7)
                 {
-                    menu_set_str_value_from_script("Expo", "Dual ISO", "OFF", 0);
+                    isoless_recovery_iso = 7;
+                }
+                
+                return 0;
+            }
+            
+            if (key == MODULE_KEY_PRESS_DOWN)
+            {
+                // Don't change ISO when set to auto ISO
+                if (lens_info.raw_iso == 0x0){
+                    return 0;
+                }
+                
+                if (!dual_iso_is_enabled())
+                {
+                    base_recovery_iso = 1;
+                    return 0;
+                }
+                
+                isoless_recovery_iso--;
+                //We hit 100 iso already
+                if (isoless_recovery_iso < 0)
+                {
+                    isoless_recovery_iso = 0;
+                }
+                
+            }
+            
+            /* Aperture change shortcuts */
+            if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
+                ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
+            {
+                if (lens_info.raw_aperture == lens_info.raw_aperture_max) return 0; // We reached max aperture, don't do anything
+                aperture_toggle(0, 1);
+                return 0;
+            }
+            if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 2) ||
+                ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 2)  )
+            {
+                if (lens_info.raw_aperture == lens_info.raw_aperture_min) return 0; // We reached min aperture, don't do anything
+                aperture_toggle(0, -1);
+                return 0;
+            }
+            if (key == MODULE_KEY_INFO && INFO_button == 3)
+            {
+                aperture_toggle(0, -1);
+                return 0;
+            }
+            if (key == MODULE_KEY_PRESS_SET && SET_button == 3)
+            {
+                aperture_toggle(0, 1);
+                return 0;
+            }
+            
+            /* Dual ISO ON / OFF */
+            if (((key == MODULE_KEY_INFO)       && INFO_button == 4) ||
+                ((key == MODULE_KEY_PRESS_SET)  && SET_button == 4))
+            {
+                if (!RECORDING)
+                {
+                    if (!dual_iso_is_enabled())
+                    {
+                        menu_set_str_value_from_script("Expo", "Dual ISO", "ON", 1);
+                        return 0;
+                    }
+                    if (dual_iso_is_enabled())
+                    {
+                        menu_set_str_value_from_script("Expo", "Dual ISO", "OFF", 0);
+                        return 0;
+                    }
+                }
+            }
+            
+            /* False color ON / OFF */
+            if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
+                ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
+            {
+                extern int falsecolor_draw;
+                if (!falsecolor_draw)
+                {
+                    falsecolor_draw = 1;
+                    return 0;
+                }
+                if (falsecolor_draw)
+                {
+                    falsecolor_draw = 0;
+                    redraw();
                     return 0;
                 }
             }
-        }
-        
-        /* False color ON / OFF */
-        if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
-            ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
-        {
-            extern int falsecolor_draw;
-            if (!falsecolor_draw)
+            
+            if (tapdisp == 5 && key == MODULE_KEY_TOUCH_1_FINGER)
             {
-                falsecolor_draw = 1;
-                return 0;
-            }
-            if (falsecolor_draw)
-            {
-                falsecolor_draw = 0;
-                redraw();
-                return 0;
-            }
-        }
-        
-        if (tapdisp == 5 && key == MODULE_KEY_TOUCH_1_FINGER)
-        {
-            extern int falsecolor_draw;
-            if (!falsecolor_draw)
-            {
-                falsecolor_draw = 1;
-                return 0;
-            }
-            if (falsecolor_draw)
-            {
-                falsecolor_draw = 0;
-                redraw();
-                return 0;
+                extern int falsecolor_draw;
+                if (!falsecolor_draw)
+                {
+                    falsecolor_draw = 1;
+                    return 0;
+                }
+                if (falsecolor_draw)
+                {
+                    falsecolor_draw = 0;
+                    redraw();
+                    return 0;
+                }
             }
         }
                         
         /* Opens up last magic lantern menu tab by tapping display */
-        if (!is_movie_mode() && !gui_menu_shown() && lv)
+        if (!is_movie_mode() && !gui_menu_shown() && lv && lv_dispsize != 10)
         {
 
             if ((key == MODULE_KEY_TOUCH_1_FINGER && tapdisp == 2) || (key == MODULE_KEY_PRESS_SET && SET_button == 7) || (key == MODULE_KEY_INFO && INFO_button == 6))
@@ -631,6 +634,16 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                 select_menu_by_name("Expo", "ISO");
                 gui_open_menu();
                 submenu = 1;
+            }
+            if (tapdisp == 1 && key == MODULE_KEY_TOUCH_1_FINGER)
+            {
+                msleep(100);
+                if(lv_disp_mode != 0){
+                    // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                    return 1;
+                }
+                select_menu_by_name("Expo", "White balance");
+                gui_open_menu();
             }
         }
     }
@@ -5952,7 +5965,9 @@ if (Half_Shutter == 2 && RECORDING)
                 }
             }
             
-
+            
+            if (lv_dispsize != 10)
+            {
                 if ((tapdisp == 2 && key == MODULE_KEY_TOUCH_1_FINGER) || (SET_button == 7 && key == MODULE_KEY_PRESS_SET) || (INFO_button == 6 && key == MODULE_KEY_INFO))
                 {
                     msleep(100);
@@ -6001,8 +6016,9 @@ if (Half_Shutter == 2 && RECORDING)
                     msleep(10);
                     submenu = 1;
                 }
-
-            /* Block SET/Arrows/One finger touch while recording to prevent changing focus box position. 
+            }
+            
+            /* Block SET/Arrows/One finger touch while recording to prevent changing focus box position.
              * When changing focus box position, a part of preview configuration changes, we don't 
              * want that to happen, to avoid corrupted frames, black preview or instability 
              * is there another way to block focus box from shifting, and make its position static? */
