@@ -4834,7 +4834,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x3_res_update)
         if (crop_preset_1x3_res_menu == 3) // Anam_Medium
         {
             MENU_SET_VALUE("Full-Res LV");
-            MENU_SET_HELP("1736x3476 @ 12.000 FPS, framing preview");
+            MENU_SET_HELP("1736x3476 @ 16,14 and 12 FPS");
         }
     }
 
