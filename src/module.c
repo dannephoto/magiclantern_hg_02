@@ -1778,6 +1778,7 @@ static void module_load_task(void* unused)
             
             if(!first_run)
             {
+                FILE *file = FIO_CreateFile( "ML/SETTINGS/TLAPSE.LEN" );
                 FILE *file2 = FIO_CreateFile( "ML/FIRST" );
                 //throw in custom folder here for now
                 static char* CM1;

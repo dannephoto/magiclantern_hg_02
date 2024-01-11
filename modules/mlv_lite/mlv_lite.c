@@ -3837,17 +3837,18 @@ void raw_video_rec_task(uint32_t thread)
                     beep();
                 }
                 
-                if (slots[slot_index].frame_number != last_processed_frame + 1)
-                {
+                //Disable for eosm. WOrks good anyway
+               // if (slots[slot_index].frame_number != last_processed_frame + 1)
+               // {
                     /* FIXME: Frame order error is always presented when using Card Spanning, does frame order matter in this case? */
-                    if (!card_spanning)
-                    {
-                        bmp_printf( FONT_MED, 30, 110, 
-                        "Frame order error: slot %d, frame %d, expected %d ", slot_index, slots[slot_index].frame_number, last_processed_frame + 1
-                        );
-                        beep();
-                    }
-                }
+                 //   if (!card_spanning)
+                 //   {
+                 //       bmp_printf( FONT_MED, 30, 110,
+                  //      "Frame order error: slot %d, frame %d, expected %d ", slot_index, slots[slot_index].frame_number, last_processed_frame + 1
+                    //    );
+                    //    beep();
+                   // }
+               // }
                 last_processed_frame++;
             }
             else
