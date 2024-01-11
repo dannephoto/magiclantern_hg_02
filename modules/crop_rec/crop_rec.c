@@ -2696,16 +2696,16 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
     if (Anam_FLV)
     {
         RAW_H         = 0x1D4;  // from mv1080 mode
-        RAW_V         = 0xDB0;
+        RAW_V         = 0xDB2;
         TimerB        = OUTPUT_10BIT ? 0xf05 : (OUTPUT_12BIT || OUTPUT_11BIT) ? 0x112b : OUTPUT_14BIT ? 0x1407 : 0;
         TimerA        = 0x207 + TimerA_Debug;
         
         //From AR_2_35_1
         Preview_H     = 1728;      // from mv1080 mode
-        Preview_V     = 2214;
+        Preview_V     = 3478;
         Preview_R     = 0x1D000E;  // from mv1080 mode
         YUV_HD_S_H    = 0x10501B5;
-        YUV_HD_S_V    = 0x1050341;
+        YUV_HD_S_V    = 0x45015C;
     }
     else
     {
@@ -4322,16 +4322,14 @@ void SetAspectRatioCorrectionValues()
         }
     }
 
-    /* Set default x5 mode values for mv1080 preset */
-    if (CROP_PRESET_MENU == CROP_PRESET_3X3)
+    /* Set default x5 mode values for mv1080 preset, also for Anam_FLV */
+    if ((CROP_PRESET_MENU == CROP_PRESET_3X3 && crop_preset_3x3_res == 1) || // mv1080
+        (CROP_PRESET_MENU == CROP_PRESET_1X3 && crop_preset_1x3_res == 3))   // Anam_FLV
     {
-        if (crop_preset_3x3_res == 1) // mv1080
-        {
-            if (is_LCD_Output()){        YUV_LV_Buf = 0x1DF05A0; YUV_LV_S_V = 0x1E002B;}
-            if (is_480p_Output()){       YUV_LV_Buf = 0x1830520; YUV_LV_S_V = 0x6100AC;}
-            if (is_1080i_Full_Output()){ YUV_LV_Buf = 0x21B0CA8; YUV_LV_S_V = 0x8700AC;}
-            if (is_1080i_Info_Output()){ YUV_LV_Buf = 0x1B70A50; YUV_LV_S_V = 0x370056;}
-        }
+        if (is_LCD_Output()){        YUV_LV_Buf = 0x1DF05A0; YUV_LV_S_V = 0x1E002B;}
+        if (is_480p_Output()){       YUV_LV_Buf = 0x1830520; YUV_LV_S_V = 0x6100AC;}
+        if (is_1080i_Full_Output()){ YUV_LV_Buf = 0x21B0CA8; YUV_LV_S_V = 0x8700AC;}
+        if (is_1080i_Info_Output()){ YUV_LV_Buf = 0x1B70A50; YUV_LV_S_V = 0x370056;}
     }
 }
 
@@ -4461,8 +4459,17 @@ static void FAST PATH_SelectPathDriveMode_hook(uint32_t* regs, uint32_t* stack, 
 
     if (CROP_PRESET_MENU == CROP_PRESET_1X3)
     {
-        Shift_Preview = 1;
-        Clear_Artifacts = 1;
+		if (crop_preset_1x3_res == 3) // Anam_FLV
+		{
+			Shift_Preview = 0;
+			Clear_Artifacts = 0;
+		}
+		else
+		{
+		    Shift_Preview = 1;
+			Clear_Artifacts = 1;
+		}
+
         EDMAC_9_Vertical_Change = 1;
     }
 

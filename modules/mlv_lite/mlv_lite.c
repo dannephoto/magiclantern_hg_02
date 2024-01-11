@@ -95,7 +95,7 @@ static int bitdepth = 0; /* coming from crop_rec.c */
 extern int WEAK_FUNC(bitdepth) bit_depth_analog;
 
 static int fullresmode = 0; /* coming from crop_rec.c */
-extern int WEAK_FUNC(fullresmode) crop_preset_1x3_res_menu;
+extern int WEAK_FUNC(fullresmode) crop_preset_1x3_res;
 
 
 /* camera-specific tricks */
