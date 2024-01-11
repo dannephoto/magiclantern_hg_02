@@ -5050,6 +5050,16 @@ static MENU_UPDATE_FUNC(crop_preset_fps_update)
                 }
             }
         }
+                    
+        if (crop_preset_1x3_res_menu == 3) // High FPS
+        {
+            int current_fps = fps_get_current_x1000();
+
+            if (is_EOSM)
+            {
+                MENU_SET_VALUE("%d.%03d",current_fps/1000, current_fps%1000);
+            }
+        }
     }
 
     if (CROP_PRESET_MENU == CROP_PRESET_1X1)
@@ -5802,6 +5812,7 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
             old_1x3_preset = crop_preset_1x3_res_menu;
             old_3x3_preset = crop_preset_3x3_res_menu;
             old_dual_iso   = dual_iso_is_enabled();
+            old_bit_depth  = bit_depth_analog;
             old_bit_depth  = bit_depth_analog;
             old_diso_fix   = fix_dual_iso_flicker;
         }
