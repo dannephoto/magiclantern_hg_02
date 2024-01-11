@@ -43,7 +43,7 @@ static CONFIG_INT("crop.preset", crop_preset_index, 2);
 static CONFIG_INT("crop.shutter_range", shutter_range, 0);
 static CONFIG_INT("crop.fix_dual_iso_flicker", fix_dual_iso_flicker, 1);
 
-static CONFIG_INT("crop.bit_depth", bit_depth_analog, 1);
+CONFIG_INT("crop.bit_depth", bit_depth_analog, 1);
 #define OUTPUT_14BIT (bit_depth_analog == 0)
 #define OUTPUT_12BIT (bit_depth_analog == 1)
 #define OUTPUT_11BIT (bit_depth_analog == 2)
@@ -71,7 +71,7 @@ static int crop_preset_1x1_res = 0;
 #define CROP_1280p     (crop_preset_1x1_res == 4)
 #define CROP_Full_Res  (crop_preset_1x1_res == 5)
 
-static CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
+CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
 static int crop_preset_1x3_res = 0;
 #define Anam_Highest   (crop_preset_1x3_res == 0)
 #define Anam_Higher    (crop_preset_1x3_res == 1)
@@ -5910,6 +5910,7 @@ if (Half_Shutter == 2 && RECORDING)
                 {
                     if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
                     if (lens_info.raw_iso == ISO_6400) return 0; // We reached highest ISO, don't do anything
+                    if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
                     iso_toggle(0, 2);
                     return 0;
                 }
@@ -5918,6 +5919,7 @@ if (Half_Shutter == 2 && RECORDING)
                 {
                     if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
                     if (lens_info.raw_iso == ISO_100) return 0; // We reached lowest ISO, don't do anything
+                    if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
                     iso_toggle(0, -2);
                     return 0;
                 }

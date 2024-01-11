@@ -91,6 +91,13 @@ extern WEAK_FUNC(ret_0) void mlv_play_file(char *filename);
 static int isotoggle = 0; /* coming from crop_rec.c */
 extern int WEAK_FUNC(isotoggle) Arrows_U_D;
 
+static int bitdepth = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(bitdepth) bit_depth_analog;
+
+static int fullresmode = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(fullresmode) crop_preset_1x3_res_menu;
+
+
 /* camera-specific tricks */
 static int cam_eos_m = 0;
 static int cam_5d2 = 0;
@@ -2368,7 +2375,7 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    if (Arrows_U_D != 1 && is_manual_focus()) 
+                    if ((Arrows_U_D != 1 && is_manual_focus()) || (bit_depth_analog == 3 && crop_preset_1x3_res != 3))
                     {
                         aewbSuspend();
                     }
