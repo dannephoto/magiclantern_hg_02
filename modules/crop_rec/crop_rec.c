@@ -2697,8 +2697,8 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
     {
         RAW_H         = 0x1D4;  // from mv1080 mode
         RAW_V         = 0xDB0;
-        TimerB        = 0x1407;
-        TimerA        = 0x207;
+        TimerB        = OUTPUT_10BIT ? 0xf05 : (OUTPUT_12BIT || OUTPUT_11BIT) ? 0x112b : OUTPUT_14BIT ? 0x1407 : 0;
+        TimerA        = 0x207 + TimerA_Debug;
         
         //From AR_2_35_1
         Preview_H     = 1728;      // from mv1080 mode
@@ -5276,16 +5276,18 @@ static struct menu_entry crop_rec_menu[] =
             {
                 .name   = "TimerA Debug",
                 .priv   = &TimerA_Debug,
-                .max    = 0xFFF,
-                .unit   = UNIT_HEX,
+                .min    = -10000,
+                .max    = 10000,
+                .unit   = UNIT_DEC,
                 .help   = "TimerA Debug.",
                 .advanced = 1,
             },
             {
                 .name   = "TimerB Debug",
                 .priv   = &TimerB_Debug,
-                .max    = 0xFFF,
-                .unit   = UNIT_HEX,
+                .min    = -10000,
+                .max    = 10000,
+                .unit   = UNIT_DEC,
                 .help   = "TimerB Debug.",
                 .advanced = 1,
             },
