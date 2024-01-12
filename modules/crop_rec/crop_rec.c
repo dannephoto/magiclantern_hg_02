@@ -5528,7 +5528,7 @@ int check_if_settings_changed()
         old_1x3_preset != crop_preset_1x3_res_menu  ||
         old_3x3_preset != crop_preset_3x3_res_menu  ||
         old_dual_iso   != dual_iso_is_enabled()     ||
-        old_bit_depth  != bit_depth_analog          ||
+        (old_bit_depth  != bit_depth_analog && Anam_FLV)         ||
         old_diso_fix   != fix_dual_iso_flicker)
     {
         return 1;
@@ -5737,9 +5737,11 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
             old_1x3_preset = crop_preset_1x3_res_menu;
             old_3x3_preset = crop_preset_3x3_res_menu;
             old_dual_iso   = dual_iso_is_enabled();
-            old_bit_depth  = bit_depth_analog;
-            old_bit_depth  = bit_depth_analog;
             old_diso_fix   = fix_dual_iso_flicker;
+            if (Anam_FLV)
+            {
+                old_bit_depth  = bit_depth_analog;
+            }
         }
     }
 
