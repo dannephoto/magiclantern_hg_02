@@ -346,7 +346,8 @@ static unsigned int photo_keypress_cbr(unsigned int key)
         {
             if (((key == MODULE_KEY_PRESS_SET           ) && SET_button  == 1)                 ||
                 ((key == MODULE_KEY_INFO                ) && INFO_button == 1)                 ||
-                ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter) )
+                ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter != 3 && is_manual_focus()) ||
+                ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter == 3 && is_manual_focus()) )
             {
                 set_zoom(1); // Get to x1 first, sometime we get black preview when going x10 --> x5
 
@@ -5359,8 +5360,8 @@ static struct menu_entry customize_buttons_menu[] =
         .children   =  (struct menu_entry[]) {
             {
                .name     = "Half-Shutter",
-               .max      = 2,
-               .choices  = CHOICES("OFF", "Zoom x10", "Focus aid"),
+               .max      = 3,
+               .choices  = CHOICES("OFF", "Zoom x10", "Focus aid", "Sticky Zoom"),
                .update   = Half_Shutter_update,
                .priv     = &Half_Shutter,
                .help     = "Assign Half-Shutter button to a task.",
@@ -5812,9 +5813,11 @@ if (Half_Shutter == 2 && RECORDING)
             /* Finished from x10 mode? Let's get back to normal preview */
             if (lv_dispsize == 10 && !RECORDING)
             {
+                
                 if (((key == MODULE_KEY_PRESS_SET           ) && SET_button  == 1)                 ||
                     ((key == MODULE_KEY_INFO                ) && INFO_button == 1)                 ||
-                    ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter && is_manual_focus()) )
+                    ((key == MODULE_KEY_UNPRESS_HALFSHUTTER ) && Half_Shutter != 3 && is_manual_focus()) ||
+                    ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter == 3 && is_manual_focus()) )
                 {
                     set_zoom(1); // Get to x1 first, sometime we get black preview when going x10 --> x5
                     set_zoom(5);
