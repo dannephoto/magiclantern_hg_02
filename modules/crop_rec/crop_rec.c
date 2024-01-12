@@ -5917,7 +5917,7 @@ if (Half_Shutter == 2 && RECORDING)
                 {
                     if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
                     if (lens_info.raw_iso == ISO_6400) return 0; // We reached highest ISO, don't do anything
-                    if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
+                    //if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
                     iso_toggle(0, 2);
                     return 0;
                 }
@@ -5926,7 +5926,7 @@ if (Half_Shutter == 2 && RECORDING)
                 {
                     if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
                     if (lens_info.raw_iso == ISO_100) return 0; // We reached lowest ISO, don't do anything
-                    if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
+                    //if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
                     iso_toggle(0, -2);
                     return 0;
                 }
