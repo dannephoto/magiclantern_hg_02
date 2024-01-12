@@ -309,7 +309,6 @@ static void set_lv_af_mode(int lv_af_mode)
 //Photo mode
 static int reciso = 0; /* coming from crop_rec.c */
 extern int WEAK_FUNC(reciso) isoless_recovery_iso;
-static int base_recovery_iso = 0;
 
 /* customize buttons and buttons shortcuts, FIXME: implement these as feature in ML core? */
 static unsigned int photo_keypress_cbr(unsigned int key)
@@ -383,6 +382,32 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                 return 0;
             }
             
+            /* ISO change shortcuts */
+            if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 1) ||
+                ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 1)  )
+            {
+                if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
+                if (lens_info.raw_iso == ISO_6400) return 0; // We reached highest ISO, don't do anything
+                //if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
+                iso_toggle(0, 2);
+                return 0;
+            }
+            if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 1) ||
+                ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 1)  )
+            {
+                if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
+                if (lens_info.raw_iso == ISO_100) return 0; // We reached lowest ISO, don't do anything
+                //if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
+                iso_toggle(0, -2);
+                return 0;
+            }
+            if (((key == MODULE_KEY_INFO)       && INFO_button == 2) ||
+                ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 2))
+            {
+                iso_toggle(0, 2);
+                return 0;
+            }
+            
             /* Aperture change shortcuts */
             if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
                 ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
@@ -408,117 +433,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                 aperture_toggle(0, 1);
                 return 0;
             }
-            
-            if (key == MODULE_KEY_PRESS_UP)
-            {
-                
-                // Don't change ISO when set to auto ISO
-                if (lens_info.raw_iso == 0x0){
-                    return 0;
-                }
-                
-                int a = lens_info.raw_iso;
-                if (a == 0x78) return 0;
-                
-                iso_toggle(0, 2);
-                
-                return 0;
-            }
-            
-            if (key == MODULE_KEY_PRESS_DOWN)
-            {
-                
-                // Don't change ISO when set to auto ISO
-                if (lens_info.raw_iso == 0x0){
-                    return 0;
-                }
-                
-                int a = lens_info.raw_iso;
-                if (a == 0x48) return 0;
-                
-                iso_toggle(0, -2);
-                
-                return 0;
-            }
-            
-            
-            if (key == MODULE_KEY_PRESS_UP)
-            {
-                // Don't change ISO when set to auto ISO
-                if (lens_info.raw_iso == 0x0){
-                    return 0;
-                }
-                
-                
-                int a = lens_info.raw_iso;
-                if (a == 0x78) return 0;
-                
-                iso_toggle(0, 2);
-                
-                return 0;
-            }
-            
-            if (key == MODULE_KEY_PRESS_DOWN)
-            {
-                // Don't change ISO when set to auto ISO
-                if (lens_info.raw_iso == 0x0){
-                    return 0;
-                }
-                
-                int a = lens_info.raw_iso;
-                if (a == 0x48) return 0;
-                
-                iso_toggle(0, -2);
-                
-                return 0;
-            }
-            
-            
-            if (key == MODULE_KEY_PRESS_UP)
-            {
-                // Don't change ISO when set to auto ISO
-                if (lens_info.raw_iso == 0x0){
-                    return 0;
-                }
-                
-                if (!dual_iso_is_enabled())
-                {
-                    base_recovery_iso = 1;
-                    return 0;
-                }
-                
-                isoless_recovery_iso++;
-                //We hit 6400 iso already
-                if (isoless_recovery_iso > 7)
-                {
-                    isoless_recovery_iso = 7;
-                }
-                
-                return 0;
-            }
-            
-            if (key == MODULE_KEY_PRESS_DOWN)
-            {
-                // Don't change ISO when set to auto ISO
-                if (lens_info.raw_iso == 0x0){
-                    return 0;
-                }
-                
-                if (!dual_iso_is_enabled())
-                {
-                    base_recovery_iso = 1;
-                    return 0;
-                }
-                
-                isoless_recovery_iso--;
-                //We hit 100 iso already
-                if (isoless_recovery_iso < 0)
-                {
-                    isoless_recovery_iso = 0;
-                }
-                
-            }
-            
+                        
             /* Aperture change shortcuts */
             if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
                 ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
@@ -568,6 +483,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
             if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
                 ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
             {
+                SetGUIRequestMode(0);
                 extern int falsecolor_draw;
                 if (!falsecolor_draw)
                 {
@@ -584,6 +500,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
             
             if (tapdisp == 5 && key == MODULE_KEY_TOUCH_1_FINGER)
             {
+                SetGUIRequestMode(0);
                 extern int falsecolor_draw;
                 if (!falsecolor_draw)
                 {
@@ -5986,6 +5903,7 @@ if (Half_Shutter == 2 && RECORDING)
                 if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
                     ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
                 {
+                    
                     extern int falsecolor_draw;
                     if (!falsecolor_draw)
                     {
@@ -6002,6 +5920,8 @@ if (Half_Shutter == 2 && RECORDING)
                 
                 if (tapdisp == 5 && key == MODULE_KEY_TOUCH_1_FINGER)
                 {
+                    SetGUIRequestMode(0);
+                    msleep(100);
                     extern int falsecolor_draw;
                     if (!falsecolor_draw)
                     {
