@@ -1617,33 +1617,37 @@ static void FAST adtg_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
         {
             BitDepth_Analog = 14;
         }
-
-        if (OUTPUT_12BIT)
+        
+        if (RECORDING)
         {
-            adtg_new[20] = (struct adtg_new) {6, 0x8882, analog_gain / 4};
-            adtg_new[21] = (struct adtg_new) {6, 0x8884, analog_gain / 4};
-            adtg_new[22] = (struct adtg_new) {6, 0x8886, analog_gain / 4};
-            adtg_new[23] = (struct adtg_new) {6, 0x8888, analog_gain / 4};
-            BitDepth_Analog = 12;
+            
+            if (OUTPUT_12BIT)
+            {
+                adtg_new[20] = (struct adtg_new) {6, 0x8882, analog_gain / 4};
+                adtg_new[21] = (struct adtg_new) {6, 0x8884, analog_gain / 4};
+                adtg_new[22] = (struct adtg_new) {6, 0x8886, analog_gain / 4};
+                adtg_new[23] = (struct adtg_new) {6, 0x8888, analog_gain / 4};
+                BitDepth_Analog = 12;
+            }
+            
+            if (OUTPUT_11BIT)
+            {
+                adtg_new[20] = (struct adtg_new) {6, 0x8882, analog_gain / 8};
+                adtg_new[21] = (struct adtg_new) {6, 0x8884, analog_gain / 8};
+                adtg_new[22] = (struct adtg_new) {6, 0x8886, analog_gain / 8};
+                adtg_new[23] = (struct adtg_new) {6, 0x8888, analog_gain / 8};
+                BitDepth_Analog = 11;
+            }
+            
+            if (OUTPUT_10BIT)
+            {
+                adtg_new[20] = (struct adtg_new) {6, 0x8882, analog_gain / 16};
+                adtg_new[21] = (struct adtg_new) {6, 0x8884, analog_gain / 16};
+                adtg_new[22] = (struct adtg_new) {6, 0x8886, analog_gain / 16};
+                adtg_new[23] = (struct adtg_new) {6, 0x8888, analog_gain / 16};
+                BitDepth_Analog = 10;
+            }
         }
-    
-        if (OUTPUT_11BIT)
-        {
-            adtg_new[20] = (struct adtg_new) {6, 0x8882, analog_gain / 8};
-            adtg_new[21] = (struct adtg_new) {6, 0x8884, analog_gain / 8};
-            adtg_new[22] = (struct adtg_new) {6, 0x8886, analog_gain / 8};
-            adtg_new[23] = (struct adtg_new) {6, 0x8888, analog_gain / 8};
-            BitDepth_Analog = 11;
-        }
-
-        if (OUTPUT_10BIT)
-        {
-            adtg_new[20] = (struct adtg_new) {6, 0x8882, analog_gain / 16};
-            adtg_new[21] = (struct adtg_new) {6, 0x8884, analog_gain / 16};
-            adtg_new[22] = (struct adtg_new) {6, 0x8886, analog_gain / 16};
-            adtg_new[23] = (struct adtg_new) {6, 0x8888, analog_gain / 16};
-            BitDepth_Analog = 10;
-        } 
     }
 
     while(*data_buf != 0xFFFFFFFF)
@@ -3608,9 +3612,9 @@ static void FAST engio_write_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
         // this method seems better in terms of stability, it doesn't produce corrupted frames,
         // but it also affect autofocus when using negative analog gain which makes it inaccurate.
         // (read about the other method for more info.)
-        if (brighten_lv_method == 0)
+        if (brighten_lv_method == 0 && RECORDING)
         {
-            if (reg == 0xC0F42744) 
+            if (reg == 0xC0F42744)
             {
                 if (which_output_format() >= 3) // don't patch if we are using uncompressed RAW 
                 {
@@ -3676,7 +3680,7 @@ static void FAST EngDrvOut_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
      * affect autofocus data --> the four regisers will adjust autofocus data to the correct brightness too . .
      * --> This way autofocus in 10/11/12-bit will be as accurate as in 14-bit.
      * BTW, these regisers used to achieve 12800 digital ISO from Canon.                                           */
-    if (brighten_lv_method == 1)
+    if (brighten_lv_method == 1 && RECORDING)
     {
         if (data == 0xC0F37AE4 || data == 0xC0F37AF0 || data == 0xC0F37AFC || data == 0xC0F37B08) 
         {
@@ -5332,6 +5336,18 @@ static struct menu_entry crop_rec_menu[] =
     },
 };
 
+            static struct menu_entry movie_menu_bitdepth[] =
+            {
+                {
+                    .name       = "Bit-depth",
+                    .priv       = &bit_depth_analog,
+                    .update     = bit_depth_analog_update,
+                    .max        = 3,
+                    .choices    = CHOICES("14-bit", "12-bit","11-bit", "10-bit"),
+                    .help       = "Choose bit-depth for lossless RAW video compression.",
+                },
+            };
+
 static MENU_UPDATE_FUNC(customize_buttons_update)
 {
     if (!CROP_PRESET_MENU && !patch_active)
@@ -6204,6 +6220,20 @@ static struct lvinfo_item info_items[] = {
     }
 };
 
+/* better put here too from raw.c since eosm is more or less 100% crop_rec based */
+int raw_lv_settings_still_valid()
+{
+    /* 10bit */
+    if (OUTPUT_10BIT) raw_info.white_level = 2870;
+    //11bit
+    if (OUTPUT_11BIT) raw_info.white_level = 3692;
+    /* 12bit */
+    if (OUTPUT_12BIT) raw_info.white_level = 5336;
+    /* 14bit 4k timelapse only. Flag set in crop_rec.c */
+    if (OUTPUT_14BIT) raw_info.white_level = 16200;
+    return 1;
+}
+
 static unsigned int raw_info_update_cbr(unsigned int unused)
 {
     if (patch_active)
@@ -6560,6 +6590,7 @@ static unsigned int crop_rec_init()
         }
     }
 
+    menu_add("Movie", movie_menu_bitdepth, COUNT(movie_menu_bitdepth));
     menu_add("Movie", crop_rec_menu, COUNT(crop_rec_menu));
     menu_add("Movie", customize_buttons_menu, COUNT(customize_buttons_menu));
     lvinfo_add_items (info_items, COUNT(info_items));

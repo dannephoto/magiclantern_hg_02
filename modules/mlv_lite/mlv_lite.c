@@ -91,10 +91,15 @@ extern WEAK_FUNC(ret_0) void mlv_play_file(char *filename);
 static int isotoggle = 0; /* coming from crop_rec.c */
 extern int WEAK_FUNC(isotoggle) Arrows_U_D;
 
-/*
+
 static int bitdepth = 0; // coming from crop_rec.c
 extern int WEAK_FUNC(bitdepth) bit_depth_analog;
+#define OUTPUT_14BIT (bit_depth_analog == 0)
+#define OUTPUT_12BIT (bit_depth_analog == 1)
+#define OUTPUT_11BIT (bit_depth_analog == 2)
+#define OUTPUT_10BIT (bit_depth_analog == 3)
 
+/*
 static int fullresmode = 0;
 extern int WEAK_FUNC(fullresmode) crop_preset_1x3_res;
 */
@@ -3276,6 +3281,18 @@ void init_mlv_chunk_headers(struct raw_info * raw_info)
     int bpp_scaling = (1 << (14 - BPP));
     rawi_hdr.raw_info.black_level = (black14 + bpp_scaling/2) / bpp_scaling;
     rawi_hdr.raw_info.white_level = (white14 + bpp_scaling/2) / bpp_scaling;
+    
+    if (cam_eos_m)
+    {
+        /* 10bit */
+        if (OUTPUT_10BIT) rawi_hdr.raw_info.white_level = 2870;
+        //11bit
+        if (OUTPUT_11BIT) rawi_hdr.raw_info.white_level = 3692;
+        /* 12bit */
+        if (OUTPUT_12BIT) rawi_hdr.raw_info.white_level = 5336;
+        /* 14bit */
+        if (OUTPUT_14BIT) rawi_hdr.raw_info.white_level = 16200;
+    }
 
     mlv_fill_idnt(&idnt_hdr, mlv_start_timestamp);
     mlv_fill_expo(&expo_hdr, mlv_start_timestamp);
@@ -4180,6 +4197,7 @@ static struct menu_entry raw_video_menu[] =
                                 "11...8-bit lossless",
                               ),
                 .help       = "Choose the output format (bit depth, compression) for the raw stream:",
+                .shidden = 1,//No need to keep this in here
                 .help2      = "14-bit: native uncompressed format used in Canon firmware.\n"
                               "12-bit: uncompressed, 2 LSB trimmed (nearly lossless on current sensor).\n"
                               "10-bit: uncompressed, 4 LSB trimmed (small loss of detail in shadows).\n"
