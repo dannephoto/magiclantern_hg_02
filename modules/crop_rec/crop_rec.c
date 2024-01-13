@@ -2612,28 +2612,35 @@ int RAW_H_Debug  = 0;
 int RAW_V_Debug  = 0;
 int TimerA_Debug = 0;
 int TimerB_Debug = 0;
+int YUV_HD_S_H_height = 0;
+int YUV_HD_S_H_width = 0;
+int YUV_HD_S_V_height = 0;
+int YUV_HD_S_V_width = 0;
 
 static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
 {
     if (Anam_FLV)
     {
         RAW_H         = 0x1D4;  // from mv1080 mode
-        RAW_V         = 0xDB2;
+        RAW_V         = 0xDB1;
         TimerB        = OUTPUT_10BIT ? 0xf05 : (OUTPUT_12BIT || OUTPUT_11BIT) ? 0x112b : OUTPUT_14BIT ? 0x1407 : 0;
         TimerA        = 0x207 + TimerA_Debug;
+        
+
+            //EngDrvOutLV(0xc0f11A88, 0x1); TESTING for better preview while filming
         
         //From AR_2_35_1
         Preview_H     = 1728;      // from mv1080 mode
         Preview_V     = 3478;
         Preview_R     = 0x1D000E;  // from mv1080 mode
-        YUV_HD_S_H    = 0x10501B5;
-        YUV_HD_S_V    = 0x45015C;
+        YUV_HD_S_H    = 0x10501B5 + YUV_HD_S_H_width + (YUV_HD_S_H_height << 16);
+        YUV_HD_S_V    = 0x45015C + YUV_HD_S_V_width + (YUV_HD_S_V_height << 16);;
     }
     else
     {
         if (AR_16_9)
         {
-            if (Anam_Highest) /* 1504x2538 */
+            if (Anam_Highest) /* 1504x2536 */
             {
                 if (is_650D || is_700D)
                 {
@@ -2646,7 +2653,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x19A; /*  @ 22.250 FPS */
-                    RAW_V         = 0xA06;
+                    RAW_V         = 0xA05;
                     TimerB        = 0xAF7;
                     TimerA        = 0x1FF;  // Danne confirmed that EOS M has 0x1FF limit. it seems same as 100D
                 }
@@ -2995,12 +3002,12 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
         
         if (AR_2_35_1)
         {
-            if (Anam_Highest) /* 1736x2214 @ 23.976 FPS */
+            if (Anam_Highest) /* 1736x2212 @ 23.976 FPS */
             {
                 if (is_650D || is_700D || is_EOSM)
                 {
                     RAW_H         = 0x1D4 + RAW_H_Debug;  // from mv1080 mode
-                    RAW_V         = 0x8C2 + RAW_V_Debug;
+                    RAW_V         = 0x8C1 + RAW_V_Debug;
                     TimerB        = 0xA05 + TimerB_Debug;
                     TimerA        = 0x207 + TimerA_Debug;
                 }
@@ -4737,9 +4744,9 @@ static MENU_UPDATE_FUNC(crop_preset_1x3_res_update)
         if (crop_preset_1x3_res_menu == 0) // Anam_Highest
         {
             MENU_SET_VALUE("4.5K");
-            if (is_650D || is_700D)MENU_SET_HELP("1504x2538 @ 23.976 FPS");
-            if (is_EOSM || is_100D)MENU_SET_HELP("1504x2538 @ 22.250 FPS");
-        }      
+            if (is_650D || is_700D)MENU_SET_HELP("1504x2536 @ 23.976 FPS");
+            if (is_EOSM || is_100D)MENU_SET_HELP("1504x2536 @ 22.250 FPS");
+        }
 
         if (crop_preset_1x3_res_menu == 1) // Anam_Higher
         {
@@ -4756,7 +4763,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x3_res_update)
         if (crop_preset_1x3_res_menu == 3) // Anam_Medium
         {
             MENU_SET_VALUE("Full-Res LV");
-            MENU_SET_HELP("1736x3476 @ 16,14 and 12 FPS");
+            MENU_SET_HELP("1736x3476 @ 12, 14 and 12 FPS");
         }
     }
 
@@ -4809,7 +4816,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x3_res_update)
         if (crop_preset_1x3_res_menu == 0) // Anam_Highest
         {
             MENU_SET_VALUE("5.2K");
-            MENU_SET_HELP("1736x2214 @ 23.976 FPS");
+            MENU_SET_HELP("1736x2212 @ 23.976 FPS");
         }
 
         if (crop_preset_1x3_res_menu == 1) // Anam_Higher
@@ -5244,6 +5251,42 @@ static struct menu_entry crop_rec_menu[] =
                 .max    = 0xFFF,
                 .unit   = UNIT_HEX,
                 .help   = "RAW V Debug.",
+                .advanced = 1,
+            },
+            {
+                .name   = "YUV_HD_S_H_height",
+                .priv   = &YUV_HD_S_H_height,
+                .min    = -20000,
+                .max    = 20000,
+                .unit   = UNIT_DEC,
+                .help  = "Alter height.",
+                .advanced = 1,
+            },
+            {
+                .name   = "YUV_HD_S_H_width",
+                .priv   = &YUV_HD_S_H_width,
+                .min    = -20000,
+                .max    = 20000,
+                .unit   = UNIT_DEC,
+                .help  = "Alter width. Scrambles preview",
+                .advanced = 1,
+            },
+            {
+                .name   = "YUV_HD_S_V_height",
+                .priv   = &YUV_HD_S_V_height,
+                .min    = -20000,
+                .max    = 20000,
+                .unit   = UNIT_DEC,
+                .help  = "height offset",
+                .advanced = 1,
+            },
+            {
+                .name   = "YUV_HD_S_V_width",
+                .priv   = &YUV_HD_S_V_width,
+                .min    = -20000,
+                .max    = 20000,
+                .unit   = UNIT_DEC,
+                .help  = "width offset",
                 .advanced = 1,
             },
             {
