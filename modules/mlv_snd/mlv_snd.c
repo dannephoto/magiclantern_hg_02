@@ -708,7 +708,7 @@ static unsigned int mlv_snd_init()
     /* will the same menu work in both submenus? probably not */
     if (menu_get_value_from_script("Movie", "RAW video") != INT_MIN)
     {
-        menu_add("RAW video", mlv_snd_menu, COUNT(mlv_snd_menu));
+        menu_add("Movie", mlv_snd_menu, COUNT(mlv_snd_menu));
     }
     else if (menu_get_value_from_script("Movie", "RAW video (MLV)") != INT_MIN)
     {
