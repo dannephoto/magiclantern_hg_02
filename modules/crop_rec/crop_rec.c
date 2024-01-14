@@ -2622,25 +2622,27 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
     if (Anam_FLV)
     {
         RAW_H         = 0x1D4;  // from mv1080 mode
-        RAW_V         = 0xDB1;
+        RAW_V         = 0xDB3;
         TimerB        = OUTPUT_10BIT ? 0xf05 : (OUTPUT_12BIT || OUTPUT_11BIT) ? 0x112b : OUTPUT_14BIT ? 0x1407 : 0;
         TimerA        = 0x207 + TimerA_Debug;
-        
-
-            //EngDrvOutLV(0xc0f11A88, 0x1); TESTING for better preview while filming
         
         //From AR_2_35_1
         Preview_H     = 1728;      // from mv1080 mode
         Preview_V     = 3478;
         Preview_R     = 0x1D000E;  // from mv1080 mode
         YUV_HD_S_H    = 0x10501B5 + YUV_HD_S_H_width + (YUV_HD_S_H_height << 16);
-        YUV_HD_S_V    = 0x45015C + YUV_HD_S_V_width + (YUV_HD_S_V_height << 16);;
+        YUV_HD_S_V    = 0x45015C + YUV_HD_S_V_width + (YUV_HD_S_V_height << 16);
+        
+        //Works well with focus aid for 1x3 presets
+        //EngDrvOutLV(0xc0f11A88, 0x1);
+        //YUV_HD_S_H    = 0x10501B5 + YUV_HD_S_H_width - (90 << 16);
+        //YUV_HD_S_V    = 0x45015C + 800 + (1000 << 16);
     }
     else
     {
         if (AR_16_9)
         {
-            if (Anam_Highest) /* 1504x2536 */
+            if (Anam_Highest) /* 1504x2538 */
             {
                 if (is_650D || is_700D)
                 {
@@ -2653,7 +2655,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x19A; /*  @ 22.250 FPS */
-                    RAW_V         = 0xA05;
+                    RAW_V         = 0xA07;
                     TimerB        = 0xAF7;
                     TimerA        = 0x1FF;  // Danne confirmed that EOS M has 0x1FF limit. it seems same as 100D
                 }
@@ -2694,7 +2696,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x17A;  /* 1376x2322 to achieve 23.976 FPS */
-                    RAW_V         = 0x92E;
+                    RAW_V         = 0x92f;
                     TimerB        = 0xA2E;
                     TimerA        = 0x1FF;
                     
@@ -2921,7 +2923,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 }
             }
             
-            if (Anam_Higher) /* 1552x2216 @ 23.976 FPS */
+            if (Anam_Higher) /* 1552x2218 @ 23.976 FPS */
             {
                 if (is_650D || is_700D)
                 {
@@ -2936,7 +2938,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x1A6;
-                    RAW_V         = 0x860;
+                    RAW_V         = 0x863;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2E;
                     if (Framerate_25) TimerB = 0x9C3;
@@ -3002,13 +3004,13 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
         
         if (AR_2_35_1)
         {
-            if (Anam_Highest) /* 1736x2212 @ 23.976 FPS */
+            if (Anam_Highest) /* 1736x2216 @ 23.976 FPS */
             {
                 if (is_650D || is_700D || is_EOSM)
                 {
                     RAW_H         = 0x1D4 + RAW_H_Debug;  // from mv1080 mode
-                    RAW_V         = 0x8C1 + RAW_V_Debug;
-                    TimerB        = 0xA05 + TimerB_Debug;
+                    RAW_V         = 0x8C3 + RAW_V_Debug;
+                    TimerB        = 0xA07 + TimerB_Debug;
                     TimerA        = 0x207 + TimerA_Debug;
                 }
                 
@@ -4744,8 +4746,8 @@ static MENU_UPDATE_FUNC(crop_preset_1x3_res_update)
         if (crop_preset_1x3_res_menu == 0) // Anam_Highest
         {
             MENU_SET_VALUE("4.5K");
-            if (is_650D || is_700D)MENU_SET_HELP("1504x2536 @ 23.976 FPS");
-            if (is_EOSM || is_100D)MENU_SET_HELP("1504x2536 @ 22.250 FPS");
+            if (is_650D || is_700D)MENU_SET_HELP("1504x2538 @ 23.976 FPS");
+            if (is_EOSM || is_100D)MENU_SET_HELP("1504x2538 @ 22.250 FPS");
         }
 
         if (crop_preset_1x3_res_menu == 1) // Anam_Higher
@@ -4816,7 +4818,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x3_res_update)
         if (crop_preset_1x3_res_menu == 0) // Anam_Highest
         {
             MENU_SET_VALUE("5.2K");
-            MENU_SET_HELP("1736x2212 @ 23.976 FPS");
+            MENU_SET_HELP("1736x2214 @ 23.976 FPS");
         }
 
         if (crop_preset_1x3_res_menu == 1) // Anam_Higher
@@ -5813,38 +5815,67 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
     extern int kill_canon_gui_mode;
     //Reset zoom when stopping recording
     
-//Focus aid function
-if (Half_Shutter == 2 && RECORDING)
-{
-    if (key == MODULE_KEY_REC && RECORDING)
+    //Focus aid function
+    if (Half_Shutter == 2 && RECORDING && (crop_preset == CROP_PRESET_3X3 || crop_preset == CROP_PRESET_1X1))
     {
-        zoom = 0;
-    }
-    
-    //Resets the preview zoom when releasing halfshutter. Better for when using autofocus
-    if (!get_halfshutter_pressed() && zoom)
-    {
-        zoom = 0;
-        if (crop_preset == CROP_PRESET_1X3 || crop_preset == CROP_PRESET_3X3)
+        if (key == MODULE_KEY_REC && RECORDING)
         {
-            EngDrvOutLV(0xc0f11A88, 0x0);
+            zoom = 0;
         }
-        CheckPreviewRegsValuesAndForce();
+        
+        //Resets the preview zoom when releasing halfshutter. Better for when using autofocus
+        if (!get_halfshutter_pressed() && zoom)
+        {
+            zoom = 0;
+            if (crop_preset == CROP_PRESET_3X3)
+            {
+                EngDrvOutLV(0xc0f11A88, 0x0);
+            }
+            CheckPreviewRegsValuesAndForce();
+        }
+        
+        if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode() && !zoom)
+        {
+            zoom = 1;
+            EngDrvOutLV(0xc0f11B8C, 0x0);
+            EngDrvOutLV(0xc0f11BCC, 0x0);
+            EngDrvOutLV(0xc0f11BC8, 0x0);
+            if (crop_preset == CROP_PRESET_1X3)
+            {
+                EngDrvOutLV(0xc0f11A88, 0x1);
+            }
+        }
     }
     
-    if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode() && !zoom)
+    //Focus aid function
+    if (Half_Shutter == 2 && RECORDING && crop_preset == CROP_PRESET_1X3)
     {
-        zoom = 1;
-        EngDrvOutLV(0xc0f11B8C, 0x0);
-        EngDrvOutLV(0xc0f11BCC, 0x0);
-        EngDrvOutLV(0xc0f11BC8, 0x0);
-        if (crop_preset == CROP_PRESET_1X3)
+        if (key == MODULE_KEY_REC && RECORDING)
         {
+            zoom = 0;
+        }
+        //Resets the preview zoom when releasing halfshutter. Better for when using autofocus
+        if (!get_halfshutter_pressed() && zoom)
+        {
+            zoom = 0;
+            if (crop_preset == CROP_PRESET_1X3)
+            {
+                EngDrvOutLV(0xc0f11A88, 0x0);
+                CheckPreviewRegsValuesAndForce();
+            }
+        }
+        
+        if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode() && !zoom)
+        {
+            zoom = 1;
             EngDrvOutLV(0xc0f11A88, 0x1);
+            //EngDrvOutLV(0xC0F11B8C, 0xFA4E75);
+            //EngDrvOutLV(0xC0F11BCC, 0x6C65E1C);
+            YUV_HD_S_H    = 0x10501B5 + YUV_HD_S_H_width - (90 << 16);
+            YUV_HD_S_V    = 0x45015C + 800 + (1000 << 16);
+            CheckPreviewRegsValuesAndForce();
         }
     }
-    
-}
     
     /* we need to use customize buttons in LiveView while ML isn't showing and when using Crop mood */
     if (lv)
