@@ -2703,8 +2703,8 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                     Preview_H     = 1372;
                     Preview_V     = 2322;
                     Preview_R     = 0x1D000D;
-                    YUV_HD_S_H    = 0x105015B;
-                    YUV_HD_S_V    = 0x105036D;
+                    YUV_HD_S_H    = 0x105015B + YUV_HD_S_H_width + (YUV_HD_S_H_height << 16);
+                    YUV_HD_S_V    = 0x105036D + YUV_HD_S_V_width + (YUV_HD_S_V_height << 16);
                 }
                 
                 if (is_100D)
@@ -5868,12 +5868,25 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
         if (get_halfshutter_pressed() && !gui_menu_shown() && lv && is_movie_mode() && !zoom)
         {
             zoom = 1;
-            EngDrvOutLV(0xc0f11A88, 0x1);
-            //EngDrvOutLV(0xC0F11B8C, 0xFA4E75);
-            //EngDrvOutLV(0xC0F11BCC, 0x6C65E1C);
-            YUV_HD_S_H    = 0x10501B5 + YUV_HD_S_H_width - (90 << 16);
-            YUV_HD_S_V    = 0x45015C + 800 + (1000 << 16);
-            CheckPreviewRegsValuesAndForce();
+
+            if (Anam_FLV)
+            {
+                EngDrvOutLV(0xc0f11A88, 0x1);
+                YUV_HD_S_H    = 0x10501B5 + YUV_HD_S_H_width - (90 << 16);
+                YUV_HD_S_V    = 0x45015C + 800 + (1000 << 16);
+                CheckPreviewRegsValuesAndForce();
+            }
+            else
+            {
+                EngDrvOutLV(0xc0f11B8C, 0x0);
+                EngDrvOutLV(0xc0f11BCC, 0x0);
+                EngDrvOutLV(0xc0f11BC8, 0x0);
+                if (crop_preset == CROP_PRESET_1X3)
+                {
+                    EngDrvOutLV(0xc0f11A88, 0x1);
+                }
+            }
+            
         }
     }
     
