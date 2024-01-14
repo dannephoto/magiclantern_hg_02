@@ -5876,6 +5876,13 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 YUV_HD_S_V    = 0x45015C + 800 + (1000 << 16);
                 CheckPreviewRegsValuesAndForce();
             }
+            else if (Anam_Higher || Anam_Highest)
+            {
+                EngDrvOutLV(0xc0f11A88, 0x1);
+                YUV_HD_S_H    = 0x105015B + 4000 + (6000 << 16);
+                YUV_HD_S_V    = 0x105036D + YUV_HD_S_V_width + (20000 << 16);
+                CheckPreviewRegsValuesAndForce();
+            }
             else
             {
                 EngDrvOutLV(0xc0f11B8C, 0x0);
