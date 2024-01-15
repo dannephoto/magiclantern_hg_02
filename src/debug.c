@@ -584,6 +584,20 @@ debug_loop_task( void* unused ) // screenshot, draw_prop
         #ifdef FEATURE_SCREENSHOT
         if (screenshot_sec)
         {
+            static int valid = 0;
+            if (screenshot_sec == 1 && valid)
+            {
+            menu_set_str_value_from_script("Movie", "RAW video", "ON", 1);
+            valid = 0;
+            msleep(100);
+            }
+            if (screenshot_sec == 3 && raw_lv_is_enabled())
+            {
+                valid = 1;
+                menu_set_str_value_from_script("Movie", "RAW video", "OFF", 0);
+                msleep(100);
+            }
+            
             info_led_blink(1, 20, 1000-20-200);
             screenshot_sec--;
             if (!screenshot_sec)
@@ -1007,12 +1021,12 @@ static struct menu_entry debug_menus[] = {
         .name = "Internal Temp",
         .update = efictemp_display,
         .icon_type = IT_ALWAYS_ON,
-	 #ifdef EFIC_CELSIUS
+     #ifdef EFIC_CELSIUS
         .help = "EFIC chip temperature (somewhere on the mainboard).",
-	 #else
-	.help = "EFIC chip temperature (raw values).",
-	.help2 = "http://www.magiclantern.fm/forum/index.php?topic=9673.0",
-	 #endif
+     #else
+    .help = "EFIC chip temperature (raw values).",
+    .help2 = "http://www.magiclantern.fm/forum/index.php?topic=9673.0",
+     #endif
         //.essential = FOR_MOVIE | FOR_PHOTO,
     },
 #endif
@@ -1081,7 +1095,7 @@ static void dbg_draw_props(int changed)
     int i;
     for (i = 0; i < dbg_propn; i++)
     {
-    	int x =  80;
+        int x =  80;
         unsigned property = dbg_props[i];
         unsigned len = dbg_props_len[i];
 #ifdef CONFIG_VXWORKS
