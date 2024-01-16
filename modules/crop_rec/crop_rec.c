@@ -528,7 +528,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Movie", "Shutter Expo");
+                select_menu_by_name("Expo", "Shutter");
                 gui_open_menu();
                 submenu = 1;
             }
@@ -539,7 +539,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Movie", "Aperture Expo");
+                select_menu_by_name("Expo", "Aperture");
                 gui_open_menu();
                 submenu = 1;
             }
@@ -550,7 +550,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Movie", "ISO Expo");
+                select_menu_by_name("Expo", "ISO");
                 gui_open_menu();
                 submenu = 1;
             }
@@ -561,7 +561,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Movie", "White Balance");
+                select_menu_by_name("Expo", "White Balance");
                 gui_open_menu();
             }
         }
