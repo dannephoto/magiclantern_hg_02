@@ -5410,6 +5410,19 @@ static struct menu_entry crop_rec_menu[] =
                 },
             };
 
+            static struct menu_entry movie_menu_ratio[] =
+            {
+                {
+                    .name       = "Aspect ratio:",
+                    .priv       = &crop_preset_ar_menu,
+                    .update     = &crop_preset_ar_update,
+                    .max        = 4,
+                    .choices    = CHOICES("16:9", "2:1", "2.20:1", "2.35:1", "2.39:1"),
+                    .help       = "Select aspect ratio for current preset.",
+                    .shidden    = 1,
+                },
+            };
+
 
 static MENU_UPDATE_FUNC(customize_buttons_update)
 {
@@ -6707,6 +6720,7 @@ static unsigned int crop_rec_init()
     menu_add("Movie", customize_buttons_menu, COUNT(customize_buttons_menu));
     menu_add("Movie", movie_menu_shutter_range, COUNT(movie_menu_shutter_range));
     menu_add("Movie", movie_menu_framerate, COUNT(movie_menu_framerate));
+    menu_add("Movie", movie_menu_ratio, COUNT(movie_menu_ratio));
     lvinfo_add_items (info_items, COUNT(info_items));
 
     return 0;

@@ -1,0 +1,11 @@
+NotifyBox
+NotifyBoxHide
+is_camera
+menu_add
+menu_open_submenu
+msleep
+patch_hook_function
+patch_instruction
+snprintf
+strcpy
+unpatch_memory

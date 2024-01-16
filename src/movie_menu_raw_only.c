@@ -41,6 +41,10 @@ static struct menu_entry movie_menu_raw_toggle[] =
          .placeholder = 1,
     },
     {
+         .name = "Aspect ratio:",
+         .placeholder = 1,
+    },
+    {
          .name = "Customize buttons",
          .placeholder = 1,
     },
