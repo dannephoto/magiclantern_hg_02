@@ -24,12 +24,76 @@
 // Also decides where entries from modules will end up
 static struct menu_entry movie_menu_raw_toggle[] =
 {
-    // {
-    //     .name = "startoff presets",
-    //     .placeholder = 1,
-    // },
     {
-        .name = "custom modes",
+         .name = "Crop mood",
+         .placeholder = 1,
+    },
+    {
+         .name = "RAW video",
+         .placeholder = 1,
+    },
+    {
+         .name = "Bit-depth",
+         .placeholder = 1,
+    },
+    {
+         .name = "Framerate:",
+         .placeholder = 1,
+    },
+    {
+         .name = "Customize buttons",
+         .placeholder = 1,
+    },
+    {
+        .name = "Custom modes",
+        .placeholder = 1,
+    },
+    {
+        .name = "Sound recording",
+        .placeholder = 1,
+    },
+    {
+        .name = "Shutter Expo",
+        .placeholder = 1,
+    },
+    {
+        .name = "Aperture Expo",
+        .placeholder = 1,
+    },
+    {
+        .name = "ISO Expo",
+        .placeholder = 1,
+    },
+    {
+        .name = "Shutter lock",
+        .placeholder = 1,
+    },
+    {
+        .name = "Shutter fine-tuning",
+        .placeholder = 1,
+    },
+    {
+        .name = "Shutter range",
+        .placeholder = 1,
+    },
+    {
+        .name = "SD Overclock",
+        .placeholder = 1,
+    },
+    {
+        .name = "HDR video",
+        .placeholder = 1,
+    },
+    {
+        .name = "FPS override",
+        .placeholder = 1,
+    },
+    {
+        .name = "intervalometer",
+        .placeholder = 1,
+    },
+    {
+        .name = "recording delay",
         .placeholder = 1,
     },
     /*
@@ -55,30 +119,6 @@ static struct menu_entry movie_menu_raw_toggle[] =
     },
     {
         .name = "white balance",
-        .placeholder = 1,
-    },
-    {
-        .name = "fps override",
-        .placeholder = 1,
-    },
-    {
-        .name = "shutter lock",
-        .placeholder = 1,
-    },
-    {
-        .name = "shutter fine-tuning",
-        .placeholder = 1,
-    },
-    {
-        .name = "shutter range",
-        .placeholder = 1,
-    },
-    {
-        .name = "sound recording",
-        .placeholder = 1,
-    },
-    {
-        .name = "customized buttons",
         .placeholder = 1,
     },
      */

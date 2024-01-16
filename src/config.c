@@ -876,7 +876,7 @@ static struct menu_entry cfg_menus[] = {
 static struct menu_entry cfg_menusmovie[] =
 {
     {
-        .name = "custom modes",
+        .name = "Custom modes",
         .priv = &config_new_preset_index,
         .min = 0,
         .max = 6,

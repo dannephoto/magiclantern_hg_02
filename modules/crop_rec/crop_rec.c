@@ -91,7 +91,7 @@ static int crop_preset_fps = 0;
 
 /* customized buttons variables */
 static CONFIG_INT("crop.button_SET",       SET_button, 6);
-static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 1);
+static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 2);
 static CONFIG_INT("crop.button_INFO",      INFO_button, 6);
 CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 1);
 static CONFIG_INT("crop.arrows_L_R",       Arrows_L_R, 0);
@@ -528,7 +528,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Expo", "Shutter");
+                select_menu_by_name("Movie", "Shutter Expo");
                 gui_open_menu();
                 submenu = 1;
             }
@@ -539,7 +539,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Expo", "Aperture");
+                select_menu_by_name("Movie", "Aperture Expo");
                 gui_open_menu();
                 submenu = 1;
             }
@@ -550,7 +550,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Expo", "ISO");
+                select_menu_by_name("Movie", "ISO Expo");
                 gui_open_menu();
                 submenu = 1;
             }
@@ -561,7 +561,7 @@ static unsigned int photo_keypress_cbr(unsigned int key)
                     // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                     return 1;
                 }
-                select_menu_by_name("Expo", "White Balance");
+                select_menu_by_name("Movie", "White Balance");
                 gui_open_menu();
             }
         }
@@ -5154,15 +5154,6 @@ static struct menu_entry crop_rec_menu[] =
                 .choices    = CHOICES("14-bit", "12-bit","11-bit", "10-bit"),
                 .help       = "Choose bit-depth for lossless RAW video compression.",
             },
-            {
-                .name       = "Shutter range",
-                .priv       = &shutter_range,
-                .max        = 1,
-                .choices    = CHOICES("Original", "Full range"),
-                .help       = "Choose the available shutter speed range:",
-                .help2      = "Original: default range used by Canon in selected video mode.\n"
-                              "Full range: from 1/FPS to minimum exposure time allowed by hardware."
-            },
             {            
                 .name       = "Fix Dual-ISO flicker",
                 .priv       = &fix_dual_iso_flicker,
@@ -5392,6 +5383,33 @@ static struct menu_entry crop_rec_menu[] =
                     .help       = "Choose bit-depth for lossless RAW video compression.",
                 },
             };
+
+            static struct menu_entry movie_menu_shutter_range[] =
+            {
+                {
+                    .name       = "Shutter range",
+                    .priv       = &shutter_range,
+                    .max        = 1,
+                    .choices    = CHOICES("Original", "Full range"),
+                    .help       = "Choose the available shutter speed range:",
+                    .help2      = "Original: default range used by Canon in selected video mode.\n"
+                                  "Full range: from 1/FPS to minimum exposure time allowed by hardware."
+                },
+            };
+
+            static struct menu_entry movie_menu_framerate[] =
+            {
+                {
+                    .name       = "Framerate:",
+                    .priv       = &crop_preset_fps_menu,
+                    .update     = &crop_preset_fps_update,
+                    .max        = 2,
+                    .choices    = CHOICES("23.976 FPS", "25 FPS", "30 FPS"),
+                    .help       = "Select framerate for current preset.",
+                    .shidden    = 1,
+                },
+            };
+
 
 static MENU_UPDATE_FUNC(customize_buttons_update)
 {
@@ -6062,7 +6080,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                         // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                         return 1;
                     }
-                    select_menu_by_name("Expo", "Shutter");
+                    select_menu_by_name("Movie", "Shutter Expo");
                     gui_open_menu();
                     msleep(10);
                     submenu = 1;
@@ -6074,7 +6092,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                         // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                         return 1;
                     }
-                    select_menu_by_name("Expo", "Aperture");
+                    select_menu_by_name("Movie", "Aperture Expo");
                     gui_open_menu();
                     msleep(10);
                     submenu = 1;
@@ -6086,7 +6104,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                         // Use INFO key to cycle LV as normal when not in the LV with ML overlays
                         return 1;
                     }
-                    select_menu_by_name("Expo", "ISO");
+                    select_menu_by_name("Movie", "ISO Expo");
                     gui_open_menu();
                     msleep(10);
                     submenu = 1;
@@ -6687,6 +6705,8 @@ static unsigned int crop_rec_init()
     menu_add("Movie", movie_menu_bitdepth, COUNT(movie_menu_bitdepth));
     menu_add("Movie", crop_rec_menu, COUNT(crop_rec_menu));
     menu_add("Movie", customize_buttons_menu, COUNT(customize_buttons_menu));
+    menu_add("Movie", movie_menu_shutter_range, COUNT(movie_menu_shutter_range));
+    menu_add("Movie", movie_menu_framerate, COUNT(movie_menu_framerate));
     lvinfo_add_items (info_items, COUNT(info_items));
 
     return 0;

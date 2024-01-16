@@ -4553,6 +4553,76 @@ static struct menu_entry expo_menus[] = {
     MENU_PLACEHOLDER("Dual ISO"),
 };
 
+static struct menu_entry expo_menus2[] = {
+#ifdef FEATURE_EXPO_ISO
+{
+    .name = "ISO Expo",
+    .update    = iso_display,
+    .select     = iso_toggle,
+    .help  = "Adjust and fine-tune ISO. Also displays APEX Sv value.",
+    .help2 = "Advanced: digital ISO tweaks, HTP, ISO 50, ISO 800.000...",
+    .edit_mode = EM_SHOW_LIVEVIEW,
+    
+    .submenu_width = 650,
+
+    .children =  (struct menu_entry[]) {
+        {
+            .name = "Equivalent ISO",
+            .help = "ISO equivalent (analog + digital components).",
+            .priv = &lens_info.iso_equiv_raw,
+            .unit = UNIT_ISO,
+            .select     = iso_toggle,
+            .edit_mode = EM_SHOW_LIVEVIEW,
+            .update = iso_icon_update,
+        },
+        {
+            .name = "Canon analog ISO",
+            .help = "Analog ISO component (ISO at which the sensor is driven).",
+            .priv = &lens_info.iso_analog_raw,
+            .unit = UNIT_ISO,
+            .select     = analog_iso_toggle,
+            .edit_mode = EM_SHOW_LIVEVIEW,
+            .depends_on = DEP_MANUAL_ISO,
+            .update = iso_icon_update,
+        },
+        {
+            .name = "Canon digital ISO",
+            .help = "Canon's digital ISO component. Strongly recommended: 0.",
+            .priv = &lens_info.iso_digital_ev,
+            .unit = UNIT_1_8_EV,
+            .select     = digital_iso_toggle,
+            .edit_mode = EM_SHOW_LIVEVIEW,
+            .depends_on = DEP_MANUAL_ISO,
+            .icon_type = IT_DICE_OFF,
+        },
+        MENU_EOL
+    },
+},
+#endif
+#ifdef FEATURE_EXPO_SHUTTER
+{
+    .name = "Shutter Expo",
+    .update     = shutter_display,
+    .select     = shutter_toggle,
+    .icon_type  = IT_PERCENT,
+    .help = "Fine-tune shutter value. Displays APEX Tv or degrees equiv.",
+    .edit_mode = EM_SHOW_LIVEVIEW,
+},
+#endif
+#ifdef FEATURE_EXPO_APERTURE
+{
+    .name = "Aperture Expo",
+    .update     = aperture_display,
+    .select     = aperture_toggle,
+    .icon_type  = IT_PERCENT,
+    .help = "Adjust aperture. Also displays APEX aperture (Av) in stops.",
+    .depends_on = DEP_CHIPPED_LENS,
+    .edit_mode = EM_SHOW_LIVEVIEW,
+},
+#endif
+};
+
+
 
 // for firing HDR shots - avoids random misfire due to low polling frequency
 static int picture_was_taken_flag = 0;
@@ -6557,6 +6627,7 @@ static void shoot_init()
 
     menu_add( "Shoot", shoot_menus, COUNT(shoot_menus) );
     menu_add( "Expo", expo_menus, COUNT(expo_menus) );
+    menu_add( "Movie", expo_menus2, COUNT(expo_menus2) );
     
     //~ menu_add( "Tweaks", vid_menus, COUNT(vid_menus) );
 

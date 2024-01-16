@@ -914,6 +914,7 @@ static struct menu_entry mov_menus[] = {
         .icon_type = IT_BOOL,
         .choices = CHOICES("OFF", "HalfShutter"),
         .help = "Start recording by pressing shutter halfway. Wired remote.",
+        .shidden = 1,
         .submenu_width = 700,
         .depends_on = DEP_MOVIE_MODE,
         .children =  (struct menu_entry[]) {
@@ -963,7 +964,23 @@ static struct menu_entry mov_menus[] = {
     #endif
 };
 
-static struct menu_entry movie_tweaks_menus[] = {
+#if defined(FEATURE_SHUTTER_LOCK)
+static struct menu_entry movie_tweaks_menus[] =
+{
+    {
+        .name = "Shutter lock",
+        .priv = &shutter_lock,
+        .max = 1,
+        .help   = "Lock shutter value in movie mode (change from Expo only).",
+        .help2  = "Tip: it prevents you from changing it by mistake.",
+        .depends_on = DEP_MOVIE_MODE,
+    },
+};
+#endif
+
+/*
+static struct menu_entry movie_tweaks_menus[] =
+{
     {
         .name = "Movie Tweaks",
         .select = menu_open_submenu,
@@ -982,8 +999,8 @@ static struct menu_entry movie_tweaks_menus[] = {
                 #endif
                 #ifdef FEATURE_REC_NOTIFY
                 {
-                    .name = "REC/STBY notify", 
-                    .priv = &rec_notify, 
+                    .name = "REC/STBY notify",
+                    .priv = &rec_notify,
                     #if defined(CONFIG_BLUE_LED) && defined(FEATURE_REC_NOTIFY_BEEP)
                     .max = 4,
                     #elif defined(CONFIG_BLUE_LED) && !defined(FEATURE_REC_NOTIFY_BEEP)
@@ -1017,7 +1034,7 @@ static struct menu_entry movie_tweaks_menus[] = {
                 #endif
                 #ifdef FEATURE_SHUTTER_LOCK
                 {
-                    .name = "Shutter Lock",
+                    .name = "shutter lock",
                     .priv = &shutter_lock,
                     .max = 1,
                     .help   = "Lock shutter value in movie mode (change from Expo only).",
@@ -1030,6 +1047,8 @@ static struct menu_entry movie_tweaks_menus[] = {
         }
     },
 };
+*/
+
 
 #ifdef FEATURE_EXPO_OVERRIDE
 struct menu_entry expo_override_menus[] = {

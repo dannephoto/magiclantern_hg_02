@@ -893,6 +893,25 @@ void digic_iso_step()
 #endif
 }
 
+#ifdef FEATURE_SHUTTER_FINE_TUNING
+static struct menu_entry lv_img_menu[] =
+{
+    {
+    .name = "Shutter fine-tuning",
+    .priv = &shutter_finetune,
+    .update = shutter_finetune_display,
+    .min = -500,
+    .max = 500,
+    .icon_type = IT_PERCENT_LOG_OFF,
+    .edit_mode = EM_SHOW_LIVEVIEW,
+    .help = "Fine-tune shutter speed in approx 20-microsecond increments.",
+    .depends_on = DEP_LIVEVIEW | DEP_MOVIE_MODE,
+    },
+};
+#endif
+
+/*
+
 static struct menu_entry lv_img_menu[] = {
     #ifdef FEATURE_VIGNETTING_CORRECTION
     {
@@ -1059,6 +1078,8 @@ static struct menu_entry lv_img_menu[] = {
     }
     #endif
 };
+
+*/
 
 #ifdef CONFIG_DIGIC_POKE
 
