@@ -2230,6 +2230,15 @@ int preview_debug_2 = 0;
 int preview_debug_3 = 0;
 int preview_debug_4 = 0;
 
+int RAW_H_Debug  = 0;
+int RAW_V_Debug  = 0;
+int TimerA_Debug = 0;
+int TimerB_Debug = 0;
+int YUV_HD_S_H_height = 0;
+int YUV_HD_S_H_width = 0;
+int YUV_HD_S_V_height = 0;
+int YUV_HD_S_V_width = 0;
+
 static unsigned TimerB = 0;
 static unsigned TimerA = 0;
 
@@ -2363,7 +2372,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H         = 0x2F2;
-            RAW_V         = 0x4E6;
+            RAW_V         = 0x4d2 + YUV_HD_S_V_height;
             TimerA        = 0x325;
             if (Framerate_24) TimerB = 0x676;
             if (Framerate_25) TimerB = 0x633;
@@ -2382,13 +2391,13 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         }
 
         Preview_H         = 2868;  // black bar above 2868
-        Preview_V         = 1226;
-        Preview_V_Recover = 171;   // trial and error
+        Preview_V         = 1206 + YUV_HD_S_H_height;
+        Preview_V_Recover = 171 + YUV_HD_S_H_width;   // trial and error
         
         Preview_R     = 0x19000F;
-
+        
         YUV_HD_S_H    = 0x10502D6;
-        YUV_HD_S_V    = 0x10501CC;
+        YUV_HD_S_V    = 0x10501b8 + YUV_HD_S_V_width;
         YUV_HD_S_V_E  = 0;
         Black_Bar     = 2;
 
@@ -2608,14 +2617,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
     return 0;
 }
 
-int RAW_H_Debug  = 0;
-int RAW_V_Debug  = 0;
-int TimerA_Debug = 0;
-int TimerB_Debug = 0;
-int YUV_HD_S_H_height = 0;
-int YUV_HD_S_H_width = 0;
-int YUV_HD_S_V_height = 0;
-int YUV_HD_S_V_width = 0;
+
 
 static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
 {
@@ -3378,9 +3380,23 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
             Preview_V     = 738;
             Preview_R     = 0x1D000E;
             YUV_HD_S_V    = 0x1050112;
-    }
+        }
+        
+        if (AR_2_39_1 && crop_preset_fps_reduce == 1 && is_EOSM)
+        {
+                // 1736x726 @ 57 FPS
+                RAW_H         = 0x1D4;
+                RAW_V         = 0x2F2;
+                TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x436;
+                TimerA        = 0x207;
+        
+            Preview_H     = 1728;
+            Preview_V     = 726;
+            Preview_R     = 0x1D000E;
+            YUV_HD_S_V    = 0x1050106;
+        }
 
-        if (AR_2_39_1)  // 2.39:1 doesn't make sense, very similair to 2.35:1, let's make it 2.50:1
+        if (AR_2_39_1 && crop_preset_fps_reduce == 0)  // 2.39:1 doesn't make sense, very similair to 2.35:1, let's make it 2.50:1
         {
             if (is_650D || is_700D || is_EOSM) // 1736x694 @ 60 FPS
             {
@@ -4656,9 +4672,10 @@ static MENU_UPDATE_FUNC(crop_update)
                                         (crop_preset_3x3_res_menu == 0 && crop_preset_ar_menu == 1) ? "868p"  :
                                         (crop_preset_3x3_res_menu == 0 && crop_preset_ar_menu == 2) ? "790p"  :
                                         (crop_preset_3x3_res_menu == 0 && crop_preset_ar_menu == 3) ? "738p"  :
-                                        (crop_preset_3x3_res_menu == 0 && crop_preset_ar_menu == 4) ? "694p"  :
+                                        (crop_preset_3x3_res_menu == 0 && crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 0 && is_EOSM) ? "694p"  :
+                                        (crop_preset_3x3_res_menu == 0 && crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 1 && is_EOSM) ? "726p"  :
                                         (crop_preset_3x3_res_menu == 1)                             ? "1080p"  : "",  "3x3");
-
+                
                 if (crop_preset_3x3_res_menu == 0) MENU_SET_RINFO("(HFR)");
             }
         }
@@ -4719,7 +4736,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     }
     if (crop_preset_1x1_res_menu == 1)
     {
-        MENU_SET_HELP("2880x1226 @ 23.976 and 25 FPS");
+        MENU_SET_HELP("2880x1206(2.39:1) @ 23.976 and 25 FPS");
     }
     if (crop_preset_1x1_res_menu == 2)
     {
@@ -4727,7 +4744,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     }
     if (crop_preset_1x1_res_menu == 3)
     {
-        MENU_SET_HELP("2560x1440 @ 23.976 and 25 FPS");
+        MENU_SET_HELP("2560x1440(16:9) @ 23.976 and 25 FPS");
     }
     if (crop_preset_1x1_res_menu == 4)
     {
@@ -4864,11 +4881,15 @@ static MENU_UPDATE_FUNC(crop_preset_3x3_res_update)
         if (crop_preset_ar_menu == 1) MENU_SET_VALUE("868p (HFR)"); // AR_2_1
         if (crop_preset_ar_menu == 2) MENU_SET_VALUE("790p (HFR)"); // AR_2_20_1
         if (crop_preset_ar_menu == 3) MENU_SET_VALUE("738p (HFR)"); // AR_2_35_1
-        if (crop_preset_ar_menu == 4) // AR_2_39_1  // actually 2.50:1 aspect ratio */
+        if (crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 0 && is_EOSM) // AR_2_39_1  // actually 2.50:1 aspect ratio */
         {
             MENU_SET_VALUE("694p (HFR)"); 
             MENU_SET_WARNING(MENU_WARN_ADVICE, "Real-Time preview doesn't work in 694p (HFR), it's always black.");
-        }            
+        }        
+        if (crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 1 && is_EOSM) // AR_2_39_1  // actually 2.50:1 aspect ratio */
+        {
+            MENU_SET_VALUE("726p (HFR)");
+        }
     }
 }
 
@@ -4878,7 +4899,8 @@ static MENU_UPDATE_FUNC(crop_preset_ar_update)
     {
         if (crop_preset_3x3_res_menu == 0)  // High_FPS
         {
-            if (crop_preset_ar_menu == 4) MENU_SET_VALUE("2.50:1"); // AR_2_39_1 // we are using AR_2_39_1 as 2.50:1 in this case
+            if (crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 1 && is_EOSM) MENU_SET_VALUE("2.39:1");
+            if (crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 0) MENU_SET_VALUE("2.50:1"); // AR_2_39_1 // we are using AR_2_39_1 as 2.50:1 in this case
         }
         if (crop_preset_3x3_res_menu == 1)  // mv1080
         {
@@ -4890,7 +4912,7 @@ static MENU_UPDATE_FUNC(crop_preset_ar_update)
     if (CROP_PRESET_MENU == CROP_PRESET_1X1)
     {
         if (crop_preset_1x1_res_menu == 0) MENU_SET_VALUE("2.33:1");  // CROP_2_5K
-        if (crop_preset_1x1_res_menu == 1) MENU_SET_VALUE("2.35:1");  // CROP_2_8K
+        if (crop_preset_1x1_res_menu == 1) MENU_SET_VALUE("2.39:1");  // CROP_2_8K
         if (crop_preset_1x1_res_menu == 2) MENU_SET_VALUE("2.35:1");  // CROP_3K
         if (crop_preset_1x1_res_menu == 3) MENU_SET_VALUE("16:9");    // CROP_1440p
         if (crop_preset_1x1_res_menu == 4) MENU_SET_VALUE("3:2");     // CROP_1280p
@@ -6229,7 +6251,8 @@ static LVINFO_UPDATE_FUNC(crop_info)
                         if (AR_2_1)     snprintf(buffer, sizeof(buffer), "868p");
                         if (AR_2_20_1)  snprintf(buffer, sizeof(buffer), "790p");
                         if (AR_2_35_1)  snprintf(buffer, sizeof(buffer), "738p");
-                        if (AR_2_39_1)  snprintf(buffer, sizeof(buffer), "694p"); // Actually 2.50:1 AR
+                        if (AR_2_39_1 && crop_preset_fps_reduce == 0)  snprintf(buffer, sizeof(buffer), "694p"); // Actually 2.50:1 AR
+                        if (AR_2_39_1 && crop_preset_fps_reduce == 1 && is_EOSM)  snprintf(buffer, sizeof(buffer), "726p");
                     }
                     if (mv1080) snprintf(buffer, sizeof(buffer), "1080p");
                     break;
