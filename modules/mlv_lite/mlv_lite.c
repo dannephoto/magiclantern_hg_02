@@ -2382,10 +2382,11 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    if (Arrows_U_D != 1 && is_manual_focus())
-                    {
-                        aewbSuspend();
-                    }
+                    //Disabling this hack for a while. Affects also aperture function. Only manual lenses? Anyway. For now.
+                   // if (!Arrows_U_D != 1 && OUTPUT_14BIT && is_manual_focus())
+                    //{
+                      //  aewbSuspend();
+                    //}
                     //if ((Arrows_U_D != 1 && is_manual_focus()) || (bit_depth_analog == 3 && crop_preset_1x3_res != 3))
                     //{
                       //  aewbSuspend();
