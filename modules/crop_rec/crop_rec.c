@@ -4608,7 +4608,7 @@ static MENU_UPDATE_FUNC(crop_update)
         crop_rec_menu[0].children[0].shidden = (crop_preset_index != 1);  // 1 CROP_PRESET_1X1
         crop_rec_menu[0].children[1].shidden = (crop_preset_index != 2);  // 2 CROP_PRESET_1X3
         crop_rec_menu[0].children[2].shidden = (crop_preset_index != 3);  // 3 CROP_PRESET_3X3
-        crop_rec_menu[0].children[5].shidden = (CROP_PRESET_MENU == CROP_PRESET_1X3);  // 3 CROP_PRESET_3X3
+        crop_rec_menu[0].children[5].shidden = (CROP_PRESET_MENU == CROP_PRESET_1X3 || CROP_PRESET_MENU == CROP_PRESET_1X1);  // 3 CROP_PRESET_3X3
         
 
         if (CROP_PRESET_MENU && lv && patch_active)
