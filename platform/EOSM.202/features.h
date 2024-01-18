@@ -32,7 +32,7 @@
 #undef FEATURE_QUICK_ZOOM
 #undef FEATURE_QUICK_ERASE
 #undef FEATURE_LV_FOCUS_BOX_FAST
-#undef FEATURE_LV_FOCUS_BOX_SNAP
+#define FEATURE_LV_FOCUS_BOX_SNAP
 #undef FEATURE_ARROW_SHORTCUTS
 #undef FEATURE_MAGIC_ZOOM_FULL_SCREEN // https://bitbucket.org/hudson/magic-lantern/issue/2272/full-screen-magic-zoom-is-garbled-on-700d
 

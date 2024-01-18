@@ -2372,7 +2372,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H         = 0x2F2;
-            RAW_V         = 0x4d2 + YUV_HD_S_V_height;
+            RAW_V         = 0x4d3 + YUV_HD_S_V_height;
             TimerA        = 0x325;
             if (Framerate_24) TimerB = 0x676;
             if (Framerate_25) TimerB = 0x633;
@@ -3117,7 +3117,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_650D || is_700D || is_EOSM)
                 {
                     RAW_H         = 0x1D4;  // from mv1080 mode
-                    RAW_V         = 0x89E;
+                    RAW_V         = 0x89f;
                     TimerB        = 0xA05;
                     TimerA        = 0x207;
                 }
@@ -3386,7 +3386,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
         {
                 // 1736x726 @ 57 FPS
                 RAW_H         = 0x1D4;
-                RAW_V         = 0x2F2;
+                RAW_V         = 0x2F3;
                 TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x436;
                 TimerA        = 0x207;
         
@@ -6485,6 +6485,16 @@ static unsigned int raw_info_update_cbr(unsigned int unused)
 
 static unsigned int crop_rec_init()
 {
+    //Will place afframe so that 2_1 HFR presets will work at least after restart
+    if (!is_manual_focus())
+    {
+        center_lv_afframe();
+        msleep(200);
+        move_lv_afframe(0, 100);
+        msleep(200);
+        clear_lv_afframe();
+    }
+    
     if (is_camera("5D3",  "1.1.3") || is_camera("5D3", "1.2.3"))
     {
         /* same addresses on both 1.1.3 and 1.2.3 */
