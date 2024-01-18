@@ -88,9 +88,14 @@ static GUARDED_BY(GuiMainTask) int show_edmac = 0;
 /* from mlv_play module */
 extern WEAK_FUNC(ret_0) void mlv_play_file(char *filename);
 
-static int isotoggle = 0; /* coming from crop_rec.c */
-extern int WEAK_FUNC(isotoggle) Arrows_U_D;
+static int updowntoggle = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(updowntoggle) Arrows_U_D;
 
+static int infotoggle = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(infotoggle) INFO_button;
+
+static int settoggle = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(settoggle) SET_button;
 
 static int bitdepth = 0; // coming from crop_rec.c
 extern int WEAK_FUNC(bitdepth) bit_depth_analog;
@@ -2382,11 +2387,11 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    //Disabling this hack for a while. Affects also aperture function. Only manual lenses? Anyway. For now.
-                   // if (!Arrows_U_D != 1 && OUTPUT_14BIT && is_manual_focus())
-                    //{
-                      //  aewbSuspend();
-                    //}
+                    //Exclude certatin custom settings in crop rec.
+                    if (!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3 && is_manual_focus())
+                    {
+                        aewbSuspend();
+                    }
                     //if ((Arrows_U_D != 1 && is_manual_focus()) || (bit_depth_analog == 3 && crop_preset_1x3_res != 3))
                     //{
                       //  aewbSuspend();

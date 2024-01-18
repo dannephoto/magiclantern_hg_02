@@ -90,9 +90,9 @@ static int crop_preset_fps = 0;
 #define Framerate_30   (crop_preset_fps == 2)
 
 /* customized buttons variables */
-static CONFIG_INT("crop.button_SET",       SET_button, 6);
+CONFIG_INT("crop.button_SET",       SET_button, 6);
 static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 2);
-static CONFIG_INT("crop.button_INFO",      INFO_button, 6);
+CONFIG_INT("crop.button_INFO",      INFO_button, 6);
 CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 1);
 static CONFIG_INT("crop.arrows_L_R",       Arrows_L_R, 0);
 
@@ -3639,23 +3639,43 @@ static void FAST engio_write_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
         // (read about the other method for more info.)
         if (brighten_lv_method == 0 && RECORDING)
         {
-            if (reg == 0xC0F42744)
+            //Workaround when small_hacks is set to More in mlv_lite.c
+            if (!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3)
             {
-                if (which_output_format() >= 3) // don't patch if we are using uncompressed RAW 
+                if (OUTPUT_12BIT)
                 {
-                    if (OUTPUT_12BIT && old != 0x2020202)
+                    EngDrvOutLV(0xC0F42744, 0x2020202);
+                }
+                if (OUTPUT_11BIT)
+                {
+                    EngDrvOutLV(0xC0F42744, 0x3030303);
+                }
+                if (OUTPUT_10BIT)
+                {
+                    EngDrvOutLV(0xC0F42744, 0x4040404);
+                }
+            }
+            else
+            {
+                
+                if (reg == 0xC0F42744)
+                {
+                    if (which_output_format() >= 3) // don't patch if we are using uncompressed RAW
                     {
-                        *(buf+1) = 0x2020202;
-                    }
-            
-                    if (OUTPUT_11BIT && old != 0x3030303)
-                    {
-                        *(buf+1) = 0x3030303;
-                    }
-            
-                    if (OUTPUT_10BIT && old != 0x4040404)
-                    {
-                        *(buf+1) = 0x4040404;
+                        if (OUTPUT_12BIT && old != 0x2020202)
+                        {
+                            *(buf+1) = 0x2020202;
+                        }
+                
+                        if (OUTPUT_11BIT && old != 0x3030303)
+                        {
+                            *(buf+1) = 0x3030303;
+                        }
+                
+                        if (OUTPUT_10BIT && old != 0x4040404)
+                        {
+                            *(buf+1) = 0x4040404;
+                        }
                     }
                 }
             }
