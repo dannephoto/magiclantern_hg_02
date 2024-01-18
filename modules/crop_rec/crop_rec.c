@@ -82,6 +82,7 @@ static CONFIG_INT("crop.preset_3x3", crop_preset_3x3_res_menu, 0);
 static int crop_preset_3x3_res = 0;
 #define High_FPS       (crop_preset_3x3_res == 0)
 #define mv1080         (crop_preset_3x3_res == 1)
+#define mv1080p        (crop_preset_3x3_res == 2)
 
 static CONFIG_INT("crop.preset_fps", crop_preset_fps_menu, 0);
 static int crop_preset_fps = 0;
@@ -1197,7 +1198,7 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
             break;
 
             case CROP_PRESET_3X3:
-                if (High_FPS)
+                if (High_FPS || mv1080p)
                 {
                     if (AR_16_9)   cmos_new[7] = 0x802;
                     if (AR_2_1    || 
@@ -3295,7 +3296,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = crop_preset_fps_reduce == 0x1 ? 0x5a2: 0x50E;
                 TimerA        = 0x20F;  // can go lower down to 0x207
             }
-
+            
             if (is_100D) // 1736x976 @ 46.300 FPS
             {
                 RAW_H         = 0x1DD;
@@ -3303,13 +3304,13 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = 0x51C;
                 TimerA        = 0x20F;
             }
-
+            
             Preview_H     = 1728;      // from mv1080 mode
             Preview_V     = 976;
             Preview_R     = 0x1D000E;  // from mv1080 mode
             YUV_HD_S_V    = 0x105016C;
         }
-
+        
         if (AR_2_1)
         {
             if (is_650D || is_700D || is_EOSM) // 1736x868 @ 50 FPS
@@ -3319,7 +3320,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = crop_preset_fps_reduce == 0x1 ? 0x501: 0x4CD;
                 TimerA        = 0x207;
             }
-
+            
             if (is_100D)
             {
                 RAW_H         = 0x1DD;
@@ -3327,13 +3328,13 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = 0x4BB;
                 TimerA        = 0x20F;
             }
-        
+            
             Preview_H     = 1728;
             Preview_V     = 868;
             Preview_R     = 0x1D000E;
             YUV_HD_S_V    = 0x1050143;
         }
-    
+        
         if (AR_2_20_1)
         {
             if (is_650D || is_700D || is_EOSM) // 1736x790 @ 54 FPS
@@ -3343,7 +3344,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x472;
                 TimerA        = 0x207;
             }
-
+            
             if (is_100D)
             {
                 RAW_H         = 0x1DD;
@@ -3351,13 +3352,13 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = 0x461;
                 TimerA        = 0x20F;
             }
-        
+            
             Preview_H     = 1728;
             Preview_V     = 790;
             Preview_R     = 0x1D000E;
             YUV_HD_S_V    = 0x1050125;
         }
-
+        
         if (AR_2_35_1)
         {
             if (is_650D || is_700D || is_EOSM) // 1736x738 @ 57 FPS
@@ -3367,7 +3368,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x436;
                 TimerA        = 0x207;
             }
-
+            
             if (is_100D) // 1736x738 @ 55.6 FPS
             {
                 RAW_H         = 0x1DD;
@@ -3375,7 +3376,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = 0x441;
                 TimerA        = 0x20F;
             }
-        
+            
             Preview_H     = 1728;
             Preview_V     = 738;
             Preview_R     = 0x1D000E;
@@ -3384,18 +3385,18 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
         
         if (AR_2_39_1 && crop_preset_fps_reduce == 1 && is_EOSM)
         {
-                // 1736x726 @ 57 FPS
-                RAW_H         = 0x1D4;
-                RAW_V         = 0x2F3;
-                TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x436;
-                TimerA        = 0x207;
-        
+            // 1736x726 @ 57 FPS
+            RAW_H         = 0x1D4;
+            RAW_V         = 0x2F3;
+            TimerB        = crop_preset_fps_reduce == 0x1 ? 0x4ce: 0x436;
+            TimerA        = 0x207;
+            
             Preview_H     = 1728;
             Preview_V     = 726;
             Preview_R     = 0x1D000E;
             YUV_HD_S_V    = 0x1050106;
         }
-
+        
         if (AR_2_39_1 && crop_preset_fps_reduce == 0)  // 2.39:1 doesn't make sense, very similair to 2.35:1, let's make it 2.50:1
         {
             if (is_650D || is_700D || is_EOSM) // 1736x694 @ 60 FPS
@@ -3405,7 +3406,7 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = 0x401;
                 TimerA        = 0x207;
             }
-
+            
             if (is_100D) // 1736x694 @ 58 FPS
             {
                 RAW_H         = 0x1DD;
@@ -3413,17 +3414,17 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
                 TimerB        = 0x413;
                 TimerA        = 0x20F;
             }
-        
+            
             Preview_H     = 1728;
             Preview_V     = 694;
             Preview_R     = 0x1D000E;
             YUV_HD_S_V    = 0;          // default x5 mode value
-
+            
             YUV_LV_S_V    = 0x1E002B;   // default x5 mode value
             YUV_LV_Buf    = 0x1DF05A0;  // default x5 mode value
         }
     }
-
+    
     /* mv1080 preset made to enable 1080p mode mainly for EOS M (other models don't really need it) */
     if (mv1080)
     {
@@ -3432,23 +3433,96 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
             RAW_H         = 0x1D4;
             RAW_V         = 0x4A4;
         }
-
+        
         if (is_100D)
         {
             RAW_H         = 0x1DD;
             RAW_V         = 0x4A9;
         }
         
-        if (Framerate_24) {TimerA = 0x20F; TimerB = 0x9DE;}              
+        if (Framerate_24) {TimerA = 0x20F; TimerB = 0x9DE;}
         if (Framerate_25) {TimerA = 0x27F; TimerB = 0x7CF;}
         if (Framerate_30) {TimerA = 0x20F; TimerB = 0x7E4;}
-
+        
         Preview_H     = 1728;      // from mv1080 mode
         Preview_V     = 1152;      // from mv1080 mode
         Preview_R     = 0x1D000E;  // from mv1080 mode
         YUV_HD_S_V    = 0x450072;
     }
-
+    
+    if (mv1080p)
+    {
+        if (AR_16_9)
+        {
+            if (is_EOSM) // 1736x976 @ 46.800 FPS
+            {
+                RAW_H         = 0x1D4;
+                RAW_V         = 0x3EC;
+            }
+            
+            Preview_H     = 1728;      // from mv1080 mode
+            Preview_V     = 976;
+            Preview_R     = 0x1D000E;  // from mv1080 mode
+            YUV_HD_S_V    = 0x105016C;
+        }
+        
+        if (AR_2_1)
+        {
+            if (is_EOSM) // 1736x868 @ 50 FPS
+            {
+                RAW_H         = 0x1D4;
+                RAW_V         = 0x380;
+            }
+            
+            Preview_H     = 1728;
+            Preview_V     = 868;
+            Preview_R     = 0x1D000E;
+            YUV_HD_S_V    = 0x1050143;
+        }
+        
+        if (AR_2_20_1)
+        {
+            if (is_EOSM) // 1736x790 @ 54 FPS
+            {
+                RAW_H         = 0x1D4;
+                RAW_V         = 0x332;
+            }
+            
+            Preview_H     = 1728;
+            Preview_V     = 790;
+            Preview_R     = 0x1D000E;
+            YUV_HD_S_V    = 0x1050125;
+        }
+        
+        if (AR_2_35_1)
+        {
+            if (is_EOSM) // 1736x738 @ 57 FPS
+            {
+                RAW_H         = 0x1D4;
+                RAW_V         = 0x2FE;
+            }
+            Preview_H     = 1728;
+            Preview_V     = 738;
+            Preview_R     = 0x1D000E;
+            YUV_HD_S_V    = 0x1050112;
+        }
+        
+        if (AR_2_39_1 && is_EOSM)
+        {
+            // 1736x726 @ 57 FPS
+            RAW_H         = 0x1D4;
+            RAW_V         = 0x2F3;
+            
+            Preview_H     = 1728;
+            Preview_V     = 726;
+            Preview_R     = 0x1D000E;
+            YUV_HD_S_V    = 0x1050106;
+        }
+        
+        if (Framerate_24) {TimerA = 0x20F; TimerB = 0x9DE;}
+        if (Framerate_25) {TimerA = 0x27F; TimerB = 0x7CF;}
+        if (Framerate_30) {TimerA = 0x20F; TimerB = 0x7E4;}
+    }
     YUV_HD_S_H    = 0x10501B5;
 
     Black_Bar = 0;
@@ -5145,12 +5219,13 @@ static struct menu_entry crop_rec_menu[] =
                 .name       = "Preset:  ",  // CROP_PRESET_3X3
                 .priv       = &crop_preset_3x3_res_menu,
                 .update     = crop_preset_3x3_res_update,
-                .max        = 1,
-                .choices    = CHOICES("High FPS", "1080p"),
+                .max        = 2,
+                .choices    = CHOICES("High FPS", "1080p 3:2", "1080p regular"),
                 .help       = "HFR: High framerate. FPS changes depending on selected aspect ratio.\n"
                               "Enable 1080p video mode from Canon.",
                 .help2      = "If LiveView is black, hit recording button to reveal the preview.\n"
-                              "1736x1160 @ 23.976, 25 and 30 FPS.",
+                              "1736x1160 @ 23.976, 25 and 30 FPS.\n"
+                              "mv1080p @ 23.976, 25 and 30 FPS.",
                 .shidden    = 1,
             },
             /*
@@ -6265,7 +6340,7 @@ static LVINFO_UPDATE_FUNC(crop_info)
                     }
                     break;
                 case CROP_PRESET_3X3:
-                    if (High_FPS)
+                    if (High_FPS || mv1080p)
                     {
                         if (AR_16_9)    snprintf(buffer, sizeof(buffer), "976p");
                         if (AR_2_1)     snprintf(buffer, sizeof(buffer), "868p");
