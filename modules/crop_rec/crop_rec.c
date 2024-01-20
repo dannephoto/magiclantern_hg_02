@@ -47,6 +47,7 @@ static int is_100D = 0;
 static int is_EOSM = 0;
 static int is_basic = 0;
 
+static CONFIG_INT("crop.fps_over", fps_over, 0);
 static CONFIG_INT("crop.tapdisp", tapdisp, 1);
 static CONFIG_INT("crop.preset_fps", crop_preset_fps_reduce, 1);
 static CONFIG_INT("crop.preset", crop_preset_index, 2);
@@ -2686,7 +2687,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
     {
         RAW_H         = 0x1D4;  // from mv1080 mode
         RAW_V         = 0xDB3;
-        TimerB        = OUTPUT_10BIT ? 0xf05 : (OUTPUT_12BIT || OUTPUT_11BIT) ? 0x112b : OUTPUT_14BIT ? 0x1407 : 0;
+        TimerB        = OUTPUT_10BIT ? 0xf05 - fps_over: (OUTPUT_12BIT || OUTPUT_11BIT) ? 0x112b - fps_over: OUTPUT_14BIT ? 0x1407 - fps_over: 0;
         TimerA        = 0x207 + TimerA_Debug;
         
         //From AR_2_35_1
@@ -5572,6 +5573,18 @@ static struct menu_entry crop_rec_menu[] =
                 },
             };
 
+            static struct menu_entry movie_menu_fps[] =
+            {
+                {
+                    .name   = "FPS modifier",
+                    .priv   = &fps_over,
+                    .min    = -100000,
+                    .max    = 100000,
+                    .unit   = UNIT_DEC,
+                    .help   = "Increase, decrease fps. Will apply to Full-Res LV 1x3",
+                },
+            };
+
 
 static MENU_UPDATE_FUNC(customize_buttons_update)
 {
@@ -6878,6 +6891,7 @@ static unsigned int crop_rec_init()
         }
     }
 
+    menu_add("Movie", movie_menu_fps, COUNT(movie_menu_fps));
     menu_add("Movie", movie_menu_bitdepth, COUNT(movie_menu_bitdepth));
     menu_add("Movie", crop_rec_menu, COUNT(crop_rec_menu));
     menu_add("Movie", customize_buttons_menu, COUNT(customize_buttons_menu));
@@ -6901,6 +6915,7 @@ MODULE_INFO_END()
 
 MODULE_CONFIGS_START()
     MODULE_CONFIG(crop_preset_index)
+    MODULE_CONFIG(fps_over)
     MODULE_CONFIG(shutter_range)
     MODULE_CONFIG(bit_depth_analog)
     MODULE_CONFIG(crop_preset_1x1_res_menu)

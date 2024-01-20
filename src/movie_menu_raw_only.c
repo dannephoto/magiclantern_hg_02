@@ -93,6 +93,10 @@ static struct menu_entry movie_menu_raw_toggle[] =
         .placeholder = 1,
     },
     {
+        .name = "FPS modifier",
+        .placeholder = 1,
+    },
+    {
         .name = "intervalometer",
         .placeholder = 1,
     },
