@@ -24,6 +24,16 @@
 #define dbg_printf(fmt,...) {}
 #endif
 
+
+int YUV_HD_S_H_height = 0;
+int YUV_HD_S_H_width = 0;
+int YUV_HD_S_V_height = 0;
+int YUV_HD_S_V_width = 0;
+int reg_skip_left = 0;
+int reg_skip_right = 0;
+int reg_skip_top = 0;
+int reg_skip_bottom = 0;
+
 static int zoom = 0;
 static int submenu = 0;
 
@@ -82,7 +92,7 @@ static CONFIG_INT("crop.preset_3x3", crop_preset_3x3_res_menu, 0);
 static int crop_preset_3x3_res = 0;
 #define High_FPS       (crop_preset_3x3_res == 0)
 #define mv1080         (crop_preset_3x3_res == 1)
-#define mv1080p        (crop_preset_3x3_res == 2)
+#define mv1080_3_2        (crop_preset_3x3_res == 2)
 
 static CONFIG_INT("crop.preset_fps", crop_preset_fps_menu, 0);
 static int crop_preset_fps = 0;
@@ -785,9 +795,58 @@ static inline void FAST calc_skip_offsets(int * p_skip_left, int * p_skip_right,
     int skip_right      = 2;
     int skip_top        = 28;
     int skip_bottom     = 0;
-
+    
     switch (crop_preset)
     {
+            
+        case CROP_PRESET_3X3:
+            if (mv1080)
+            {
+                if (AR_16_9)//976
+                {
+                    skip_left       = 72 + reg_skip_left;
+                    skip_right      = 0 + reg_skip_right;
+                    skip_top        = 28 + 92;
+                    skip_bottom     = 0 + 92;
+                }
+                if (AR_2_1)//868
+                {
+                    skip_left       = 72 + reg_skip_left;
+                    skip_right      = 0 + reg_skip_right;
+                    skip_top        = 28 + 146;
+                    skip_bottom     = 0 + 146;
+                }
+                if (AR_2_20_1)//790
+                {
+                    skip_left       = 72 + reg_skip_left;
+                    skip_right      = 0 + reg_skip_right;
+                    skip_top        = 28 + 185;
+                    skip_bottom     = 0 + 185;
+                }
+                if (AR_2_35_1)//738
+                {
+                    skip_left       = 72 + reg_skip_left;
+                    skip_right      = 0 + reg_skip_right;
+                    skip_top        = 28 + 211;
+                    skip_bottom     = 0 + 211;
+                }
+                if (AR_2_39_1)//726
+                {
+                    skip_left       = 72 + reg_skip_left;
+                    skip_right      = 0 + reg_skip_right;
+                    skip_top        = 28 + 217;
+                    skip_bottom     = 0 + 217;
+                }
+            }
+            if (mv1080_3_2)
+            {
+                skip_left       = 72;
+                skip_right      = 0;
+                skip_top        = 28;
+                skip_bottom     = 0;
+            }
+            break;
+                                    
         case CROP_PRESET_FULLRES_LV:
             /* photo mode values */
             skip_left       = 138;
@@ -1198,7 +1257,7 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
             break;
 
             case CROP_PRESET_3X3:
-                if (High_FPS || mv1080p)
+                if (High_FPS)
                 {
                     if (AR_16_9)   cmos_new[7] = 0x802;
                     if (AR_2_1    || 
@@ -1206,7 +1265,7 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                     if (AR_2_35_1 ||
                         AR_2_39_1) cmos_new[7] = 0x806; // AR_2_39_1 is actually 2.50:1 preset
                 }
-                if (mv1080) cmos_new[7] = 0x800;
+                if (mv1080 || mv1080_3_2) cmos_new[7] = 0x800;
                 cmos_new[5] = 0x20;
             break;
         }
@@ -2235,10 +2294,6 @@ int RAW_H_Debug  = 0;
 int RAW_V_Debug  = 0;
 int TimerA_Debug = 0;
 int TimerB_Debug = 0;
-int YUV_HD_S_H_height = 0;
-int YUV_HD_S_H_width = 0;
-int YUV_HD_S_V_height = 0;
-int YUV_HD_S_V_width = 0;
 
 static unsigned TimerB = 0;
 static unsigned TimerA = 0;
@@ -3428,16 +3483,10 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
     /* mv1080 preset made to enable 1080p mode mainly for EOS M (other models don't really need it) */
     if (mv1080)
     {
-        if (is_650D || is_700D || is_EOSM)
+        if (is_EOSM)
         {
             RAW_H         = 0x1D4;
             RAW_V         = 0x4A4;
-        }
-        
-        if (is_100D)
-        {
-            RAW_H         = 0x1DD;
-            RAW_V         = 0x4A9;
         }
         
         if (Framerate_24) {TimerA = 0x20F; TimerB = 0x9DE;}
@@ -3450,79 +3499,24 @@ static inline uint32_t reg_override_3X3(uint32_t reg, uint32_t old_val)
         YUV_HD_S_V    = 0x450072;
     }
     
-    if (mv1080p)
+    if (mv1080_3_2)
     {
-        if (AR_16_9)
+        if (is_EOSM)
         {
-            if (is_EOSM) // 1736x976 @ 46.800 FPS
-            {
-                RAW_H         = 0x1D4;
-                RAW_V         = 0x3EC;
-            }
-            
-            Preview_H     = 1728;      // from mv1080 mode
-            Preview_V     = 976;
-            Preview_R     = 0x1D000E;  // from mv1080 mode
-            YUV_HD_S_V    = 0x105016C;
-        }
-        
-        if (AR_2_1)
-        {
-            if (is_EOSM) // 1736x868 @ 50 FPS
-            {
-                RAW_H         = 0x1D4;
-                RAW_V         = 0x380;
-            }
-            
-            Preview_H     = 1728;
-            Preview_V     = 868;
-            Preview_R     = 0x1D000E;
-            YUV_HD_S_V    = 0x1050143;
-        }
-        
-        if (AR_2_20_1)
-        {
-            if (is_EOSM) // 1736x790 @ 54 FPS
-            {
-                RAW_H         = 0x1D4;
-                RAW_V         = 0x332;
-            }
-            
-            Preview_H     = 1728;
-            Preview_V     = 790;
-            Preview_R     = 0x1D000E;
-            YUV_HD_S_V    = 0x1050125;
-        }
-        
-        if (AR_2_35_1)
-        {
-            if (is_EOSM) // 1736x738 @ 57 FPS
-            {
-                RAW_H         = 0x1D4;
-                RAW_V         = 0x2FE;
-            }
-            Preview_H     = 1728;
-            Preview_V     = 738;
-            Preview_R     = 0x1D000E;
-            YUV_HD_S_V    = 0x1050112;
-        }
-        
-        if (AR_2_39_1 && is_EOSM)
-        {
-            // 1736x726 @ 57 FPS
             RAW_H         = 0x1D4;
-            RAW_V         = 0x2F3;
-            
-            Preview_H     = 1728;
-            Preview_V     = 726;
-            Preview_R     = 0x1D000E;
-            YUV_HD_S_V    = 0x1050106;
+            RAW_V         = 0x4A4;
         }
         
         if (Framerate_24) {TimerA = 0x20F; TimerB = 0x9DE;}
         if (Framerate_25) {TimerA = 0x27F; TimerB = 0x7CF;}
         if (Framerate_30) {TimerA = 0x20F; TimerB = 0x7E4;}
+        
+        Preview_H     = 1728;      // from mv1080 mode
+        Preview_V     = 1152;      // from mv1080 mode
+        Preview_R     = 0x1D000E;  // from mv1080 mode
+        YUV_HD_S_V    = 0x450072;
     }
+    
     YUV_HD_S_H    = 0x10501B5;
 
     Black_Bar = 0;
@@ -4364,7 +4358,7 @@ void SetAspectRatioCorrectionValues()
     }
 
     /* Set default x5 mode values for mv1080 preset, also for Anam_FLV */
-    if ((CROP_PRESET_MENU == CROP_PRESET_3X3 && crop_preset_3x3_res == 1) || // mv1080
+    if ((CROP_PRESET_MENU == CROP_PRESET_3X3 && (crop_preset_3x3_res == 1 || crop_preset_3x3_res == 2)) || // mv1080
         (CROP_PRESET_MENU == CROP_PRESET_1X3 && crop_preset_1x3_res == 3))   // Anam_FLV
     {
         if (is_LCD_Output()){        YUV_LV_Buf = 0x1DF05A0; YUV_LV_S_V = 0x1E002B;}
@@ -4520,7 +4514,7 @@ static void FAST PATH_SelectPathDriveMode_hook(uint32_t* regs, uint32_t* stack, 
         Clear_Artifacts = 1;
         EDMAC_9_Vertical_Change = 0;
         
-        if (crop_preset_3x3_res == 1) // mv1080 doesn't need them
+        if (crop_preset_3x3_res == 1 || crop_preset_3x3_res == 2) // mv1080 doesn't need them
         {
             Shift_Preview = 0;
             Clear_Artifacts = 0;
@@ -4996,7 +4990,7 @@ static MENU_UPDATE_FUNC(crop_preset_ar_update)
             if (crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 1 && is_EOSM) MENU_SET_VALUE("2.39:1");
             if (crop_preset_ar_menu == 4 && crop_preset_fps_reduce == 0) MENU_SET_VALUE("2.50:1"); // AR_2_39_1 // we are using AR_2_39_1 as 2.50:1 in this case
         }
-        if (crop_preset_3x3_res_menu == 1)  // mv1080
+        if (crop_preset_3x3_res_menu == 2)  // mv1080
         {
             MENU_SET_VALUE("3:2");
             MENU_SET_WARNING(MENU_WARN_ADVICE, "This option doesn't work in current preset.");
@@ -5220,12 +5214,9 @@ static struct menu_entry crop_rec_menu[] =
                 .priv       = &crop_preset_3x3_res_menu,
                 .update     = crop_preset_3x3_res_update,
                 .max        = 2,
-                .choices    = CHOICES("High FPS", "1080p 3:2", "1080p regular"),
-                .help       = "HFR: High framerate. FPS changes depending on selected aspect ratio.\n"
+                .choices    = CHOICES("High FPS", "1080p", "1080p 3:2"),
+                .help       = "HFR: High framerate and regular HD1080p modes.\n"
                               "Enable 1080p video mode from Canon.",
-                .help2      = "If LiveView is black, hit recording button to reveal the preview.\n"
-                              "1736x1160 @ 23.976, 25 and 30 FPS.\n"
-                              "mv1080p @ 23.976, 25 and 30 FPS.",
                 .shidden    = 1,
             },
             /*
@@ -5471,6 +5462,42 @@ static struct menu_entry crop_rec_menu[] =
                 .unit   = UNIT_HEX,
                 .help   = "Horizontal position / binning.",
                 .help2  = "Use for horizontal centering.",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_skip_left",
+                .priv   = &reg_skip_left,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "skip left",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_skip_right",
+                .priv   = &reg_skip_right,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "skip right",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_skip_top",
+                .priv   = &reg_skip_top,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "skip top",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_skip_bottom",
+                .priv   = &reg_skip_bottom,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "skip bottom",
                 .advanced = 1,
             },
             {
@@ -6340,7 +6367,7 @@ static LVINFO_UPDATE_FUNC(crop_info)
                     }
                     break;
                 case CROP_PRESET_3X3:
-                    if (High_FPS || mv1080p)
+                    if (High_FPS)
                     {
                         if (AR_16_9)    snprintf(buffer, sizeof(buffer), "976p");
                         if (AR_2_1)     snprintf(buffer, sizeof(buffer), "868p");
@@ -6547,7 +6574,7 @@ static unsigned int raw_info_update_cbr(unsigned int unused)
             }
         }
 
-        if (is_5D3)
+        if (is_5D3 || is_EOSM)
         {
             /* update skip offsets */
             int skip_left, skip_right, skip_top, skip_bottom;
