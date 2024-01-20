@@ -88,7 +88,7 @@ static int crop_preset_1x3_res = 0;
 #define Anam_Medium    (crop_preset_1x3_res == 2)
 #define Anam_FLV    (crop_preset_1x3_res == 3)
 
-static CONFIG_INT("crop.preset_3x3", crop_preset_3x3_res_menu, 0);
+static CONFIG_INT("crop.preset_3x3", crop_preset_3x3_res_menu, 1);
 static int crop_preset_3x3_res = 0;
 #define High_FPS       (crop_preset_3x3_res == 0)
 #define mv1080         (crop_preset_3x3_res == 1)
