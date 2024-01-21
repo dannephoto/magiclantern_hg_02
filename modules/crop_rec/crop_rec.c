@@ -5649,6 +5649,7 @@ static struct menu_entry customize_buttons_menu[] =
                 .priv     = &Arrows_U_D,
                 .help     = "Assign Up and Down arrows to a task.",
             },
+            /* not working with eosm
             {
                 .name     = "L/R Arrows",
                 .max      = 2,
@@ -5656,6 +5657,7 @@ static struct menu_entry customize_buttons_menu[] =
                 .priv     = &Arrows_L_R,
                 .help     = "Assign Left and Right arrows to a task.",
             },
+             */
 
             MENU_EOL,
         },
