@@ -5774,6 +5774,7 @@ static int old_dual_iso;
 static int old_diso_fix;
 static int old_bit_depth;
 static int old_crop_preset_fps_reduce;
+static int old_fps_over;
 
 int check_if_settings_changed()
 {
@@ -5785,7 +5786,8 @@ int check_if_settings_changed()
         old_dual_iso   != dual_iso_is_enabled()     ||
         (old_bit_depth  != bit_depth_analog && Anam_FLV)         ||
         old_diso_fix   != fix_dual_iso_flicker      ||
-        old_crop_preset_fps_reduce != crop_preset_fps_reduce)
+        old_crop_preset_fps_reduce != crop_preset_fps_reduce ||
+        old_fps_over != fps_over)
     {
         return 1;
     }
@@ -5995,6 +5997,7 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
             old_dual_iso   = dual_iso_is_enabled();
             old_diso_fix   = fix_dual_iso_flicker;
             old_crop_preset_fps_reduce = crop_preset_fps_reduce;
+            old_fps_over = fps_over;
             if (Anam_FLV)
             {
                 old_bit_depth  = bit_depth_analog;
