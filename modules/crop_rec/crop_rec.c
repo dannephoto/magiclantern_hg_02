@@ -2905,7 +2905,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_650D || is_700D)
                 {
                     RAW_H         = 0x176;
-                    RAW_V         = 0x814;
+                    RAW_V         = 0x813;
                     TimerA        = 0x1B9;
                     if (Framerate_24) TimerB = 0xBCA;
                     if (Framerate_25) TimerB = 0xB4E;
@@ -2915,7 +2915,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x176;
-                    RAW_V         = 0x814;
+                    RAW_V         = 0x815;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2D;
                     if (Framerate_25) TimerB = 0x9C3;
@@ -2961,7 +2961,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM) /* 1664x2268 @ 23.976 FPS */
                 {
                     RAW_H         = 0x1C2;
-                    RAW_V         = 0x8F8;
+                    RAW_V         = 0x8F9;
                     TimerB        = 0xA2D;
                     TimerA        = 0x1FF;
                     
@@ -3041,7 +3041,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x186;
-                    RAW_V         = 0x7B2;
+                    RAW_V         = 0x7B3;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2E;
                     if (Framerate_25) TimerB = 0x9C3;
@@ -3108,7 +3108,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x1B2;
-                    RAW_V         = 0x814;
+                    RAW_V         = 0x815;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2D;
                     if (Framerate_25) TimerB = 0x9C3;
@@ -3147,7 +3147,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x192;
-                    RAW_V         = 0x772;
+                    RAW_V         = 0x773;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2D;
                     if (Framerate_25) TimerB = 0x9C3;
@@ -3214,7 +3214,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x1B2;
-                    RAW_V         = 0x7F4;
+                    RAW_V         = 0x7F5;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2D;
                     if (Framerate_25) TimerB = 0x9C3;
@@ -3253,7 +3253,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x192;
-                    RAW_V         = 0x752;
+                    RAW_V         = 0x753;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2D;
                     if (Framerate_25) TimerB = 0x9C3;

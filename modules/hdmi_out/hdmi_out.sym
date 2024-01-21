@@ -1,0 +1,3 @@
+00000008 EDID_HDMI_INFO
+00000224 patch_HDMI_output
+000005e8 unpatch_HDMI_output

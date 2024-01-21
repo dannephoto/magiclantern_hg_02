@@ -4,6 +4,8 @@
 Dedicated movie preset intervalometer
 --]]
 
+  config = {}
+  local config = require("config")
   console.hide()
   menu.close()
 
@@ -190,6 +192,7 @@ mymenu = menu.new
     },
 }
 
+config.create_from_menu(mymenu)
 
 -- starts movie recording after a delay
 
