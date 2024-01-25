@@ -2578,13 +2578,13 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         Preview_Control_Basic = 0;
     }
 
-    if (CROP_Full_Res) /* 5208x3478 @ 3 FPS */
+    if (CROP_Full_Res) /* 5208x3478 @ 2 FPS */
     {
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H    = 0x538;
             RAW_V    = 0xDB2;
-            TimerB   = 0x1E03;
+            TimerB   = 0x1E03 + 3840;//2FPS
             TimerA   = 0x56B;
         }
 
@@ -4846,7 +4846,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     }
     if (crop_preset_1x1_res_menu == 5)
     {
-        MENU_SET_HELP("5208x3478 @ 3 FPS. Has cropped centered real-time preview.");
+        MENU_SET_HELP("5208x3478 @ 2 FPS. Has cropped centered real-time preview.");
     }
 }
 
@@ -5132,7 +5132,7 @@ static MENU_UPDATE_FUNC(crop_preset_fps_update)
 
         if (crop_preset_1x1_res_menu == 5) // CROP_Full_Res
         {
-            MENU_SET_VALUE("3 FPS");
+            MENU_SET_VALUE("2 FPS");
             MENU_SET_WARNING(MENU_WARN_ADVICE, "This option doesn't work with Full-Res LV.");
         }
     }
@@ -5979,7 +5979,7 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
          * https://www.magiclantern.fm/forum/index.php?topic=26521.msg239231#msg239231 (+31 MB of RAM)  
          * let's check picture quality on startup, also when the user change it to other than RAW          
          * let's inform the user to change pic quality back to RAW, and a camera restart would required 
-         * this extends recording times at high resolutions, also allows to record Full-Res LV @ 3 FPS */
+         * this extends recording times at high resolutions, also allows to record Full-Res LV @ 2 FPS */
         if (patch_active && CROP_PRESET_MENU && is_movie_mode())
         {
             if (pic_quality != 0x4060000)
