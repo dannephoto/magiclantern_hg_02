@@ -81,6 +81,7 @@ static int crop_preset_1x1_res = 0;
 #define CROP_1440p     (crop_preset_1x1_res == 3)
 #define CROP_1280p     (crop_preset_1x1_res == 4)
 #define CROP_Full_Res  (crop_preset_1x1_res == 5)
+#define CROP_1630p     (crop_preset_1x1_res == 6)
 
 CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
 static int crop_preset_1x3_res = 0;
@@ -1154,6 +1155,12 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                 {
                     cmos_new[5] = 0x2C0;
                     cmos_new[7] = 0xAA9;
+                }
+                
+                if (CROP_1630p)
+                {
+                    cmos_new[5] = 0x2C0;
+                    cmos_new[7] = 0xB09;
                 }
                 
                 if (CROP_2_8K)
@@ -2504,7 +2511,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         Preview_Control_Basic = 0;
         EDMAC_9_Vertical_Change = 1;
     }
-
+        
     if (CROP_1440p)
     {
         if (is_650D || is_700D || is_EOSM)
@@ -2535,6 +2542,33 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         YUV_HD_S_H    = 0x1050286;
         YUV_HD_S_V    = 0x105021E;
 
+        Black_Bar     = 2;
+        Preview_Control = 1;
+        EDMAC_24_Redirect = 1;
+        EDMAC_9_Vertical_Change = 1;
+        Preview_Control_Basic = 0;
+    }
+    
+    if (CROP_1630p)
+    {
+        if (is_650D || is_700D || is_EOSM)
+        {
+            RAW_H    = 0x202;
+            RAW_V    = 0x67A;
+            TimerA   = 0x2DB;
+            if (Framerate_24) TimerB = 0x71E;
+            if (Framerate_25) TimerB = 0x71E;
+            if (Framerate_30) TimerB = 0x71E;  // 30 Doesn't work, make it 25
+        }
+
+        Preview_H     = 1916;  // 2556 causes preview artifacts
+        Preview_V     = 1630;
+        Preview_R     = 0x19000D;
+        Preview_V_Recover = 22;
+        
+        YUV_HD_S_H    = 0x450080; //+ 50
+        YUV_HD_S_V    = 0x1050264 + reg_skip_right;
+                
         Black_Bar     = 2;
         Preview_Control = 1;
         EDMAC_24_Redirect = 1;
@@ -3861,7 +3895,7 @@ static void FAST EngDrvOut_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
      * the values taken when setting focus box to center then pressing down button one time in x5 mode.
      * it seems these also make preview more reliable in these modes, in some focus box positions preview
      * become black without these values */
-    if ((CROP_PRESET_MENU == CROP_PRESET_3X3) || 
+    if ((CROP_PRESET_MENU == CROP_PRESET_3X3 || CROP_PRESET_MENU == CROP_PRESET_1X3) ||
        ((CROP_PRESET_MENU == CROP_PRESET_1X1) && crop_preset_1x1_res == 4)) // also for 1280p preset
     {
         if (data == 0xC0F09050) {regs[1] =   0x3002D0;}
@@ -4497,6 +4531,13 @@ static void FAST PATH_SelectPathDriveMode_hook(uint32_t* regs, uint32_t* stack, 
             EDMAC_9_Vertical_Change = 1;
         }
     }
+    
+    if (crop_preset_1x1_res == 6)    // CROP_1280p
+    {
+        Shift_Preview = 0;
+        Clear_Artifacts = 0;
+        EDMAC_9_Vertical_Change = 0;
+    }
 
     if (CROP_PRESET_MENU == CROP_PRESET_1X3)
     {
@@ -4847,6 +4888,10 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     if (crop_preset_1x1_res_menu == 5)
     {
         MENU_SET_HELP("5208x3478 @ 2 FPS. Has cropped centered real-time preview.");
+    }
+    if (crop_preset_1x1_res_menu == 6)
+    {
+        MENU_SET_HELP("1920x1630 @ 24 FPS");
     }
 }
 
@@ -5201,8 +5246,8 @@ static struct menu_entry crop_rec_menu[] =
                 .name       = "Preset:",   // CROP_PRESET_1X1
                 .priv       = &crop_preset_1x1_res_menu,
                 .update     = crop_preset_1x1_res_update,
-                .max        = 5,
-                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV"),
+                .max        = 6,
+                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1630p"),
                 .help       = "Choose 1:1 preset.",
                 .shidden    = 1,
             },
