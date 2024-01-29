@@ -1167,7 +1167,7 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                 
                 if (CROP_1620p)
                 {
-                    cmos_new[5] = 0x380 + reg_cmos5;
+                    cmos_new[5] = 0x344 + reg_cmos5;
                     cmos_new[7] = 0xB09 + reg_cmos7;
                 }
                 
@@ -2574,7 +2574,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         Preview_R     = 0x19000D;
         Preview_V_Recover = 22;
         
-        YUV_HD_S_H    = 0x450080 + reg_YUV_HD_S_H; //+ 50
+        YUV_HD_S_H    = 0x450090 + reg_YUV_HD_S_H; //+ 50
         YUV_HD_S_V    = 0x105025A + reg_YUV_HD_S_V;
                 
         Black_Bar     = 2;
