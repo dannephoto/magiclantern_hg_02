@@ -2562,7 +2562,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H    = 0x23E + reg_height;
-            RAW_V    = 0x670 + reg_width;
+            RAW_V    = 0x671 + reg_width;
             TimerA   = 0x2DB;
             if (Framerate_24) TimerB = 0x71E;
             if (Framerate_25) TimerB = 0x71E;
