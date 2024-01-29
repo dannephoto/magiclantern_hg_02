@@ -33,6 +33,14 @@ int reg_skip_left = 0;
 int reg_skip_right = 0;
 int reg_skip_top = 0;
 int reg_skip_bottom = 0;
+int reg_cmos5 = 0;
+int reg_cmos7 = 0;
+int reg_height = 0;
+int reg_width = 0;
+int reg_Preview_H = 0;
+int reg_Preview_V = 0;
+int reg_YUV_HD_S_H = 0;
+int reg_YUV_HD_S_V = 0;
 
 static int zoom = 0;
 static int submenu = 0;
@@ -81,7 +89,7 @@ static int crop_preset_1x1_res = 0;
 #define CROP_1440p     (crop_preset_1x1_res == 3)
 #define CROP_1280p     (crop_preset_1x1_res == 4)
 #define CROP_Full_Res  (crop_preset_1x1_res == 5)
-#define CROP_1630p     (crop_preset_1x1_res == 6)
+#define CROP_1620p     (crop_preset_1x1_res == 6)
 
 CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
 static int crop_preset_1x3_res = 0;
@@ -1157,10 +1165,10 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                     cmos_new[7] = 0xAA9;
                 }
                 
-                if (CROP_1630p)
+                if (CROP_1620p)
                 {
-                    cmos_new[5] = 0x2C0;
-                    cmos_new[7] = 0xB09;
+                    cmos_new[5] = 0x380 + reg_cmos5;
+                    cmos_new[7] = 0xB09 + reg_cmos7;
                 }
                 
                 if (CROP_2_8K)
@@ -2549,25 +2557,25 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         Preview_Control_Basic = 0;
     }
     
-    if (CROP_1630p)
+    if (CROP_1620p)
     {
         if (is_650D || is_700D || is_EOSM)
         {
-            RAW_H    = 0x202;
-            RAW_V    = 0x67A;
+            RAW_H    = 0x23E + reg_height;
+            RAW_V    = 0x670 + reg_width;
             TimerA   = 0x2DB;
             if (Framerate_24) TimerB = 0x71E;
             if (Framerate_25) TimerB = 0x71E;
             if (Framerate_30) TimerB = 0x71E;  // 30 Doesn't work, make it 25
         }
 
-        Preview_H     = 1916;  // 2556 causes preview artifacts
-        Preview_V     = 1630;
+        Preview_H     = 2156 + reg_Preview_H;  // 2556 causes preview artifacts
+        Preview_V     = 1620 + reg_Preview_V;
         Preview_R     = 0x19000D;
         Preview_V_Recover = 22;
         
-        YUV_HD_S_H    = 0x450080; //+ 50
-        YUV_HD_S_V    = 0x1050264 + reg_skip_right;
+        YUV_HD_S_H    = 0x450080 + reg_YUV_HD_S_H; //+ 50
+        YUV_HD_S_V    = 0x105025A + reg_YUV_HD_S_V;
                 
         Black_Bar     = 2;
         Preview_Control = 1;
@@ -4891,7 +4899,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     }
     if (crop_preset_1x1_res_menu == 6)
     {
-        MENU_SET_HELP("1920x1630 @ 24 FPS");
+        MENU_SET_HELP("1920x1620 @ 24 FPS");
     }
 }
 
@@ -5247,7 +5255,7 @@ static struct menu_entry crop_rec_menu[] =
                 .priv       = &crop_preset_1x1_res_menu,
                 .update     = crop_preset_1x1_res_update,
                 .max        = 6,
-                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1630p"),
+                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p"),
                 .help       = "Choose 1:1 preset.",
                 .shidden    = 1,
             },
@@ -5549,6 +5557,78 @@ static struct menu_entry crop_rec_menu[] =
                 .max    = 1000,
                 .unit   = UNIT_DEC,
                 .help  = "skip bottom",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_cmos5",
+                .priv   = &reg_cmos5,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "cmos5",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_cmos7",
+                .priv   = &reg_cmos7,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "cmos7",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_height",
+                .priv   = &reg_height,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "height",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_width",
+                .priv   = &reg_width,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "width",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_Preview_H",
+                .priv   = &reg_Preview_H,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "Preview_H",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_Preview_V",
+                .priv   = &reg_Preview_V,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "Preview_V",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_YUV_HD_S_H",
+                .priv   = &reg_YUV_HD_S_H,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "YUV_HD_S_H",
+                .advanced = 1,
+            },
+            {
+                .name   = "reg_YUV_HD_S_V",
+                .priv   = &reg_YUV_HD_S_V,
+                .min    = -1000,
+                .max    = 1000,
+                .unit   = UNIT_DEC,
+                .help  = "YUV_HD_S_V",
                 .advanced = 1,
             },
             {
