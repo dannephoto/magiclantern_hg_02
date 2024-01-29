@@ -4899,7 +4899,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     }
     if (crop_preset_1x1_res_menu == 6)
     {
-        MENU_SET_HELP("1920x1620 @ 24 FPS");
+        MENU_SET_HELP("2160x1620 @ 24 FPS");
     }
 }
 
@@ -5255,7 +5255,7 @@ static struct menu_entry crop_rec_menu[] =
                 .priv       = &crop_preset_1x1_res_menu,
                 .update     = crop_preset_1x1_res_update,
                 .max        = 6,
-                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p"),
+                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p 4:3"),
                 .help       = "Choose 1:1 preset.",
                 .shidden    = 1,
             },
