@@ -2489,7 +2489,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H    = 0x322 + reg_width;
-            RAW_V    = 0x539 + reg_height;
+            RAW_V    = 0x521 + reg_height;
             TimerB   = 0x60F;
             TimerA   = 0x35B;
         }
@@ -2503,14 +2503,14 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         }
 
         Preview_H         = 2868;  // black bar above 2868
-        Preview_V         = 1308;
+        Preview_V         = 1284;
         Preview_V_Recover = 284;   // trial and error
 
         Preview_R     = 0x190028;
         REG_C0F383DC_Tuning = -26; 
 
         YUV_HD_S_H    = 0x1050308;
-        YUV_HD_S_V    = 0x10501EC;
+        YUV_HD_S_V    = 0x10501D4;
         YUV_HD_S_V_E  = 0;
         Black_Bar     = 2;
 
@@ -2525,7 +2525,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H    = 0x2A2 + reg_width;
-            RAW_V    = 0x5BC + reg_height;
+            RAW_V    = 0x5BD + reg_height;
             TimerA   = 0x2DB;
             if (Framerate_24) TimerB = 0x71E;
             if (Framerate_25) TimerB = 0x6D3;
@@ -2625,7 +2625,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H    = 0x538 + reg_width;
-            RAW_V    = 0xDB2 + reg_height;
+            RAW_V    = 0xDB3 + reg_height;
             TimerB   = 0x1E03 + 3840;//2FPS
             TimerA   = 0x56B;
         }
@@ -2918,7 +2918,7 @@ static inline uint32_t reg_override_1X3(uint32_t reg, uint32_t old_val)
                 if (is_EOSM)
                 {
                     RAW_H         = 0x192 + reg_width;
-                    RAW_V         = 0x8BC + reg_height;
+                    RAW_V         = 0x8BD + reg_height;
                     TimerA        = 0x1FF;
                     if (Framerate_24) TimerB = 0xA2D;
                     if (Framerate_25) TimerB = 0x9C3;
@@ -5060,7 +5060,7 @@ static MENU_UPDATE_FUNC(crop_preset_ar_update)
     {
         if (crop_preset_1x1_res_menu == 0) MENU_SET_VALUE("2.33:1");  // CROP_2_5K
         if (crop_preset_1x1_res_menu == 1) MENU_SET_VALUE("2.39:1");  // CROP_2_8K
-        if (crop_preset_1x1_res_menu == 2) MENU_SET_VALUE("2.35:1");  // CROP_3K
+        if (crop_preset_1x1_res_menu == 2) MENU_SET_VALUE("2.39:1");  // CROP_3K
         if (crop_preset_1x1_res_menu == 3) MENU_SET_VALUE("16:9");    // CROP_1440p
         if (crop_preset_1x1_res_menu == 4) MENU_SET_VALUE("3:2");     // CROP_1280p
         if (crop_preset_1x1_res_menu == 5) MENU_SET_VALUE("3:2");     // CROP_Full_Res
