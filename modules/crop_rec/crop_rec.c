@@ -2558,14 +2558,14 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
     }
     
     if (CROP_1620p)
-    {
+    {   
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H    = 0x23E + reg_width;
-            RAW_V    = 0x671 + reg_height;
+            RAW_V    = 0x671 + reg_height; 
             TimerA   = 0x2DB;
             if (Framerate_24) TimerB = 0x71E;
-            if (Framerate_25) TimerB = 0x71E;
+            if (Framerate_25) TimerB = 0x71E;       
             if (Framerate_30) TimerB = 0x71E;  // 30 Doesn't work, make it 25
         }
 
@@ -2576,7 +2576,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         
         YUV_HD_S_H    = 0x450090 + reg_YUV_HD_S_H; //+ 50
         YUV_HD_S_V    = 0x105025A + reg_YUV_HD_S_V;
-                
+                        
         Black_Bar     = 2;
         Preview_Control = 1;
         EDMAC_24_Redirect = 1;
@@ -6014,15 +6014,17 @@ static unsigned int crop_rec_polling_cbr(unsigned int unused)
         // all of our presets work in x5 mode because of preview, even none-cropped ones
         if (CROP_PRESET_MENU && !RECORDING && is_movie_mode()) 
         {
-            // WB value will change in ML, but won't be applied until we refresh LV manually, that's because 
+            // WB value will change in ML, but won't be applied until we refresh LV manually, that's because
             // of setting LV zoom to x5 zoom directly after we enter LV, this delay helps to avoid this issue
+            /* Let´s keep things snappy. Removing this for now.
             if (lv_dispsize == 1)
             {
                 gui_uilock(UILOCK_EVERYTHING);
                 msleep(1100); 
                 gui_uilock(UILOCK_NONE);
             }
-
+             */
+             
             if (is_manual_focus())
             {
                 /* while we are using manual focus and 3x3 presets change AF method to FlexiZone - Multi 
