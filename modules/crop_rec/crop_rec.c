@@ -90,6 +90,8 @@ static int crop_preset_1x1_res = 0;
 #define CROP_1280p     (crop_preset_1x1_res == 4)
 #define CROP_Full_Res  (crop_preset_1x1_res == 5)
 #define CROP_1620p     (crop_preset_1x1_res == 6)
+#define CROP_1620p_test1     (crop_preset_1x1_res == 7)
+#define CROP_1620p_test2     (crop_preset_1x1_res == 8)
 
 CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
 static int crop_preset_1x3_res = 0;
@@ -1165,10 +1167,10 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                     cmos_new[7] = 0xAA9;
                 }
                 
-                if (CROP_1620p)
+                if (CROP_1620p || CROP_1620p_test1 || CROP_1620p_test2)
                 {
                     cmos_new[5] = 0x344 + reg_cmos5;
-                    cmos_new[7] = 0xB09 + reg_cmos7;
+                    cmos_new[7] = 0xAC8 + reg_cmos7;
                 }
                 
                 if (CROP_2_8K)
@@ -2557,16 +2559,16 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         Preview_Control_Basic = 0;
     }
     
-    if (CROP_1620p)
-    {   
+    if (CROP_1620p || CROP_1620p_test1 || CROP_1620p_test2)
+    {
         if (is_650D || is_700D || is_EOSM)
         {
             RAW_H    = 0x23E + reg_width;
-            RAW_V    = 0x671 + reg_height; 
-            TimerA   = 0x2DB;
-            if (Framerate_24) TimerB = 0x71E;
-            if (Framerate_25) TimerB = 0x71E;       
-            if (Framerate_30) TimerB = 0x71E;  // 30 Doesn't work, make it 25
+            RAW_V    = 0x671 + reg_height;
+            TimerA   = 0x279;
+            if (Framerate_24) TimerB = 0x838;
+            if (Framerate_25) TimerB = 0x838;
+            if (Framerate_30) TimerB = 0x838;  // 30 Doesn't work, make it 25
         }
 
         Preview_H     = 2156 + reg_Preview_H;  // 2556 causes preview artifacts
@@ -2574,8 +2576,22 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         Preview_R     = 0x19000D;
         Preview_V_Recover = 22;
         
-        YUV_HD_S_H    = 0x450090 + reg_YUV_HD_S_H; //+ 50
-        YUV_HD_S_V    = 0x105025A + reg_YUV_HD_S_V;
+        YUV_HD_S_H    = 0x1050220 + reg_YUV_HD_S_H; //+ 50
+        YUV_HD_S_V    = 0x1050240 + reg_YUV_HD_S_V;
+        
+        //doktorkrek suggestion
+        if (crop_preset_1x1_res == 7)
+        {
+            YUV_LV_Buf = 0x1B505A0;
+            YUV_LV_S_V = 0x10501B2;
+            EngDrvOutLV(0xC0F11A8C, 0x1E0038);
+        }
+        
+        if (crop_preset_1x1_res == 8)
+        {
+            YUV_LV_Buf = 0x1B505A0;
+            YUV_LV_S_V = 0x10501B2;
+        }
                         
         Black_Bar     = 2;
         Preview_Control = 1;
@@ -4540,10 +4556,10 @@ static void FAST PATH_SelectPathDriveMode_hook(uint32_t* regs, uint32_t* stack, 
         }
     }
     
-    if (crop_preset_1x1_res == 6)    // CROP_1280p
+    if (crop_preset_1x1_res == 6 || crop_preset_1x1_res == 7)    // CROP_1620p
     {
         Shift_Preview = 0;
-        Clear_Artifacts = 0;
+        Clear_Artifacts = 1;
         EDMAC_9_Vertical_Change = 0;
     }
 
@@ -4897,7 +4913,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     {
         MENU_SET_HELP("5208x3478 @ 2 FPS. Has cropped centered real-time preview.");
     }
-    if (crop_preset_1x1_res_menu == 6)
+    if (crop_preset_1x1_res_menu == 6 || crop_preset_1x1_res_menu == 7 || crop_preset_1x1_res_menu == 8)
     {
         MENU_SET_HELP("2160x1620 @ 24 FPS");
     }
@@ -5254,8 +5270,8 @@ static struct menu_entry crop_rec_menu[] =
                 .name       = "Preset:",   // CROP_PRESET_1X1
                 .priv       = &crop_preset_1x1_res_menu,
                 .update     = crop_preset_1x1_res_update,
-                .max        = 6,
-                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p 4:3"),
+                .max        = 8,
+                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p 4:3", "1620p 4:3 TEST1", "1620p 4:3 TEST2"),
                 .help       = "Choose 1:1 preset.",
                 .shidden    = 1,
             },
