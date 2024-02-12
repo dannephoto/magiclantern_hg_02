@@ -91,6 +91,9 @@ extern WEAK_FUNC(ret_0) void mlv_play_file(char *filename);
 static int updowntoggle = 0; /* coming from crop_rec.c */
 extern int WEAK_FUNC(updowntoggle) Arrows_U_D;
 
+static int morehack = 0; /* coming from crop_rec.c */
+extern int WEAK_FUNC(morehack) more_hacks;
+
 static int infotoggle = 0; /* coming from crop_rec.c */
 extern int WEAK_FUNC(infotoggle) INFO_button;
 
@@ -2387,10 +2390,17 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    //Exclude certatin custom settings in crop rec.
-                    if (!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3 && is_manual_focus())
+                    if (more_hacks)
                     {
                         aewbSuspend();
+                    }
+                    else
+                    {
+                        //Exclude certatin custom settings in crop rec.
+                        if (!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3 && is_manual_focus())
+                        {
+                            aewbSuspend();
+                        }
                     }
                     //if ((Arrows_U_D != 1 && is_manual_focus()) || (bit_depth_analog == 3 && crop_preset_1x3_res != 3))
                     //{

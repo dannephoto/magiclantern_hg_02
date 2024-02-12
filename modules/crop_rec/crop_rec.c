@@ -115,6 +115,7 @@ CONFIG_INT("crop.button_SET",       SET_button, 6);
 static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 2);
 CONFIG_INT("crop.button_INFO",      INFO_button, 6);
 CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 1);
+CONFIG_INT("crop.more_hacks",       more_hacks, 1);
 static CONFIG_INT("crop.arrows_L_R",       Arrows_L_R, 0);
 
 enum crop_preset {
@@ -3761,7 +3762,7 @@ static void FAST engio_write_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
         if (brighten_lv_method == 0 && RECORDING)
         {
             //Workaround when small_hacks is set to More in mlv_lite.c
-            if (!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3)
+            if ((!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3) || more_hacks)
             {
                 if (OUTPUT_12BIT)
                 {
@@ -5779,6 +5780,13 @@ static struct menu_entry customize_buttons_menu[] =
                 .priv     = &Arrows_U_D,
                 .help     = "Assign Up and Down arrows to a task.",
             },
+            {
+                .name     = "More_hacks",
+                .max      = 1,
+                .choices  = CHOICES("OFF", "Allow"),
+                .priv     = &more_hacks,
+                .help     = "More hacks always allowed",
+            },
             /* not working with eosm
             {
                 .name     = "L/R Arrows",
@@ -6242,6 +6250,10 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                     ((key == MODULE_KEY_INFO              ) && INFO_button == 1)                 ||
                     ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter && is_manual_focus()) )
                 {
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
                     set_zoom(10);
 
                     /* Enable Canon overlays in x10 mode */
@@ -6280,6 +6292,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 1) ||
                     ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 1)  )
                 {
+                    if (more_hacks && RECORDING) return 0;
                     if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
                     if (lens_info.raw_iso == ISO_6400) return 0; // We reached highest ISO, don't do anything
                     //if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
@@ -6289,6 +6302,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 1) ||
                     ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 1)  )
                 {
+                    if (more_hacks && RECORDING) return 0;
                     if (lens_info.raw_iso == 0x0) return 0; // Don't change ISO when it's set to Auto
                     if (lens_info.raw_iso == ISO_100) return 0; // We reached lowest ISO, don't do anything
                     //if (Anam_FLV && OUTPUT_10BIT && RECORDING)  return 0;
@@ -6298,6 +6312,12 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 if (((key == MODULE_KEY_INFO)       && INFO_button == 2) ||
                     ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 2))
                 {
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
+                    
+                    if (more_hacks && RECORDING) return 0;
                     iso_toggle(0, 2);
                     return 0;
                 }
@@ -6306,6 +6326,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 if (((key == MODULE_KEY_PRESS_UP)    && Arrows_U_D == 2) ||
                     ((key == MODULE_KEY_PRESS_RIGHT) && Arrows_L_R == 2)  )
                 {
+                    if (more_hacks && RECORDING) return 0;
                     if (lens_info.raw_aperture == lens_info.raw_aperture_max) return 0; // We reached max aperture, don't do anything
                     aperture_toggle(0, 1);
                     return 0;
@@ -6313,17 +6334,24 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 if (((key == MODULE_KEY_PRESS_DOWN)  && Arrows_U_D == 2) ||
                     ((key == MODULE_KEY_PRESS_LEFT)  && Arrows_L_R == 2)  )
                 {
+                    if (more_hacks && RECORDING) return 0;
                     if (lens_info.raw_aperture == lens_info.raw_aperture_min) return 0; // We reached min aperture, don't do anything
                     aperture_toggle(0, -1);
                     return 0;
                 }
                 if (key == MODULE_KEY_INFO && INFO_button == 3)
                 {
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
+                    if (more_hacks && RECORDING) return 0;
                     aperture_toggle(0, -1);
                     return 0;
                 }
                 if (key == MODULE_KEY_PRESS_SET && SET_button == 3)
                 {
+                    if (more_hacks && RECORDING) return 0;
                     aperture_toggle(0, 1);
                     return 0;
                 }
@@ -6332,6 +6360,11 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 if (((key == MODULE_KEY_INFO)       && INFO_button == 4) ||
                     ((key == MODULE_KEY_PRESS_SET)  && SET_button == 4))
                 {
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
+                    
                     if (!RECORDING)
                     {
                         if (!dual_iso_is_enabled())
@@ -6351,6 +6384,10 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                 if (((key == MODULE_KEY_INFO)       && INFO_button == 5) ||
                     ((key == MODULE_KEY_PRESS_SET)  && SET_button  == 5))
                 {
+                    if(lv_disp_mode != 0){
+                        // Use INFO key to cycle LV as normal when not in the LV with ML overlays
+                        return 1;
+                    }
                     
                     extern int falsecolor_draw;
                     if (!falsecolor_draw)
@@ -7069,6 +7106,7 @@ MODULE_CONFIGS_START()
     MODULE_CONFIG(tapdisp)
     MODULE_CONFIG(Arrows_L_R)
     MODULE_CONFIG(Arrows_U_D)
+    MODULE_CONFIG(more_hacks)
 MODULE_CONFIGS_END()
 
 MODULE_CBRS_START()
