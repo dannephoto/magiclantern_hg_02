@@ -90,8 +90,6 @@ static int crop_preset_1x1_res = 0;
 #define CROP_1280p     (crop_preset_1x1_res == 4)
 #define CROP_Full_Res  (crop_preset_1x1_res == 5)
 #define CROP_1620p     (crop_preset_1x1_res == 6)
-#define CROP_1620p_test1     (crop_preset_1x1_res == 7)
-#define CROP_1620p_test2     (crop_preset_1x1_res == 8)
 
 CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
 static int crop_preset_1x3_res = 0;
@@ -1167,7 +1165,7 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                     cmos_new[7] = 0xAA9;
                 }
                 
-                if (CROP_1620p || CROP_1620p_test1 || CROP_1620p_test2)
+                if (CROP_1620p)
                 {
                     cmos_new[5] = 0x344 + reg_cmos5;
                     cmos_new[7] = 0xAC8 + reg_cmos7;
@@ -2559,7 +2557,7 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         Preview_Control_Basic = 0;
     }
     
-    if (CROP_1620p || CROP_1620p_test1 || CROP_1620p_test2)
+    if (CROP_1620p)
     {
         if (is_650D || is_700D || is_EOSM)
         {
@@ -2580,18 +2578,9 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         YUV_HD_S_V    = 0x1050240 + reg_YUV_HD_S_V;
         
         //doktorkrek suggestion
-        if (crop_preset_1x1_res == 7)
-        {
-            YUV_LV_Buf = 0x1B505A0;
-            YUV_LV_S_V = 0x10501B2;
-            EngDrvOutLV(0xC0F11A8C, 0x1E0038);
-        }
-        
-        if (crop_preset_1x1_res == 8)
-        {
-            YUV_LV_Buf = 0x1B505A0;
-            YUV_LV_S_V = 0x10501B2;
-        }
+        YUV_LV_Buf = 0x1B505A0;
+        YUV_LV_S_V = 0x10501B2;
+        //EngDrvOutLV(0xC0F11A8C, 0x1E0038);
                         
         Black_Bar     = 2;
         Preview_Control = 1;
@@ -4556,7 +4545,7 @@ static void FAST PATH_SelectPathDriveMode_hook(uint32_t* regs, uint32_t* stack, 
         }
     }
     
-    if (crop_preset_1x1_res == 6 || crop_preset_1x1_res == 7)    // CROP_1620p
+    if (crop_preset_1x1_res == 6)    // CROP_1620p
     {
         Shift_Preview = 0;
         Clear_Artifacts = 1;
@@ -4913,7 +4902,7 @@ static MENU_UPDATE_FUNC(crop_preset_1x1_res_update)
     {
         MENU_SET_HELP("5208x3478 @ 2 FPS. Has cropped centered real-time preview.");
     }
-    if (crop_preset_1x1_res_menu == 6 || crop_preset_1x1_res_menu == 7 || crop_preset_1x1_res_menu == 8)
+    if (crop_preset_1x1_res_menu == 6)
     {
         MENU_SET_HELP("2160x1620 @ 24 FPS");
     }
@@ -5270,8 +5259,8 @@ static struct menu_entry crop_rec_menu[] =
                 .name       = "Preset:",   // CROP_PRESET_1X1
                 .priv       = &crop_preset_1x1_res_menu,
                 .update     = crop_preset_1x1_res_update,
-                .max        = 8,
-                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p 4:3", "1620p 4:3 TEST1", "1620p 4:3 TEST2"),
+                .max        = 6,
+                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p 4:3"),
                 .help       = "Choose 1:1 preset.",
                 .shidden    = 1,
             },
