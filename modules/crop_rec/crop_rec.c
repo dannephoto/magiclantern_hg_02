@@ -90,6 +90,7 @@ static int crop_preset_1x1_res = 0;
 #define CROP_1280p     (crop_preset_1x1_res == 4)
 #define CROP_Full_Res  (crop_preset_1x1_res == 5)
 #define CROP_1620p     (crop_preset_1x1_res == 6)
+#define CROP_1080p     (crop_preset_1x1_res == 7)
 
 CONFIG_INT("crop.preset_1x3", crop_preset_1x3_res_menu, 1);
 static int crop_preset_1x3_res = 0;
@@ -1184,7 +1185,7 @@ static void FAST cmos_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
                     cmos_new[7] = 0xAA9;
                 }
                 
-                if (CROP_1280p)
+                if (CROP_1280p || CROP_1080p)
                 {
                     cmos_new[5] = 0x380;
                     cmos_new[7] = 0xACA;
@@ -2625,6 +2626,42 @@ static inline uint32_t reg_override_1X1(uint32_t reg, uint32_t old_val)
         EDMAC_9_Vertical_Change = 0;
         Preview_Control_Basic = 0;
     }
+    
+    if (CROP_1080p)
+    {
+        if (is_650D || is_700D || is_EOSM)
+        {
+            RAW_H    = 0x202 + reg_width;
+            RAW_V    = 0x455 + reg_height;
+            TimerA   = 0x235;
+            if (Framerate_24) TimerB = 0x935;
+            if (Framerate_25) TimerB = 0x8D4;
+            if (Framerate_30) TimerB = 0x75D;
+        }
+
+        if (is_100D)
+        {
+            RAW_H    = 0x20B;
+            RAW_V    = 0x521;
+            TimerA   = 0x23D;
+            if (Framerate_24) TimerB = 0x914;
+            if (Framerate_25) TimerB = 0x8B5;
+            if (Framerate_30) TimerB = 0x743;
+        }
+
+        Preview_H     = 1916 + reg_Preview_H;
+        Preview_V     = 1080 + reg_Preview_V;
+        Preview_R     = 0x19000D;
+
+        YUV_HD_S_H    = 0x450080 + YUV_HD_S_H_width;
+        YUV_HD_S_V    = 0x250039 + YUV_HD_S_H_height;
+
+        Black_Bar     = 0;
+        Preview_Control = 1;
+        EDMAC_24_Redirect = 0;
+        EDMAC_9_Vertical_Change = 0;
+        Preview_Control_Basic = 0;
+    }
 
     if (CROP_Full_Res) /* 5208x3478 @ 2 FPS */
     {
@@ -3910,7 +3947,7 @@ static void FAST EngDrvOut_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
      * it seems these also make preview more reliable in these modes, in some focus box positions preview
      * become black without these values */
     if ((CROP_PRESET_MENU == CROP_PRESET_3X3 || CROP_PRESET_MENU == CROP_PRESET_1X3) ||
-       ((CROP_PRESET_MENU == CROP_PRESET_1X1) && crop_preset_1x1_res == 4)) // also for 1280p preset
+       ((CROP_PRESET_MENU == CROP_PRESET_1X1))) // also for 1280p preset
     {
         if (data == 0xC0F09050) {regs[1] =   0x3002D0;}
         if (data == 0xC0F09054) {regs[1] =  0x2E006D8;}
@@ -4531,7 +4568,7 @@ static void FAST PATH_SelectPathDriveMode_hook(uint32_t* regs, uint32_t* stack, 
             EDMAC_9_Vertical_Change = 1;
         }
 
-        if (crop_preset_1x1_res == 4)    // CROP_1280p
+        if (crop_preset_1x1_res == 4 || crop_preset_1x1_res == 7)    // CROP_1280p
         {
             Shift_Preview = 0;
             Clear_Artifacts = 0;
@@ -5070,6 +5107,7 @@ static MENU_UPDATE_FUNC(crop_preset_ar_update)
         if (crop_preset_1x1_res_menu == 3) MENU_SET_VALUE("16:9");    // CROP_1440p
         if (crop_preset_1x1_res_menu == 4) MENU_SET_VALUE("3:2");     // CROP_1280p
         if (crop_preset_1x1_res_menu == 5) MENU_SET_VALUE("3:2");     // CROP_Full_Res
+        if (crop_preset_1x1_res_menu == 7) MENU_SET_VALUE("16:9");    // CROP_1080p
         MENU_SET_WARNING(MENU_WARN_ADVICE, "This option doesn't work in 1:1 crop.");
     }
 }
@@ -5260,8 +5298,8 @@ static struct menu_entry crop_rec_menu[] =
                 .name       = "Preset:",   // CROP_PRESET_1X1
                 .priv       = &crop_preset_1x1_res_menu,
                 .update     = crop_preset_1x1_res_update,
-                .max        = 6,
-                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p 4:3"),
+                .max        = 7,
+                .choices    = CHOICES("2.5K", "2.8K", "3K", "1440p", "1280p", "Full-Res LV", "1620p 4:3", "1920x1080p"),
                 .help       = "Choose 1:1 preset.",
                 .shidden    = 1,
             },
@@ -6530,6 +6568,7 @@ static LVINFO_UPDATE_FUNC(crop_info)
                     if (CROP_3K)       snprintf(buffer, sizeof(buffer), "3K");
                     if (CROP_1440p)    snprintf(buffer, sizeof(buffer), "1440p");
                     if (CROP_1280p)    snprintf(buffer, sizeof(buffer), "1280p");
+                    if (CROP_1080p)    snprintf(buffer, sizeof(buffer), "1080p");
                     if (CROP_Full_Res) snprintf(buffer, sizeof(buffer), "FLV");
                     break;
                 case CROP_PRESET_1X3:
