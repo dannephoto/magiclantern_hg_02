@@ -2390,7 +2390,7 @@ void hack_liveview(int unhack)
                 if (small_hacks == 2)
                 {
                     lvfaceEnd();
-                    if (more_hacks)
+                    if (more_hacks == 1)
                     {
                         aewbSuspend();
                     }
