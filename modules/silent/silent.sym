@@ -1,4 +1,0 @@
-000028a0 lossless_init
-00003054 lossless_compress_raw_rectangle
-0000341c lossless_compress_raw
-0000344c lossless_decompress_raw
