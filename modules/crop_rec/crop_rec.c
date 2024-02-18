@@ -6195,6 +6195,12 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
     extern int kill_canon_gui_mode;
     //Reset zoom when stopping recording
     
+    //Prevent black screen?
+    if (key == MODULE_KEY_REC && RECORDING)
+    {
+        set_zoom(1);
+    }
+    
     //Focus aid function
     if (Half_Shutter == 2 && RECORDING && (crop_preset == CROP_PRESET_3X3 || crop_preset == CROP_PRESET_1X1))
     {
