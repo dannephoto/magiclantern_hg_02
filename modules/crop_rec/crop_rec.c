@@ -6316,6 +6316,7 @@ static unsigned int crop_rec_keypress_cbr(unsigned int key)
                     ((key == MODULE_KEY_PRESS_HALFSHUTTER ) && Half_Shutter == 3 && is_manual_focus()) )
                 {
                     set_zoom(1); // Get to x1 first, sometime we get black preview when going x10 --> x5
+                    msleep(50);
                     set_zoom(5);
 
                     /* Disable Canon overlays in x5 mode */
