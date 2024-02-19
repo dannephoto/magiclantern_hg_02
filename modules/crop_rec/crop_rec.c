@@ -13,7 +13,6 @@
 #include <shoot.h>
 #include <lens.h>
 #include <focus.h>
-#include "histogram.h"
 #include "../mlv_lite/mlv_lite.h"
 #include "../dual_iso/dual_iso.h"
 
@@ -1702,7 +1701,7 @@ static void FAST adtg_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
             BitDepth_Analog = 14;
         }
         
-        if (RECORDING || (hist_draw && (hist_type == 2 || hist_type == 3)))//When RAW histogram is used turn off the temporary 14bit stuff
+        if (RECORDING)//When RAW histogram is used turn off the temporary 14bit stuff
         {
             
             if (OUTPUT_12BIT)
@@ -3797,7 +3796,7 @@ static void FAST engio_write_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
         // this method seems better in terms of stability, it doesn't produce corrupted frames,
         // but it also affect autofocus when using negative analog gain which makes it inaccurate.
         // (read about the other method for more info.)
-        if ((brighten_lv_method == 0 && RECORDING) || (brighten_lv_method == 0 && hist_draw && (hist_type == 2 || hist_type == 3)))//When RAW histogram is used turn off the temporary 14bit stuff
+        if (brighten_lv_method == 0 && RECORDING)//When RAW histogram is used turn off the temporary 14bit stuff
         {
             //Workaround when small_hacks is set to More in mlv_lite.c
             if ((!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3) || more_hacks)
@@ -3885,7 +3884,7 @@ static void FAST EngDrvOut_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
      * affect autofocus data --> the four regisers will adjust autofocus data to the correct brightness too . .
      * --> This way autofocus in 10/11/12-bit will be as accurate as in 14-bit.
      * BTW, these regisers used to achieve 12800 digital ISO from Canon.                                           */
-    if ((brighten_lv_method == 1 && RECORDING) || (brighten_lv_method == 1 && hist_draw && (hist_type == 2 || hist_type == 3)))
+    if (brighten_lv_method == 1 && RECORDING)
     {
         if (data == 0xC0F37AE4 || data == 0xC0F37AF0 || data == 0xC0F37AFC || data == 0xC0F37B08) 
         {
