@@ -117,6 +117,7 @@ static CONFIG_INT("crop.button_H-Shutter", Half_Shutter, 2);
 CONFIG_INT("crop.button_INFO",      INFO_button, 6);
 CONFIG_INT("crop.arrows_U_D",       Arrows_U_D, 1);
 CONFIG_INT("crop.more_hacks",       more_hacks, 1);
+CONFIG_INT("crop.LV_hist",       LV_hist, 0);
 static CONFIG_INT("crop.arrows_L_R",       Arrows_L_R, 0);
 
 enum crop_preset {
@@ -1701,7 +1702,7 @@ static void FAST adtg_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
             BitDepth_Analog = 14;
         }
         
-        if (RECORDING)//When RAW histogram is used turn off the temporary 14bit stuff
+        if ((RECORDING && LV_hist == 0) || LV_hist == 1)//When RAW histogram is used turn off the temporary 14bit stuff
         {
             
             if (OUTPUT_12BIT)
@@ -3796,7 +3797,7 @@ static void FAST engio_write_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
         // this method seems better in terms of stability, it doesn't produce corrupted frames,
         // but it also affect autofocus when using negative analog gain which makes it inaccurate.
         // (read about the other method for more info.)
-        if (brighten_lv_method == 0 && RECORDING)//When RAW histogram is used turn off the temporary 14bit stuff
+        if ((brighten_lv_method == 0 && RECORDING && LV_hist == 0) || (brighten_lv_method == 0 && LV_hist == 1))//When RAW histogram is used turn off the temporary 14bit stuff
         {
             //Workaround when small_hacks is set to More in mlv_lite.c
             if ((!Arrows_U_D && INFO_button != 2 && INFO_button != 3 && SET_button != 2 && SET_button != 3) || more_hacks)
@@ -3884,7 +3885,7 @@ static void FAST EngDrvOut_hook(uint32_t* regs, uint32_t* stack, uint32_t pc)
      * affect autofocus data --> the four regisers will adjust autofocus data to the correct brightness too . .
      * --> This way autofocus in 10/11/12-bit will be as accurate as in 14-bit.
      * BTW, these regisers used to achieve 12800 digital ISO from Canon.                                           */
-    if (brighten_lv_method == 1 && RECORDING)
+    if ((brighten_lv_method == 1 && RECORDING && LV_hist == 0) || (brighten_lv_method == 1 && LV_hist == 1))
     {
         if (data == 0xC0F37AE4 || data == 0xC0F37AF0 || data == 0xC0F37AFC || data == 0xC0F37B08) 
         {
@@ -5825,6 +5826,13 @@ static struct menu_entry customize_buttons_menu[] =
                 .priv     = &more_hacks,
                 .help     = "More hacks always allowed",
             },
+            {
+                .name     = "LV preview method",
+                .max      = 1,
+                .choices  = CHOICES("14bit", "Regular"),
+                .priv     = &LV_hist,
+                .help     = "Choose regular if using RAW-based histogram",
+            },
             /* not working with eosm
             {
                 .name     = "L/R Arrows",
@@ -7153,6 +7161,7 @@ MODULE_CONFIGS_START()
     MODULE_CONFIG(Arrows_L_R)
     MODULE_CONFIG(Arrows_U_D)
     MODULE_CONFIG(more_hacks)
+    MODULE_CONFIG(LV_hist)
 MODULE_CONFIGS_END()
 
 MODULE_CBRS_START()
